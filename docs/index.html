@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Hunter's portfolio: his room in 3D. Click around.">
+<meta name="description" content="Hunter Allen's portfolio: PC builds, hardware projects and experiments, inside a 3D model of his room.">
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 <title>Hunter's Room</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
@@ -99,6 +99,8 @@ body.has-panel .status,body.has-panel .brand{opacity:0}
 .marker:nth-child(4) i::after{animation-delay:1.5s}
 .marker:nth-child(5) i::after{animation-delay:2s}
 .marker:nth-child(6) i::after{animation-delay:2.3s}
+.marker:nth-child(7) i::after{animation-delay:.8s}
+.marker:nth-child(8) i::after{animation-delay:1.7s}
 .marker span{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
   padding:5px 10px;border-radius:999px;background:rgba(14,16,32,.78);border:1px solid var(--line);color:var(--paper);
   transition:background .2s,color .2s,transform .2s}
@@ -129,6 +131,19 @@ body.has-panel .status,body.has-panel .brand{opacity:0}
 .cards li{border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px;background:var(--fill)}
 .cards h3{margin:0;font-family:var(--font-display);font-weight:600;font-size:1.2rem;letter-spacing:-.01em;display:flex;justify-content:space-between;gap:12px;align-items:baseline}
 .cards h3 small{font-family:var(--font-mono);font-weight:400;font-size:.68rem;letter-spacing:.08em;color:var(--paper-faint);white-space:nowrap}
+.panel-body h4{margin:10px 0 0;font-family:var(--font-mono);font-weight:400;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--lamp)}
+.stats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stats li{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--fill);display:flex;flex-direction:column;gap:2px}
+.stats b{font-family:var(--font-display);font-weight:700;font-size:1.55rem;letter-spacing:-.02em;color:var(--paper);font-variant-numeric:tabular-nums}
+.stats span{font-size:.82rem;color:var(--paper-soft)}
+.slots{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.slots li{aspect-ratio:4/3;border:1px dashed var(--line);border-radius:12px;display:grid;place-items:center;text-align:center;padding:6px;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-faint)}
+.cards h3 small.st{border-radius:999px;padding:2px 8px;border:1px solid currentColor}
+.cards h3 small.built{color:var(--screen)}
+.cards h3 small.proto{color:var(--lamp)}
+.cards h3 small.idea{color:var(--paper-soft)}
+.tags a,.tags button{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.06em;color:var(--lamp);background:none;border:1px solid color-mix(in srgb, var(--lamp) 45%, transparent);border-radius:999px;padding:4px 10px;cursor:pointer;text-decoration:none}
+.tags a:hover,.tags button:hover{background:var(--lamp);color:#20140a}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .tags span{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.06em;color:var(--screen);border:1px solid color-mix(in srgb, var(--screen) 35%, transparent);border-radius:999px;padding:2px 8px}
 
@@ -194,7 +209,7 @@ body.ready #loader{opacity:0}
 
 <header class="brand">
   <div class="eyebrow">Portfolio · Room 01</div>
-  <h1>Hunter<span>Come in. This is where I build PCs, print parts and write code.</span></h1>
+  <h1>Hunter Allen<span>Welcome to my workspace. Click around to see what I have built.</span></h1>
 </header>
 <div class="status" aria-hidden="true">
   <div>Local time <b id="clockText">--:--</b></div>
@@ -205,12 +220,11 @@ body.ready #loader{opacity:0}
 
 <nav class="dock" aria-label="Sections">
   <ul>
-    <li><button type="button" data-open="projects" aria-pressed="false">Projects</button></li>
-    <li><button type="button" data-open="builds" aria-pressed="false">PC builds</button></li>
-    <li><button type="button" data-open="printing" aria-pressed="false">3D printing</button></li>
     <li><button type="button" data-open="about" aria-pressed="false">About</button></li>
-    <li><button type="button" data-open="interests" aria-pressed="false">Shelves</button></li>
-    <li><button type="button" data-open="contact" aria-pressed="false">Say hi</button></li>
+    <li><button type="button" data-open="builds" aria-pressed="false">Business</button></li>
+    <li><button type="button" data-open="hardware" aria-pressed="false">Engineering</button></li>
+    <li><button type="button" data-open="experiments" aria-pressed="false">Experiments</button></li>
+    <li><button type="button" data-open="contact" aria-pressed="false">Contact</button></li>
   </ul>
   <p class="hint">Drag to spin the room. Click a dot to read more. Click a 3D printer, the Roomba or the LED strip to set it off.</p>
 </nav>
@@ -228,88 +242,150 @@ body.ready #loader{opacity:0}
 <div id="toast" role="status"></div>
 <div id="loader"><p>Opening the door</p></div>
 
-<template id="tpl-projects">
-  <span class="ph">Placeholder projects. Send me the real ones.</span>
-  <p class="lead">What is open on the ultrawide: the code side of what I do.</p>
-  <ul class="cards">
-    <li><h3>This room <small>2026</small></h3><p>The site you are standing in. My actual room, rebuilt in 3D so you can click around it.</p><div class="tags"><span>three.js</span><span>webgl</span></div></li>
-    <li><h3>Project two <small>20XX</small></h3><p>The one I would demo first. One line on what it does, one on why it was hard to make.</p><div class="tags"><span>stack</span><span>link</span></div></li>
-    <li><h3>Project three <small>20XX</small></h3><p>A class project or weekend build I am proud of.</p><div class="tags"><span>stack</span><span>repo</span></div></li>
+<template id="tpl-about">
+  <p class="lead">I'm Hunter Allen, a student, entrepreneur and technology enthusiast from Pennsylvania. I build things, sell things, fix things, and look for ways to make them better.</p>
+  <p>I have always wanted to know how things work, especially computers and electronics. What started as an interest in building PCs grew into HunterPCBuilds, my own computer building and reselling business.</p>
+  <p>Since then I have worked on custom PC hardware, 3D printing, robotics and software. I like taking an idea, figuring out how to make it work, and turning it into something you can hold. What interests me most is where technology meets entrepreneurship: useful products, practical problems, and ideas that become real opportunities.</p>
+  <ul class="shelf">
+    <li><b>Builder</b><span>I take things apart, learn how they work, and put them back together better.</span></li>
+    <li><b>Entrepreneur</b><span>I want experiments to turn into products and businesses people use.</span></li>
+    <li><b>Problem solver</b><span>I work with the hardware I have and find the unconventional fix.</span></li>
+    <li><b>Athlete</b><span>Four years of varsity running and about eight years of club hockey.</span></li>
   </ul>
+  <h4>Experience</h4>
+  <ul class="cards">
+    <li><h3>HunterPCBuilds <small>late 2025 to now</small></h3><p>Founder. Building, refurbishing and reselling PCs.</p><div class="tags"><button type="button" data-go="builds">Open the business</button></div></li>
+    <li><h3>School IT internship <small>summer 2026</small></h3><p>Worked with my school district's IT team on support, hardware and systems troubleshooting.</p></li>
+    <li><h3>Dave's Famous Hot Wiener <small>summer 2025 to May 2026</small></h3><p>Crew member. My first job outside my own businesses.</p></li>
+  </ul>
+  <h4>School</h4>
+  <dl class="facts">
+    <dt>School</dt><dd>South Western High School</dd>
+    <dt>GPA</dt><dd>3.955, as of October 2026</dd>
+    <dt>Class rank</dt><dd>80 of 346</dd>
+    <dt>Program</dt><dd>GIEP</dd>
+    <dt>Coursework</dt><dd>AP Computer Science A, AP Computer Science Principles, Physics, Digital Media</dd>
+  </dl>
+  <h4>Athletics</h4>
+  <dl class="facts">
+    <dt>Cross country and track</dt><dd>Four years of varsity. Usually one of the top three runners on the team, with mid-distance on the track.</dd>
+    <dt>Club ice hockey</dt><dd>About eight years as a defenseman, with the York Devils and the Palmyra Black Knights.</dd>
+  </dl>
+  <h4>What I am into</h4>
+  <div class="tags"><span>PC hardware</span><span>entrepreneurship</span><span>3D printing</span><span>AI-assisted development</span><span>robotics</span><span>homelabs</span><span>cooling and airflow</span><span>repair</span></div>
 </template>
 
 <template id="tpl-builds">
-  <span class="ph">Drafted from your photos. Fix anything that is off.</span>
-  <p class="lead">The white desk is the build bench. I put together PCs here and sell them. The tools live on the small table next to it.</p>
-  <p>Parts come in, boxes stack up under the desk, and finished machines go on the shelf by the window until they find an owner.</p>
-  <ul class="cards">
-    <li><h3>How I build <small>process</small></h3><p>Pick parts for the budget, assemble, cable manage, stress test, then hand it over ready to use.</p></li>
-    <li><h3>Builds so far <small>count</small></h3><p>How many you have built and sold, and the one you are proudest of.</p><div class="tags"><span>add specs</span><span>add photos</span></div></li>
-    <li><h3>Want one? <small>contact</small></h3><p>Tell me the budget and what it is for. Details are on the phone on my desk.</p></li>
+  <p class="lead">HunterPCBuilds is my PC building, refurbishing and reselling business. I started it in late 2025.</p>
+  <ul class="stats">
+    <li><b>75 to 80</b><span>PCs built and sold by September 2026</span></li>
+    <li><b>~$30,000</b><span>revenue</span></li>
+    <li><b>~$5,000</b><span>profit</span></li>
+    <li><b>~60</b><span>eBay sales, about $11,000</span></li>
   </ul>
+  <p>It started with a $375 computer I built for a friend from my cross country team. I tracked every part and what it cost in Google Sheets, and that one build turned an interest in computers into a business.</p>
+  <ul class="cards">
+    <li><h3>What I do <small>process</small></h3><p>Source used hardware, test and evaluate every component, price the system, manage costs and find the buyer.</p></li>
+    <li><h3>What I build <small>hardware</small></h3><p>Custom gaming PCs on everything from older Xeon platforms to modern Ryzen systems. The white desk across the room is the build bench.</p><div class="tags"><span>Xeon</span><span>Ryzen</span><span>refurbished</span></div></li>
+    <li><h3>Repair and refurbishing <small>service</small></h3><p>Troubleshooting, repairing and refurbishing machines so they go back out working.</p></li>
+    <li><h3>eBay store <small>hunter.pcbuilds</small></h3><p>Where most of the finished machines are listed.</p><div class="tags"><a href="https://www.ebay.com/usr/hunter.pcbuilds" target="_blank" rel="noopener">ebay.com/usr/hunter.pcbuilds</a></div></li>
+  </ul>
+  <h4>Build gallery</h4>
+  <span class="ph">Photos and specs of my best builds are coming.</span>
+  <ul class="slots"><li>Build photo</li><li>Before and after</li><li>Specs</li></ul>
+</template>
+
+<template id="tpl-hardware">
+  <p class="lead">The laptops on the blue dresser are where my hardware projects start. The biggest one turns a business ThinkPad into a modular desktop gaming setup.</p>
+  <ul class="cards">
+    <li><h3>ThinkPad eGPU dock <small class="st built">working</small></h3><p>A working external GPU setup for a ThinkPad T480. A GTX 1660 connects over Thunderbolt, and the laptop drops into a dock I designed with custom 3D-printed parts.</p><p>The hard part was the physical side: mounting, airflow, cable routing and power.</p><div class="tags"><span>ThinkPad T480</span><span>Thunderbolt</span><span>GTX 1660</span><span>3D printed</span></div></li>
+    <li><h3>Making it reproducible <small class="st idea">exploring</small></h3><p>I am looking at offering the dock so other people can build one: design files with instructions, a printed parts kit, or a complete DIY package.</p></li>
+    <li><h3>ThinkPad cooling and eGPU stand <small class="st proto">design and prototyping</small></h3><p>A laptop-sized cooling platform and eGPU enclosure in one. Dedicated airflow channels, TPU seals, room for a two-slot graphics card and a 400W Flex ATX power supply, with separate paths for GPU exhaust and CPU intake.</p><div class="tags"><span>CAD</span><span>TPU</span><span>Flex ATX</span></div></li>
+    <li><h3>Repair and troubleshooting <small>ongoing</small></h3><p>Diagnosing hardware problems, repairing computers, configuring BIOS settings, installing operating systems and drivers, and helping people with their technology.</p></li>
+  </ul>
+  <span class="ph">CAD renders and build photos are coming.</span>
+  <ul class="slots"><li>CAD render</li><li>Printed part</li><li>Installed</li></ul>
+  <h4>More engineering in this room</h4>
+  <div class="tags"><button type="button" data-go="printing">3D printing</button><button type="button" data-go="software">Software and AI</button><button type="button" data-go="interests">The workshop shelves</button></div>
 </template>
 
 <template id="tpl-printing">
-  <span class="ph">Drafted from your photos. Tell me your best prints.</span>
-  <p class="lead">A small print farm lives in this room, and something is usually running.</p>
+  <p class="lead">Four printers live in this room, and I use them for parts that have a job to do.</p>
   <ul class="cards">
-    <li><h3>The big Elegoo <small>bench</small></h3><p>Open-frame with a large bed, on the dark bench. For the big parts, like the helmet on it right now.</p></li>
-    <li><h3>Bambu Lab A1 mini <small>bench</small></h3><p>Small, quick and reliable. Sits next to the Elegoo.</p></li>
-    <li><h3>Flashforge AD5M <small>black desk</small></h3><p>Enclosed and an arm's reach from my chair.</p></li>
+    <li><h3>Elegoo Neptune 4 Max <small>bench</small></h3><p>The big open-frame one on the dark bench, for large parts.</p></li>
+    <li><h3>Bambu Lab A1 Mini <small>bench</small></h3><p>Small, quick and reliable. Sits next to the Elegoo.</p></li>
+    <li><h3>Flashforge Adventurer 5M <small>black desk</small></h3><p>An arm's reach from my chair.</p></li>
     <li><h3>Geeetech M1S <small>main desk</small></h3><p>The little blue and white one at the end of the desk.</p></li>
-    <li><h3>Filament <small>by the door</small></h3><p>The stack of boxes on the wire rack is all filament, with a spool tower next to it.</p></li>
   </ul>
-  <p>Add here: favorite prints, things designed from scratch, and anything you print for other people.</p>
+  <p>Click any printer in the room to start a print.</p>
+  <h4>What I print</h4>
+  <ul class="shelf">
+    <li><b>Dock parts</b><span>Custom components for the ThinkPad eGPU dock.</span></li>
+    <li><b>Cooling and mounts</b><span>Laptop cooling and mounting parts.</span></li>
+    <li><b>Enclosures</b><span>Custom housings for hardware.</span></li>
+    <li><b>Prototypes</b><span>Mechanical test parts, plus printer mods and experiments.</span></li>
+  </ul>
+  <span class="ph">Gallery coming: the CAD model, the printed part and the finished install, side by side.</span>
+  <ul class="slots"><li>CAD model</li><li>Printed part</li><li>Installed</li></ul>
+  <div class="tags"><button type="button" data-go="hardware">Back to hardware projects</button></div>
 </template>
 
-<template id="tpl-about">
-  <span class="ph">Drafted from your photos. Tell me the true version.</span>
-  <p class="lead">Hi, I'm Hunter. I build PCs, 3D print, and write code, mostly from this chair.</p>
-  <p>The pegboard is the honest part of the wall: a Game Boy, a pizza plush, an empty filament spool, all under a neon rope and an LED strip that changes color with my mood.</p>
-  <dl class="facts">
-    <dt>Studying</dt><dd>AP Computer Science A, AP CS Principles, Physics, Digital Media</dd>
-    <dt>Daily drivers</dt><dd>Three laptops docked on the blue dresser, plus the tower in a Shiny Snake S300L</dd>
-    <dt>On the wall</dt><dd>Framed circuit boards</dd>
-    <dt>Under the desk</dt><dd>A Roomba</dd>
-    <dt>Right now</dt><dd>What you are working on this month</dd>
-    <dt>Based in</dt><dd>Your city, if you want it public</dd>
-  </dl>
+<template id="tpl-software">
+  <p class="lead">What is open on the ultrawide: websites, dashboards and AI-assisted development.</p>
+  <ul class="cards">
+    <li><h3>This room <small>2026</small></h3><p>The site you are standing in. My actual room, rebuilt in 3D so you can click around it.</p><div class="tags"><span>three.js</span><span>webgl</span></div></li>
+    <li><h3>AI-assisted development <small>how I work</small></h3><p>I build with Claude Code, and I use AI to get from an idea to a working site or tool quickly.</p><div class="tags"><span>Claude Code</span><span>automation</span></div></li>
+    <li><h3>Coursework <small>school</small></h3><p>AP Computer Science A and AP Computer Science Principles.</p></li>
+  </ul>
+  <span class="ph">More software projects and screenshots are coming.</span>
+  <div class="tags"><button type="button" data-go="hardware">Back to hardware projects</button></div>
+</template>
+
+<template id="tpl-experiments">
+  <p class="lead">The whiteboard is for ideas that are not finished yet. Everything here is a prototype, an experiment or a concept.</p>
+  <ul class="cards">
+    <li><h3>Autonomous mower <small class="st idea">concept, early prototype</small></h3><p>A roughly $600 robotic mower that a crew could bring to a property, run and take with them. The early prototype work is motor control on an L298 driver with a Raspberry Pi. The plan adds Ryobi 40V battery power, an Xbox controller for manual driving and mapping, camera and LiDAR navigation, and automatic back-and-forth mowing passes.</p><div class="tags"><span>Raspberry Pi</span><span>L298</span><span>robotics</span></div></li>
+    <li><h3>Home server <small class="st built">running</small></h3><p>A Xeon E-2276G server with 32GB of RAM and 4TB of storage. I use it to explore virtualization and CPU and GPU computing, and to look at ways idle compute could earn money.</p><div class="tags"><span>homelab</span><span>virtualization</span></div></li>
+    <li><h3>Hidden printer enclosures <small class="st idea">concept</small></h3><p>Disguising a compact 3D printer as an arcade machine, and a deployable enclosure small enough for a dorm room. Hardware that fits into furniture and small spaces.</p></li>
+    <li><h3>Raspberry Pi experiments <small class="st proto">ongoing</small></h3><p>Pi boards for robotics, computing experiments and hardware projects.</p></li>
+  </ul>
 </template>
 
 <template id="tpl-interests">
-  <span class="ph">Placeholder shelf. Swap in what is really on yours.</span>
-  <p class="lead">Two shelving units by the window hold everything that is not a computer yet.</p>
+  <p class="lead">Two shelving units by the window hold the workshop: the hardware I collect and work with.</p>
   <ul class="shelf">
-    <li><b>Hardware</b><span>Cases, parts and finished PCs waiting for owners.</span></li>
-    <li><b>Electronics</b><span>Kits, boards and a projector up top.</span></li>
-    <li><b>Retro tech</b><span>The Game Boy and old iPod are not for sale.</span></li>
-    <li><b>Reading</b><span>Books you would recommend.</span></li>
-    <li><b>Playing</b><span>Games you are into.</span></li>
-    <li><b>Outside</b><span>What you do away from the desk.</span></li>
+    <li><b>GPUs and processors</b><span>Parts waiting for their next build.</span></li>
+    <li><b>Finished PCs</b><span>Machines waiting for owners.</span></li>
+    <li><b>Electronics</b><span>Boards, kits and Raspberry Pis.</span></li>
+    <li><b>Tools</b><span>What I use to build and repair.</span></li>
   </ul>
+  <span class="ph">A clickable catalog of what is on the shelves is coming.</span>
+  <div class="tags"><button type="button" data-go="builds">See HunterPCBuilds</button></div>
 </template>
 
 <template id="tpl-contact">
-  <span class="ph">Placeholder contact details.</span>
   <p class="lead">The phone is on the desk mat. I do answer it.</p>
   <ul class="contact">
+    <li><div><small>eBay store</small><code id="c-eb">ebay.com/usr/hunter.pcbuilds</code></div><button type="button" class="copy" data-copy="c-eb">Copy</button></li>
     <li><div><small>Email</small><code id="c-email">you@example.com</code></div><button type="button" class="copy" data-copy="c-email">Copy</button></li>
     <li><div><small>GitHub</small><code id="c-gh">github.com/your-handle</code></div><button type="button" class="copy" data-copy="c-gh">Copy</button></li>
-    <li><div><small>Elsewhere</small><code id="c-el">snapchat, instagram, or wherever you post</code></div><button type="button" class="copy" data-copy="c-el">Copy</button></li>
   </ul>
-  <p>Best for: PC build requests, print jobs, project ideas, and telling me what in this room should be clickable next.</p>
+  <span class="ph">Email and GitHub are placeholders until I add the real ones.</span>
+  <p>Best for: PC build requests, hardware questions, print jobs and project ideas.</p>
 </template>
 
 <script>
 /* ---------- UI: works with or without the 3D scene ---------- */
 (function(){
   const SECTIONS = {
-    projects:{eyebrow:'On the ultrawide', title:'Projects'},
-    builds:{eyebrow:'On the white desk', title:'PC builds'},
-    printing:{eyebrow:'On the bench', title:'3D printing'},
-    about:{eyebrow:'On the pegboard', title:'About me'},
-    interests:{eyebrow:'By the window', title:'The shelves'},
-    contact:{eyebrow:'On the desk mat', title:'Say hi'}
+    about:{eyebrow:'01 · On the pegboard', title:'About me'},
+    builds:{eyebrow:'02 · Business', title:'HunterPCBuilds'},
+    hardware:{eyebrow:'03 · On the blue dresser', title:'Hardware projects'},
+    printing:{eyebrow:'03 · On the bench', title:'3D printing'},
+    software:{eyebrow:'03 · On the ultrawide', title:'Software and AI'},
+    experiments:{eyebrow:'04 · On the whiteboard', title:'Ideas and experiments'},
+    interests:{eyebrow:'By the window', title:'My workshop'},
+    contact:{eyebrow:'05 · On the desk mat', title:'Contact'}
   };
   const panel = document.getElementById('panel');
   const body = document.getElementById('panelBody');
@@ -349,6 +425,7 @@ body.ready #loader{opacity:0}
   document.getElementById('panelClose').addEventListener('click', close);
   window.addEventListener('keydown', e=>{ if(e.key === 'Escape') close(); });
   body.addEventListener('click', e=>{
+    const go = e.target.closest('[data-go]'); if(go){ open(go.dataset.go); body.scrollTop = 0; return; }
     const btn = e.target.closest('.copy'); if(!btn) return;
     const el = document.getElementById(btn.dataset.copy);
     const done = ()=>{ btn.textContent = 'Copied'; setTimeout(()=>btn.textContent = 'Copy', 1400); };
@@ -574,7 +651,7 @@ for(let i=0;i<7;i++){ const c = box(rr(.08,.2),.03,rr(.05,.12), M.plastic, [rr(-
 box(.26,.2,.24, M.card, [-.2,.4,.25], wood); box(.3,.08,.22, M.white, [.1,.33,.3], wood); box(.2,.24,.2, M.plastic, [.16,.12,.22], wood);
 
 // blue dresser with the three daily laptops
-const dresser = sub(W2.f); dresser.position.set(1.12,0,0);
+const dresser = hot(sub(W2.f), 'hardware'); dresser.position.set(1.12,0,0);
 box(.46,.03,.42, M.blue, [0,.665,.23], dresser);
 box(.44,.17,.4, M.blue, [0,.565,.23], dresser); box(.4,.13,.008, std({color:0x2c4c9c, roughness:.5}), [0,.565,.434], dresser); mesh(new THREE.SphereGeometry(.014,10,8), M.steel, [0,.565,.446], dresser);
 [[-.2,.05],[.2,.05],[-.2,.41],[.2,.41]].forEach(p=> box(.04,.49,.04, M.blue, [p[0],.245,p[1]], dresser));
@@ -595,7 +672,7 @@ function pcb(g,w,h){
 [2.02,1.72,1.42,1.12].forEach(y=>{ box(.3,.26,.025, M.matte, [1.12,y+.06,.014], W2.w); mesh(new THREE.PlaneGeometry(.26,.22), std({map:ctex(260,220,pcb), roughness:.6}), [1.12,y+.06,.028], W2.w, false); });
 
 // main desk (old local coords, shifted so it ends where the black desk begins)
-const desk = hot(sub(W2.f), 'projects'); desk.position.x = 2.73;
+const desk = hot(sub(W2.f), 'software'); desk.position.x = 2.73;
 box(1.85,.035,.75, M.white, [-.375,.742,.4], desk);
 [[-1.24,.08],[.49,.08],[-1.24,.72],[.49,.72]].forEach(p=> cyl(.025,.02,.725, M.white, [p[0],.362,p[1]], desk, 14));
 box(1.3,.004,.62, M.matte, [-.15,.762,.44], desk, false);
@@ -718,7 +795,7 @@ const neonL2 = new THREE.PointLight(0x35d8ff, .6, 3.5, 2); neonL2.position.set(.
 const bdesk = sub(W3.f);
 box(1.14,.035,.5, M.matte, [.6,.742,.27], bdesk);
 [[.06,.05],[1.14,.05],[.06,.49],[1.14,.49]].forEach(p=> box(.035,.725,.035, M.black, [p[0],.362,p[1]], bdesk));
-const pc = hot(sub(bdesk), 'projects'); pc.position.set(.22,.76,.25); pc.scale.set(.95,.72,.8);
+const pc = hot(sub(bdesk), 'builds'); pc.position.set(.22,.76,.25); pc.scale.set(.95,.72,.8);
 // Shiny Snake S300L: compact tower with glass on the front and on the side facing the chair
 box(.23,.02,.42, M.plastic, [0,.01,0], pc); box(.23,.02,.42, M.plastic, [0,.41,0], pc); box(.012,.4,.42, M.plastic, [-.109,.21,0], pc); box(.23,.4,.012, M.plastic, [0,.21,-.204], pc);
 [[.109,.204]].forEach(p=> box(.014,.4,.014, M.plastic, [p[0],.21,p[1]], pc));
@@ -806,7 +883,12 @@ const tower = sub(W6.f); tower.position.set(.16,0,.18);
 cyl(.11,.11,.42, std({color:0x15161a, roughness:.7}), [0,.21,0], tower, 6);
 [0xe9e9e6,0x1b1c20,0xd8c8a8,0x1b1c20,0xe9e9e6].forEach((c,i)=>{ cyl(.1,.1,.012, M.matte, [0,.43+i*.075,0], tower, 24); cyl(.085,.085,.05, std({color:c, roughness:.6}), [0,.465+i*.075,0], tower, 24); });
 // whiteboard above the rack
-box(.74,.52,.02, M.steel, [.58,1.95,.012], W6.w); mesh(new THREE.PlaneGeometry(.7,.48), std({color:0xf4f5f3, roughness:.25}), [.58,1.95,.024], W6.w, false);
+box(.74,.52,.02, M.steel, [.58,1.95,.012], W6.w); { const wc = document.createElement('canvas'); wc.width = 700; wc.height = 480; const g = wc.getContext('2d'); g.fillStyle = '#f4f5f3'; g.fillRect(0,0,700,480);
+  g.font = '600 34px sans-serif'; g.fillStyle = '#1b1c20'; g.fillText('IDEAS', 34, 56); g.fillRect(34,68,120,4);
+  g.font = '26px sans-serif'; [['#d13b2e','mower v6: Pi + L298 + 40V'],['#2f6fd0','eGPU dock kit'],['#1b1c20','arcade printer enclosure'],['#2f6fd0','dorm printer box'],['#d13b2e','homelab: idle compute?']].forEach((r,i)=>{ g.fillStyle = r[0]; g.fillText('- ' + r[1], 34, 124+i*48); });
+  g.strokeStyle = '#2f6fd0'; g.lineWidth = 4; g.strokeRect(470,250,170,110); g.beginPath(); g.arc(505,385,22,0,7); g.stroke(); g.beginPath(); g.arc(605,385,22,0,7); g.stroke(); g.strokeStyle = '#d13b2e'; g.beginPath(); for(let i=0;i<4;i++){ g.moveTo(480,268+i*24); g.lineTo(630,268+i*24); } g.stroke();
+  const wt = new THREE.CanvasTexture(wc); wt.colorSpace = THREE.SRGBColorSpace; wt.anisotropy = 8;
+  const wbHot = hot(sub(W6.w), 'experiments'); mesh(new THREE.PlaneGeometry(.7,.48), std({map:wt, roughness:.25}), [.58,1.95,.024], wbHot, false); }
 box(.7,.02,.05, M.steel, [.58,1.69,.035], W6.w);
 [0xd13b2e,0x2f6fd0,0x1b1c20].forEach((c,i)=>{ const p = cyl(.008,.008,.1, std({color:c, roughness:.5}), [.4+i*.13,1.708,.04], W6.w, 8); p.rotation.z = Math.PI/2; });
 // marker holder on the chair rail
@@ -997,12 +1079,14 @@ scene.environmentIntensity = .5;
 
 /* ---------- hotspots, camera, interaction ---------- */
 const HOT = {
-  projects:{label:'Projects', anchor:new V3(1.58,1.5,-.12), pos:new V3(-.75,1.75,-1.0), tgt:new V3(1.6,1.08,-.06)},
-  builds:{label:'PC builds', anchor:new V3(-1.45,1.3,-1.85), pos:new V3(1.1,2.1,-.1), tgt:new V3(-1.5,.6,-1.6)},
-  printing:{label:'3D printing', anchor:new V3(-1.45,1.6,-.02), pos:new V3(.55,1.6,-.75), tgt:new V3(-1.5,.8,.25)},
   about:{label:'About me', anchor:new V3(.98,2.12,1.1), pos:new V3(.2,1.75,-1.35), tgt:new V3(1.05,1.5,1.15)},
-  interests:{label:'The shelves', anchor:new V3(-.05,2.15,-2.4), pos:new V3(-.2,1.7,.4), tgt:new V3(.3,1.0,-2.6)},
-  contact:{label:'Say hi', anchor:new V3(1.16,.86,-.53), pos:new V3(.3,1.45,-.03), tgt:new V3(1.3,.85,-.5)}
+  builds:{label:'HunterPCBuilds', anchor:new V3(-1.45,1.3,-1.85), pos:new V3(1.1,2.1,-.1), tgt:new V3(-1.5,.6,-1.6)},
+  hardware:{label:'Hardware projects', anchor:new V3(1.57,1.12,-1.53), pos:new V3(.15,1.55,-.95), tgt:new V3(1.6,.75,-1.55)},
+  printing:{label:'3D printing', anchor:new V3(-1.45,1.6,-.02), pos:new V3(.55,1.6,-.75), tgt:new V3(-1.5,.8,.25)},
+  software:{label:'Software and AI', anchor:new V3(1.58,1.5,-.12), pos:new V3(-.75,1.75,-1.0), tgt:new V3(1.6,1.08,-.06)},
+  experiments:{label:'Ideas', anchor:new V3(-1.74,2.26,1.07), pos:new V3(-.1,1.85,.35), tgt:new V3(-1.8,1.9,1.07)},
+  interests:{label:'My workshop', anchor:new V3(-.05,2.15,-2.4), pos:new V3(-.2,1.7,.4), tgt:new V3(.3,1.0,-2.6)},
+  contact:{label:'Contact', anchor:new V3(1.16,.86,-.53), pos:new V3(.3,1.45,-.03), tgt:new V3(1.3,.85,-.5)}
 };
 const HOME = {pos:new V3(-5.4,4.4,-5.5), tgt:new V3(.05,.85,-.25)};
 const markersEl = document.getElementById('markers');
