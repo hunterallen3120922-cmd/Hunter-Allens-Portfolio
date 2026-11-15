@@ -144,6 +144,25 @@ body.has-panel .status,body.has-panel .brand{opacity:0}
 .cards h3 small.idea{color:var(--paper-soft)}
 .tags a,.tags button{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.06em;color:var(--lamp);background:none;border:1px solid color-mix(in srgb, var(--lamp) 45%, transparent);border-radius:999px;padding:4px 10px;cursor:pointer;text-decoration:none}
 .tags a:hover,.tags button:hover{background:var(--lamp);color:#20140a}
+.plays{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.plays button{width:100%;display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:var(--fill);color:var(--paper);font-family:var(--font-display);font-weight:600;font-size:1.14rem;letter-spacing:-.01em;cursor:pointer;transition:border-color .2s, transform .2s}
+.plays button:hover,.plays button:focus-visible{border-color:var(--lamp);transform:translateX(3px)}
+.plays i{flex:none;width:36px;height:36px;border-radius:50%;background:var(--lamp);display:grid;place-items:center}
+.plays i::after{content:"";border-left:11px solid #20140a;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
+.plays span{flex:1;min-width:0}
+.plays small.st{font-family:var(--font-mono);font-weight:400;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:2px 8px;border:1px solid currentColor;white-space:nowrap}
+.plays small.built{color:var(--screen)}.plays small.proto{color:var(--lamp)}.plays small.idea{color:var(--paper-soft)}
+#demobar{position:fixed;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom, 0px) + 18px);transform:translateX(-50%);width:min(720px, calc(100% - 32px));box-sizing:border-box;display:flex;gap:16px;align-items:center;padding:14px 16px 14px 20px;border-radius:22px;background:color-mix(in srgb, var(--sheet) 90%, transparent);border:1px solid var(--line);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--paper)}
+.demo-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.demo-text b{font-family:var(--font-display);font-weight:700;font-size:1.2rem;letter-spacing:-.01em}
+.demo-text span{font-size:.9rem;line-height:1.4;color:var(--paper-soft)}
+.demo-text em{font-style:normal;font-family:var(--font-mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--screen);min-height:1.2em;font-variant-numeric:tabular-nums}
+.demo-btns{display:flex;flex-direction:column;gap:6px}
+.demo-btns button{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--paper);cursor:pointer}
+.demo-btns #demoBack{background:var(--lamp);border-color:var(--lamp);color:#20140a}
+body.has-demo .status,body.has-demo .brand{opacity:0}
+body.has-demo .dock{opacity:0;transform:translateY(20px);pointer-events:none}
+body.has-demo #toast{bottom:calc(env(safe-area-inset-bottom, 0px) + 170px)}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .tags span{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.06em;color:var(--screen);border:1px solid color-mix(in srgb, var(--screen) 35%, transparent);border-radius:999px;padding:2px 8px}
 
@@ -226,7 +245,7 @@ body.ready #loader{opacity:0}
     <li><button type="button" data-open="experiments" aria-pressed="false">Experiments</button></li>
     <li><button type="button" data-open="contact" aria-pressed="false">Contact</button></li>
   </ul>
-  <p class="hint">Drag to spin the room. Click a dot to read more. Click a 3D printer, the Roomba or the LED strip to set it off.</p>
+  <p class="hint">Drag to spin the room. Click a dot, then pick a project to watch it happen. Click a 3D printer, the Roomba or the LED strip to set it off.</p>
 </nav>
 
 <aside id="panel" role="dialog" aria-labelledby="panelTitle" hidden>
@@ -239,127 +258,96 @@ body.ready #loader{opacity:0}
   </div>
   <div class="panel-body" id="panelBody"></div>
 </aside>
+<div id="demobar" hidden>
+  <div class="demo-text"><b id="demoTitle"></b><span id="demoLine"></span><em id="demoStat" aria-live="polite"></em></div>
+  <div class="demo-btns"><button type="button" id="demoReplay">Replay</button><button type="button" id="demoBack">Back</button></div>
+</div>
 <div id="toast" role="status"></div>
 <div id="loader"><p>Opening the door</p></div>
 
 <template id="tpl-about">
-  <p class="lead">I'm Hunter Allen, a student, entrepreneur and technology enthusiast from Pennsylvania. I build things, sell things, fix things, and look for ways to make them better.</p>
-  <p>I have always wanted to know how things work, especially computers and electronics. What started as an interest in building PCs grew into HunterPCBuilds, my own computer building and reselling business.</p>
-  <p>Since then I have worked on custom PC hardware, 3D printing, robotics and software. I like taking an idea, figuring out how to make it work, and turning it into something you can hold. What interests me most is where technology meets entrepreneurship: useful products, practical problems, and ideas that become real opportunities.</p>
+  <p class="lead">I'm Hunter Allen, a student and entrepreneur from Pennsylvania. I build things, sell things and fix things.</p>
   <ul class="shelf">
-    <li><b>Builder</b><span>I take things apart, learn how they work, and put them back together better.</span></li>
-    <li><b>Entrepreneur</b><span>I want experiments to turn into products and businesses people use.</span></li>
-    <li><b>Problem solver</b><span>I work with the hardware I have and find the unconventional fix.</span></li>
-    <li><b>Athlete</b><span>Four years of varsity running and about eight years of club hockey.</span></li>
+    <li><b>Builder</b><span>Take it apart, put it back better.</span></li>
+    <li><b>Entrepreneur</b><span>Turn experiments into products.</span></li>
+    <li><b>Problem solver</b><span>Find the unconventional fix.</span></li>
+    <li><b>Athlete</b><span>Varsity runner, club hockey.</span></li>
   </ul>
   <h4>Experience</h4>
-  <ul class="cards">
-    <li><h3>HunterPCBuilds <small>late 2025 to now</small></h3><p>Founder. Building, refurbishing and reselling PCs.</p><div class="tags"><button type="button" data-go="builds">Open the business</button></div></li>
-    <li><h3>School IT internship <small>summer 2026</small></h3><p>Worked with my school district's IT team on support, hardware and systems troubleshooting.</p></li>
-    <li><h3>Dave's Famous Hot Wiener <small>summer 2025 to May 2026</small></h3><p>Crew member. My first job outside my own businesses.</p></li>
-  </ul>
+  <dl class="facts">
+    <dt>Late 2025 to now</dt><dd>Founder, HunterPCBuilds</dd>
+    <dt>Summer 2026</dt><dd>School IT internship</dd>
+    <dt>2025 to 2026</dt><dd>Crew, Dave's Famous Hot Wiener</dd>
+  </dl>
   <h4>School</h4>
   <dl class="facts">
-    <dt>School</dt><dd>South Western High School</dd>
-    <dt>GPA</dt><dd>3.955, as of October 2026</dd>
-    <dt>Class rank</dt><dd>80 of 346</dd>
-    <dt>Program</dt><dd>GIEP</dd>
-    <dt>Coursework</dt><dd>AP Computer Science A, AP Computer Science Principles, Physics, Digital Media</dd>
+    <dt>School</dt><dd>South Western High School, GIEP</dd>
+    <dt>GPA</dt><dd>3.955, ranked 80 of 346</dd>
+    <dt>Courses</dt><dd>AP Computer Science A and Principles, Physics, Digital Media</dd>
   </dl>
-  <h4>Athletics</h4>
+  <h4>Sports</h4>
   <dl class="facts">
-    <dt>Cross country and track</dt><dd>Four years of varsity. Usually one of the top three runners on the team, with mid-distance on the track.</dd>
-    <dt>Club ice hockey</dt><dd>About eight years as a defenseman, with the York Devils and the Palmyra Black Knights.</dd>
+    <dt>Running</dt><dd>Four years of varsity cross country and track</dd>
+    <dt>Hockey</dt><dd>Eight years of club, defense. York Devils and Palmyra Black Knights</dd>
   </dl>
-  <h4>What I am into</h4>
-  <div class="tags"><span>PC hardware</span><span>entrepreneurship</span><span>3D printing</span><span>AI-assisted development</span><span>robotics</span><span>homelabs</span><span>cooling and airflow</span><span>repair</span></div>
+  <div class="tags"><button type="button" data-go="builds">See my business</button><button type="button" data-go="hardware">See what I build</button></div>
 </template>
 
 <template id="tpl-builds">
-  <p class="lead">HunterPCBuilds is my PC building, refurbishing and reselling business. I started it in late 2025.</p>
-  <ul class="stats">
-    <li><b>75 to 80</b><span>PCs built and sold by September 2026</span></li>
-    <li><b>~$30,000</b><span>revenue</span></li>
-    <li><b>~$5,000</b><span>profit</span></li>
-    <li><b>~60</b><span>eBay sales, about $11,000</span></li>
+  <p class="lead">My PC building and reselling business, since late 2025.</p>
+  <ul class="plays">
+    <li><button type="button" data-demo="pcbuild" data-line="Source the parts, test them, build it, sell it. It started with a $375 PC for a cross country teammate."><i></i><span>Watch a PC get built</span></button></li>
+    <li><button type="button" data-demo="numbers" data-line="About $30,000 in sales and $5,000 in profit so far."><i></i><span>See the numbers</span></button></li>
   </ul>
-  <p>It started with a $375 computer I built for a friend from my cross country team. I tracked every part and what it cost in Google Sheets, and that one build turned an interest in computers into a business.</p>
-  <ul class="cards">
-    <li><h3>What I do <small>process</small></h3><p>Source used hardware, test and evaluate every component, price the system, manage costs and find the buyer.</p></li>
-    <li><h3>What I build <small>hardware</small></h3><p>Custom gaming PCs on everything from older Xeon platforms to modern Ryzen systems. The white desk across the room is the build bench.</p><div class="tags"><span>Xeon</span><span>Ryzen</span><span>refurbished</span></div></li>
-    <li><h3>Repair and refurbishing <small>service</small></h3><p>Troubleshooting, repairing and refurbishing machines so they go back out working.</p></li>
-    <li><h3>eBay store <small>hunter.pcbuilds</small></h3><p>Where most of the finished machines are listed.</p><div class="tags"><a href="https://www.ebay.com/usr/hunter.pcbuilds" target="_blank" rel="noopener">ebay.com/usr/hunter.pcbuilds</a></div></li>
-  </ul>
-  <h4>Build gallery</h4>
-  <span class="ph">Photos and specs of my best builds are coming.</span>
-  <ul class="slots"><li>Build photo</li><li>Before and after</li><li>Specs</li></ul>
+  <div class="tags"><a href="https://www.ebay.com/usr/hunter.pcbuilds" target="_blank" rel="noopener">eBay store: hunter.pcbuilds</a><span>Xeon to Ryzen</span><span>refurbishing</span><span>repair</span></div>
 </template>
 
 <template id="tpl-hardware">
-  <p class="lead">The laptops on the blue dresser are where my hardware projects start. The biggest one turns a business ThinkPad into a modular desktop gaming setup.</p>
-  <ul class="cards">
-    <li><h3>ThinkPad eGPU dock <small class="st built">working</small></h3><p>A working external GPU setup for a ThinkPad T480. A GTX 1660 connects over Thunderbolt, and the laptop drops into a dock I designed with custom 3D-printed parts.</p><p>The hard part was the physical side: mounting, airflow, cable routing and power.</p><div class="tags"><span>ThinkPad T480</span><span>Thunderbolt</span><span>GTX 1660</span><span>3D printed</span></div></li>
-    <li><h3>Making it reproducible <small class="st idea">exploring</small></h3><p>I am looking at offering the dock so other people can build one: design files with instructions, a printed parts kit, or a complete DIY package.</p></li>
-    <li><h3>ThinkPad cooling and eGPU stand <small class="st proto">design and prototyping</small></h3><p>A laptop-sized cooling platform and eGPU enclosure in one. Dedicated airflow channels, TPU seals, room for a two-slot graphics card and a 400W Flex ATX power supply, with separate paths for GPU exhaust and CPU intake.</p><div class="tags"><span>CAD</span><span>TPU</span><span>Flex ATX</span></div></li>
-    <li><h3>Repair and troubleshooting <small>ongoing</small></h3><p>Diagnosing hardware problems, repairing computers, configuring BIOS settings, installing operating systems and drivers, and helping people with their technology.</p></li>
+  <p class="lead">Hardware I designed around a ThinkPad.</p>
+  <ul class="plays">
+    <li><button type="button" data-demo="egpu" data-line="A ThinkPad T480 drops into a dock I designed, and a GTX 1660 takes over the graphics through Thunderbolt."><i></i><span>ThinkPad eGPU dock</span><small class="st built">working</small></button></li>
+    <li><button type="button" data-demo="cooling" data-line="One stand that cools the laptop and houses the graphics card. Cool air in the front, hot air out the side."><i></i><span>Cooling and eGPU stand</span><small class="st proto">prototype</small></button></li>
   </ul>
-  <span class="ph">CAD renders and build photos are coming.</span>
-  <ul class="slots"><li>CAD render</li><li>Printed part</li><li>Installed</li></ul>
-  <h4>More engineering in this room</h4>
-  <div class="tags"><button type="button" data-go="printing">3D printing</button><button type="button" data-go="software">Software and AI</button><button type="button" data-go="interests">The workshop shelves</button></div>
+  <div class="tags"><button type="button" data-go="printing">3D printing</button><button type="button" data-go="software">Software and AI</button><button type="button" data-go="interests">Workshop shelves</button></div>
 </template>
 
 <template id="tpl-printing">
-  <p class="lead">Four printers live in this room, and I use them for parts that have a job to do.</p>
-  <ul class="cards">
-    <li><h3>Elegoo Neptune 4 Max <small>bench</small></h3><p>The big open-frame one on the dark bench, for large parts.</p></li>
-    <li><h3>Bambu Lab A1 Mini <small>bench</small></h3><p>Small, quick and reliable. Sits next to the Elegoo.</p></li>
-    <li><h3>Flashforge Adventurer 5M <small>black desk</small></h3><p>An arm's reach from my chair.</p></li>
-    <li><h3>Geeetech M1S <small>main desk</small></h3><p>The little blue and white one at the end of the desk.</p></li>
+  <p class="lead">Four printers. Pick one and it prints.</p>
+  <ul class="plays">
+    <li><button type="button" data-demo="print0" data-line="The big one, for large parts."><i></i><span>Elegoo Neptune 4 Max</span></button></li>
+    <li><button type="button" data-demo="print1" data-line="Small, quick and reliable."><i></i><span>Bambu Lab A1 Mini</span></button></li>
+    <li><button type="button" data-demo="print2" data-line="An arm's reach from my chair."><i></i><span>Flashforge Adventurer 5M</span></button></li>
+    <li><button type="button" data-demo="print3" data-line="The little blue and white one on the main desk."><i></i><span>Geeetech M1S</span></button></li>
   </ul>
-  <p>Click any printer in the room to start a print.</p>
-  <h4>What I print</h4>
-  <ul class="shelf">
-    <li><b>Dock parts</b><span>Custom components for the ThinkPad eGPU dock.</span></li>
-    <li><b>Cooling and mounts</b><span>Laptop cooling and mounting parts.</span></li>
-    <li><b>Enclosures</b><span>Custom housings for hardware.</span></li>
-    <li><b>Prototypes</b><span>Mechanical test parts, plus printer mods and experiments.</span></li>
-  </ul>
-  <span class="ph">Gallery coming: the CAD model, the printed part and the finished install, side by side.</span>
-  <ul class="slots"><li>CAD model</li><li>Printed part</li><li>Installed</li></ul>
-  <div class="tags"><button type="button" data-go="hardware">Back to hardware projects</button></div>
+  <div class="tags"><span>dock parts</span><span>cooling mounts</span><span>enclosures</span><span>prototypes</span><button type="button" data-go="hardware">Hardware projects</button></div>
 </template>
 
 <template id="tpl-software">
-  <p class="lead">What is open on the ultrawide: websites, dashboards and AI-assisted development.</p>
-  <ul class="cards">
-    <li><h3>This room <small>2026</small></h3><p>The site you are standing in. My actual room, rebuilt in 3D so you can click around it.</p><div class="tags"><span>three.js</span><span>webgl</span></div></li>
-    <li><h3>AI-assisted development <small>how I work</small></h3><p>I build with Claude Code, and I use AI to get from an idea to a working site or tool quickly.</p><div class="tags"><span>Claude Code</span><span>automation</span></div></li>
-    <li><h3>Coursework <small>school</small></h3><p>AP Computer Science A and AP Computer Science Principles.</p></li>
+  <p class="lead">Websites and tools, built with AI in the loop.</p>
+  <ul class="plays">
+    <li><button type="button" data-demo="spin" data-line="My real room, rebuilt in three.js so you can click around it."><i></i><span>This room</span></button></li>
   </ul>
-  <span class="ph">More software projects and screenshots are coming.</span>
-  <div class="tags"><button type="button" data-go="hardware">Back to hardware projects</button></div>
+  <div class="tags"><span>Claude Code</span><span>three.js</span><span>AP CS A</span><span>AP CS Principles</span><button type="button" data-go="hardware">Hardware projects</button></div>
 </template>
 
 <template id="tpl-experiments">
-  <p class="lead">The whiteboard is for ideas that are not finished yet. Everything here is a prototype, an experiment or a concept.</p>
-  <ul class="cards">
-    <li><h3>Autonomous mower <small class="st idea">concept, early prototype</small></h3><p>A roughly $600 robotic mower that a crew could bring to a property, run and take with them. The early prototype work is motor control on an L298 driver with a Raspberry Pi. The plan adds Ryobi 40V battery power, an Xbox controller for manual driving and mapping, camera and LiDAR navigation, and automatic back-and-forth mowing passes.</p><div class="tags"><span>Raspberry Pi</span><span>L298</span><span>robotics</span></div></li>
-    <li><h3>Home server <small class="st built">running</small></h3><p>A Xeon E-2276G server with 32GB of RAM and 4TB of storage. I use it to explore virtualization and CPU and GPU computing, and to look at ways idle compute could earn money.</p><div class="tags"><span>homelab</span><span>virtualization</span></div></li>
-    <li><h3>Hidden printer enclosures <small class="st idea">concept</small></h3><p>Disguising a compact 3D printer as an arcade machine, and a deployable enclosure small enough for a dorm room. Hardware that fits into furniture and small spaces.</p></li>
-    <li><h3>Raspberry Pi experiments <small class="st proto">ongoing</small></h3><p>Pi boards for robotics, computing experiments and hardware projects.</p></li>
+  <p class="lead">Not finished yet. These are ideas and prototypes.</p>
+  <ul class="plays">
+    <li><button type="button" data-demo="mower" data-line="A $600 mower a crew drops off. Drive it once with an Xbox controller to map the yard, then it mows on its own. So far: a Raspberry Pi and an L298 motor driver."><i></i><span>Autonomous mower</span><small class="st idea">concept</small></button></li>
+    <li><button type="button" data-demo="server" data-line="A Xeon E-2276G with 32GB of RAM and 4TB of storage, for virtual machines and compute experiments."><i></i><span>Home server</span><small class="st built">running</small></button></li>
+    <li><button type="button" data-demo="arcade" data-line="A 3D printer hidden inside an arcade cabinet."><i></i><span>Arcade printer enclosure</span><small class="st idea">concept</small></button></li>
   </ul>
+  <div class="tags"><span>Raspberry Pi</span><span>robotics</span><span>dorm printer box</span></div>
 </template>
 
 <template id="tpl-interests">
-  <p class="lead">Two shelving units by the window hold the workshop: the hardware I collect and work with.</p>
+  <p class="lead">The workshop: hardware I collect and work with.</p>
   <ul class="shelf">
-    <li><b>GPUs and processors</b><span>Parts waiting for their next build.</span></li>
-    <li><b>Finished PCs</b><span>Machines waiting for owners.</span></li>
-    <li><b>Electronics</b><span>Boards, kits and Raspberry Pis.</span></li>
-    <li><b>Tools</b><span>What I use to build and repair.</span></li>
+    <li><b>GPUs and CPUs</b><span>Waiting for a build.</span></li>
+    <li><b>Finished PCs</b><span>Waiting for owners.</span></li>
+    <li><b>Electronics</b><span>Boards and Pis.</span></li>
+    <li><b>Tools</b><span>For building and repair.</span></li>
   </ul>
-  <span class="ph">A clickable catalog of what is on the shelves is coming.</span>
   <div class="tags"><button type="button" data-go="builds">See HunterPCBuilds</button></div>
 </template>
 
@@ -371,7 +359,6 @@ body.ready #loader{opacity:0}
     <li><div><small>GitHub</small><code id="c-gh">github.com/your-handle</code></div><button type="button" class="copy" data-copy="c-gh">Copy</button></li>
   </ul>
   <span class="ph">Email and GitHub are placeholders until I add the real ones.</span>
-  <p>Best for: PC build requests, hardware questions, print jobs and project ideas.</p>
 </template>
 
 <script>
@@ -391,10 +378,33 @@ body.ready #loader{opacity:0}
   const body = document.getElementById('panelBody');
   const dock = document.querySelectorAll('.dock button');
   let current = null, lastFocus = null, hideTimer = 0;
+  const bar = document.getElementById('demobar');
+  let demoOn = false, demoFrom = null, demoName = null, lastStat = null;
+  function stat(t){ if(t !== lastStat){ lastStat = t; document.getElementById('demoStat').textContent = t; } }
+  function playDemo(btn){
+    demoFrom = current || demoFrom; demoName = btn.dataset.demo; demoOn = true;
+    document.getElementById('demoTitle').textContent = btn.querySelector('span').textContent;
+    document.getElementById('demoLine').textContent = btn.dataset.line || '';
+    stat('');
+    current = null; panel.classList.remove('open'); document.body.classList.remove('has-panel'); clearTimeout(hideTimer); hideTimer = setTimeout(()=>{ panel.hidden = true; }, 600);
+    dock.forEach(b=>b.setAttribute('aria-pressed','false'));
+    document.body.classList.add('has-demo'); bar.hidden = false;
+    document.getElementById('demoBack').focus({preventScroll:true});
+    window.dispatchEvent(new CustomEvent('room:demo',{detail:demoName}));
+  }
+  function endDemo(){
+    if(!demoOn) return false;
+    if(demoFrom && SECTIONS[demoFrom]) open(demoFrom);
+    else { demoOn = false; document.body.classList.remove('has-demo'); bar.hidden = true; window.dispatchEvent(new CustomEvent('room:demo',{detail:null})); window.dispatchEvent(new CustomEvent('room:focus',{detail:null})); }
+    return true;
+  }
+  document.getElementById('demoBack').addEventListener('click', endDemo);
+  document.getElementById('demoReplay').addEventListener('click', ()=>{ stat(''); window.dispatchEvent(new CustomEvent('room:demo',{detail:demoName})); });
 
   function open(id){
     if(!SECTIONS[id]) return;
     if(current === id) return;
+    if(demoOn){ demoOn = false; document.body.classList.remove('has-demo'); bar.hidden = true; window.dispatchEvent(new CustomEvent('room:demo',{detail:null})); }
     if(!current) lastFocus = document.activeElement;
     current = id;
     clearTimeout(hideTimer);
@@ -423,8 +433,9 @@ body.ready #loader{opacity:0}
   }
   dock.forEach(b=>b.addEventListener('click',()=> current === b.dataset.open ? close() : open(b.dataset.open)));
   document.getElementById('panelClose').addEventListener('click', close);
-  window.addEventListener('keydown', e=>{ if(e.key === 'Escape') close(); });
+  window.addEventListener('keydown', e=>{ if(e.key === 'Escape'){ if(!endDemo()) close(); } });
   body.addEventListener('click', e=>{
+    const pd = e.target.closest('[data-demo]'); if(pd){ playDemo(pd); return; }
     const go = e.target.closest('[data-go]'); if(go){ open(go.dataset.go); body.scrollTop = 0; return; }
     const btn = e.target.closest('.copy'); if(!btn) return;
     const el = document.getElementById(btn.dataset.copy);
@@ -444,7 +455,7 @@ body.ready #loader{opacity:0}
   }
   tick(); setInterval(tick, 15000);
 
-  window.RoomUI = {open, close, toast, get current(){ return current; }};
+  window.RoomUI = {open, close, toast, stat, endDemo, get current(){ return current; }};
   window.addEventListener('hashchange', ()=>{ const h = location.hash.slice(1); if(SECTIONS[h]) open(h); });
   window.addEventListener('room:ready', ()=>{ const h = location.hash.slice(1); if(SECTIONS[h]) setTimeout(()=>open(h), 1800); });
 
@@ -729,9 +740,9 @@ cyl(.028,.032,.15, std({color:0x2a2622, roughness:.2, transparent:true, opacity:
 const mini = sub(W2.f); hotGroups.push(mini); mini.position.set(1.68,.76,.4); mini.rotation.y = .12;
 const m1White = std({color:0xeef1f2, roughness:.35}), m1Blue = std({color:0x4fb3e0, roughness:.4});
 rbox(.25,.05,.25,.02, m1Blue, [0,.025,0], mini);
-rbox(.24,.2,.24,.025, m1White, [0,.15,0], mini);
+const m1Body = std({color:0xeef1f2, roughness:.35, transparent:true}); rbox(.24,.2,.24,.025, m1Body, [0,.15,0], mini);
 rbox(.25,.045,.25,.02, m1Blue, [0,.262,0], mini);
-box(.17,.15,.006, std({color:0x0d1117, roughness:.1, metalness:.2, transparent:true, opacity:.75}), [0,.145,.1215], mini);
+const m1Win = std({color:0x0d1117, roughness:.1, metalness:.2, transparent:true, opacity:.75}); box(.17,.15,.006, m1Win, [0,.145,.1215], mini);
 const m1Bed = box(.12,.008,.12, std({color:0x2b2e35, roughness:.4}), [0,.1,.02], mini), m1Head = box(.03,.035,.03, m1Blue, [.02,.19,.03], mini);
 box(.07,.03,.004, basic(0x9fd8ff), [0,.262,.127], mini, false);
 const m1handle = mesh(new THREE.TorusGeometry(.045,.008,8,16,Math.PI), m1White, [0,.283,0], mini);
@@ -1103,11 +1114,12 @@ const cur = {pos:new V3(), tgt:new V3()}, from = {pos:new V3(), tgt:new V3()}, t
 let tw = 1, twDur = 1.5;
 let shiftX = 0, shiftY = 0, yaw = 0, pitch = 0, yawGoal = 0, pitchGoal = 0, parX = 0, parY = 0, parXG = 0, parYG = 0;
 const isNarrow = ()=> W <= 720;
-function panelInset(){ if(!focusId) return [0,0]; return isNarrow() ? [0, H*.62] : [Math.min(440, W-32) + 16, 0]; }
+let demoView = null;
+function panelInset(){ if(!focusId) return [0,0]; if(demoView) return isNarrow() ? [0, H*.2] : [0, 0]; return isNarrow() ? [0, H*.62] : [Math.min(440, W-32) + 16, 0]; }
 function goal(id){
-  const v = id ? HOT[id] : HOME, a = W/H, dir = v.pos.clone().sub(v.tgt);
+  const v = demoView || (id ? HOT[id] : HOME), a = W/H, dir = v.pos.clone().sub(v.tgt);
   let k;
-  if(id){ const ins = panelInset(), ea = (W-ins[0])/(H-ins[1]); k = Math.max(1, (isNarrow() ? 1.7 : 1.05)/ea); }
+  if(id && !(demoView && demoView.home)){ const ins = panelInset(), ea = (W-ins[0])/(H-ins[1]); k = Math.max(1, (isNarrow() ? 1.7 : 1.05)/ea); }
   else k = Math.max(1, (a < 1 ? 1.12 : 1.84)/a);
   return {pos:v.tgt.clone().add(dir.multiplyScalar(k)), tgt:v.tgt.clone()};
 }
@@ -1166,6 +1178,7 @@ function up(e){
     else if(id === '@roomba') startRoomba();
     else if(id && id.startsWith('@print:')) startPrint(jobs[+id.slice(7)]);
     else if(id) window.RoomUI.open(id);
+    else if(demoView) window.RoomUI.endDemo();
     else if(focusId) window.RoomUI.close();
   }
   down = null;
@@ -1177,6 +1190,221 @@ function cycleLeds(){
   ledIx = (ledIx+1) % LEDS.length; ledGoal.set(LEDS[ledIx][1]);
   document.getElementById('lampText').textContent = LEDS[ledIx][0];
   window.RoomUI.toast('LED strip: ' + LEDS[ledIx][0]);
+}
+
+/* ---------- demos: pick a project title, watch it happen in the room ---------- */
+scene.updateMatrixWorld(true);
+const wp = o => o.getWorldPosition(new V3());
+const mkView = (t, off, home) => ({tgt:t.clone(), pos:t.clone().add(new V3(off[0],off[1],off[2])), home:!!home});
+const faceY = off => Math.atan2(off[0], off[2]);   // turn a group so its +z looks back at the camera
+const setStat = t => window.RoomUI.stat(t);
+const cl01 = (t,a,b)=> THREE.MathUtils.clamp((t-a)/(b-a),0,1), smo = x => x*x*(3-2*x);
+const emis = (c,i=1.4)=> std({color:c, emissive:c, emissiveIntensity:i, roughness:.45});
+function label(text, parent, pos, w=.5, color='#f3ead9'){
+  const t = ctex(512,128,(g)=>{ g.fillStyle = 'rgba(12,14,24,.86)'; g.beginPath(); if(g.roundRect) g.roundRect(6,10,500,108,34); else g.rect(6,10,500,108); g.fill();
+    g.font = '600 50px system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = color; g.fillText(text,256,66); });
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:t, transparent:true, depthTest:false})); sp.scale.set(w,w/4,1); sp.position.set(pos[0],pos[1],pos[2]); sp.renderOrder = 6; parent.add(sp); return sp;
+}
+const demos = {}; let demo = null, demoT = 0;
+function defDemo(name, view, g, o){ if(g){ if(!g.parent) scene.add(g); g.visible = false; } demos[name] = Object.assign({view, g}, o); }
+function stopDemo(){ if(demo){ if(demo.g) demo.g.visible = false; if(demo.stop) demo.stop(); demo = null; } }
+function startDemo(name){ stopDemo(); demo = demos[name]; demoT = 0; if(demo.g) demo.g.visible = true; if(demo.start) demo.start(); demo.tick(0, 0); }
+function tickDemo(dt){ if(demo){ demoT += dt; demo.tick(demoT, dt); } }
+window.addEventListener('room:demo', e=>{
+  stopDemo();
+  if(e.detail && demos[e.detail]){ demoView = demos[e.detail].view; startDemo(e.detail); go('@demo', 1.4); }
+  else demoView = null;
+});
+
+// a glowing pad in the middle of the floor, for things that are not physically in the room
+const PAD = new V3(-.3,0,.05), PADOFF = [-1.15,1.75,-1.45];
+function holo(){
+  const g = new THREE.Group(); g.position.copy(PAD); g.rotation.y = faceY(PADOFF);
+  cyl(.46,.48,.014, M.matte, [0,.007,0], g, 48);
+  const ring = mesh(new THREE.TorusGeometry(.44,.008,8,64), basic(0x19e6c0), [0,.016,0], g, false); ring.rotation.x = Math.PI/2;
+  glow(0x19e6c0, 1.3, [0,.05,0], g, .22);
+  return g;
+}
+const PADVIEW = mkView(new V3(PAD.x,.5,PAD.z), PADOFF);
+
+// HunterPCBuilds: parts drop into the open case on the build desk
+{ const g = sub(openC);
+  const fanMat = emis(0x39b8ff, 0);
+  const parts = [
+    {m:box(.03,.085,.24, std({color:0x15161a, roughness:.4, metalness:.5}), null, g), to:[.0,.15,-.03], say:'Installing the graphics card'},
+    {m:box(.012,.1,.03, emis(0xa45cff,.9), null, g), to:[-.07,.31,.09], say:'Seating the RAM'},
+    {m:box(.012,.1,.03, emis(0xa45cff,.9), null, g), to:[-.07,.31,.13], say:'Seating the RAM'},
+    {m:mesh(new THREE.TorusGeometry(.05,.012,8,24), fanMat, null, g, false), to:[0,.3,-.165], say:'Mounting the fan'},
+    {m:mesh(new THREE.PlaneGeometry(.38,.4), std({color:0x9fd8ff, roughness:.05, transparent:true, opacity:.14}), null, g, false), to:[.101,.2,0], say:'Closing the side panel'}
+  ];
+  box(.032,.012,.24, emis(0x19e6c0,1.2), [0,.045,0], parts[0].m, false);
+  parts[4].m.rotation.y = Math.PI/2;
+  const led = glow(0x39b8ff, .5, [.02,.25,0], g, 0); const inner = new THREE.PointLight(0x39b8ff, 0, .9); inner.position.set(.03,.22,0); g.add(inner);
+  const c0 = wp(openC), off = [1.35,.8,.9];
+  defDemo('pcbuild', mkView(new V3(c0.x,c0.y+.22,c0.z), off), g, { tick(t){
+    let say = 'Sourcing and testing the parts';
+    parts.forEach((p,i)=>{ const k = smo(cl01(t, .7+i*.85, 1.5+i*.85)); p.m.visible = k > 0;
+      p.m.position.set(p.to[0] + (1-k)*.5, p.to[1] + (1-k)*(.22+i*.04) + Math.sin(k*Math.PI)*.12, p.to[2]); if(k > 0) say = p.say; });
+    const on = cl01(t, 5.2, 6);
+    fanMat.emissiveIntensity = on*1.8; fanMat.emissive.setHSL((t*.12)%1, .9, .5); fanMat.color.copy(fanMat.emissive);
+    parts[3].m.rotation.z = t*on*9; led.material.opacity = on*.4; inner.intensity = .25 + on*.6; inner.color.copy(on ? fanMat.emissive : white); led.material.color.copy(fanMat.emissive);
+    if(on >= 1) say = 'Stress tested and ready to sell';
+    setStat(say);
+  }});
+}
+
+// the numbers, as bars on the pad
+{ const g = holo();
+  const bars = [['$30k sales',30,0x19e6c0],['$11k on eBay',11,0x39b8ff],['$5k profit',5,0xffb057]].map((b,i)=>{
+    const geo = new THREE.BoxGeometry(.17,1,.17); geo.translate(0,.5,0);
+    return {m:mesh(geo, emis(b[2],.55), [(i-1)*.28,.02,0], g), l:label(b[0], g, [(i-1)*.28,.1,0], .3), h:b[1]/30*.8}; });
+  defDemo('numbers', PADVIEW, g, { tick(t){
+    bars.forEach((b,i)=>{ const k = smo(cl01(t, .5+i*.6, 1.9+i*.6)); b.m.scale.y = Math.max(.002, k*b.h); b.l.position.y = .14 + k*b.h; b.l.material.opacity = cl01(t,.3+i*.6,.8+i*.6); });
+    const k = smo(cl01(t,.5,3.6)); setStat(k >= 1 ? 'PCs built and sold: 75 to 80' : 'PCs built and sold: ' + Math.round(k*75));
+  }});
+}
+
+// a ThinkPad with a lid that opens and a live screen
+function mkLaptop(parent){
+  const L = sub(parent);
+  box(.32,.016,.22, M.black, [0,.008,0], L); mesh(new THREE.PlaneGeometry(.28,.1), std({color:0x24262c, roughness:.7}), [0,.0165,-.03], L, false).rotation.x = -Math.PI/2;
+  mesh(new THREE.SphereGeometry(.006,8,6), basic(0xd13b2e), [0,.018,-.03], L, false);
+  const lid = sub(L); lid.position.set(0,.017,-.11); box(.32,.011,.22, M.black, [0,.0055,.11], lid);
+  const c = document.createElement('canvas'); c.width = 320; c.height = 208; const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
+  const scr = mesh(new THREE.PlaneGeometry(.295,.19), new THREE.MeshBasicMaterial({map:tex}), [0,-.0006,.11], lid, false); scr.rotation.x = Math.PI/2;
+  return {L, lid, tex, g:c.getContext('2d')};
+}
+function drawGame(lp, t, fast, title){
+  const g = lp.g; g.fillStyle = '#0a0c14'; g.fillRect(0,0,320,208);
+  const a = fast ? t*2.4 : Math.floor(t*3)/3*2.4;
+  g.save(); g.translate(160,112); g.rotate(a); g.fillStyle = fast ? '#19e6c0' : '#7a7f8c'; g.fillRect(-42,-42,84,84); g.rotate(.8); g.fillStyle = fast ? '#a45cff' : '#4b4f5a'; g.fillRect(-24,-24,48,48); g.restore();
+  g.font = '600 20px system-ui, sans-serif'; g.fillStyle = fast ? '#19e6c0' : '#c9ccd4'; g.fillText(title, 12, 26);
+  g.font = '15px system-ui, sans-serif'; g.fillStyle = fast ? '#7fe0d0' : '#ffb057'; g.fillText(fast ? 'smooth' : 'choppy', 12, 196);
+  lp.tex.needsUpdate = true;
+}
+const DR = wp(dresser), HWOFF = [-1.3,.5,.45], HWBASE = new V3(DR.x-.46, 1.22, DR.z+.16);
+const printed = std({color:0xff7a1a, roughness:.6});
+
+// eGPU dock: the laptop lifts out of the charging dock, lands in the printed dock, the GPU plugs in
+{ const g = new THREE.Group(); g.position.copy(HWBASE); g.rotation.y = faceY(HWOFF);
+  const dockP = sub(g); dockP.position.set(-.17,0,0); box(.36,.024,.25, printed, [0,-.012,0], dockP); box(.36,.05,.02, printed, [0,.013,-.135], dockP); box(.02,.03,.25, printed, [-.19,.003,0], dockP);
+  const lp = mkLaptop(g);
+  const card = sub(g); box(.3,.02,.15, printed, [0,-.012,0], card); box(.27,.045,.115, std({color:0x16171b, roughness:.4, metalness:.5}), [0,.022,0], card); box(.27,.006,.02, emis(0x19e6c0,1.2), [0,.047,.05], card);
+  const fans = [-.066,.066].map(x=>{ cyl(.047,.047,.004, M.matte, [x,.046,0], card, 24); const f = sub(card); f.position.set(x,.05,0); for(let i=0;i<3;i++){ const b = box(.085,.003,.018, M.steel, null, f, false); b.rotation.y = i*Math.PI/3; } return f; });
+  box(.12,.06,.1, M.steel, [.07,.03,-.14], card);
+  const curve = new THREE.CatmullRomCurve3([new V3(-.01,.01,-.07), new V3(.05,.07,-.1), new V3(.12,.07,-.06), new V3(.17,.03,-.03)]);
+  const cableMat = emis(0x39b8ff, 1.2), cable = mesh(new THREE.TubeGeometry(curve, 30, .006, 6), cableMat, null, g, false), cableN = cable.geometry.index.count;
+  const spark = glow(0x9fe8ff, .14, [0,0,0], g, 0);
+  defDemo('egpu', mkView(HWBASE.clone().add(new V3(0,.1,.08)), HWOFF), g, { tick(t){
+    const up = smo(cl01(t,.2,1.4)), open = smo(cl01(t,1.4,2.3)), gin = smo(cl01(t,2.6,3.7)), plug = cl01(t,3.9,4.7), on = t > 5;
+    dockP.scale.setScalar(Math.max(.001, smo(cl01(t,0,.6))));
+    lp.L.position.set(-.17, -.3 + up*.3, 0); lp.L.rotation.z = (1-up)*1.3; lp.lid.rotation.x = -open*1.85;
+    card.visible = gin > 0; card.position.set(.3 + (1-gin)*.6, 0, 0);
+    cable.visible = plug > 0; cable.geometry.setDrawRange(0, Math.floor(cableN*plug/36)*36);
+    cableMat.emissiveIntensity = on ? 1.4 + Math.sin(t*8)*.6 : .8;
+    spark.material.opacity = on ? .9 : 0; if(on) spark.position.copy(curve.getPoint((t*1.2)%1));
+    fans.forEach(f=> f.rotation.y = on ? t*22 : 0);
+    drawGame(lp, t, on, on ? 'GTX 1660' : 'Built-in graphics');
+    setStat(t < 1.4 ? 'ThinkPad T480 drops into the printed dock' : t < 2.6 ? 'Built-in graphics: choppy' : t < 3.9 ? 'Adding a GTX 1660' : !on ? 'Connecting over Thunderbolt' : 'Running on the GTX 1660');
+  }});
+}
+
+// cooling and eGPU stand: cool air in at the front, hot air out past the card
+{ const g = new THREE.Group(); g.position.copy(HWBASE); g.rotation.y = faceY(HWOFF);
+  box(.36,.012,.26, printed, [0,.006,0], g); box(.012,.07,.26, printed, [-.174,.035,0], g); box(.012,.07,.26, printed, [.174,.035,0], g);
+  [-.09,0,.09].forEach(x=> box(.008,.058,.24, printed, [x,.035,0], g)); box(.36,.008,.26, printed, [0,.074,0], g);
+  const lp = mkLaptop(g); lp.L.position.set(0,.078,0); lp.lid.rotation.x = -1.85;
+  const shell = std({color:0xff7a1a, roughness:.6, transparent:true, opacity:.35});
+  box(.36,.17,.13, shell, [0,.085,-.2], g, false); box(.27,.045,.1, std({color:0x16171b, roughness:.4}), [-.02,.1,-.2], g); box(.27,.006,.1, emis(0x19e6c0,1), [-.02,.126,-.2], g); box(.3,.05,.1, M.steel, [0,.03,-.2], g);
+  box(.3,.006,.012, emis(0x2a2a2a,0), [0,.08,.126], g);
+  const cool = [], hot = [];
+  for(let i=0;i<18;i++){ cool.push(mesh(new THREE.SphereGeometry(.009,8,6), basic(0x39b8ff), null, g, false)); hot.push(mesh(new THREE.SphereGeometry(.009,8,6), basic(0xff5a3c), null, g, false)); }
+  const lIn = label('cool air in', g, [-.34,.04,.34], .26, '#7fd4ff'), lOut = label('hot air out', g, [.46,.3,-.2], .26, '#ff9a80');
+  defDemo('cooling', mkView(HWBASE.clone().add(new V3(0,.12,.05)), [HWOFF[0]*1.05, HWOFF[1]+.15, HWOFF[2]+.25]), g, { tick(t){
+    const k = smo(cl01(t,0,.8)); g.scale.setScalar(Math.max(.001,k));
+    cool.forEach((p,i)=>{ const u = (t*.45 + i/cool.length)%1, lane = (i%4-1.5)*.075; p.position.set(lane, .04 + Math.sin(u*Math.PI)*.004, .4 - u*.5); p.scale.setScalar(u < .08 ? u/.08 : u > .85 ? (1-u)/.15 : 1); });
+    hot.forEach((p,i)=>{ const u = (t*.5 + i/hot.length)%1; p.position.set(.18 + u*.4, .08 + (i%3)*.03 + u*u*.2, -.2 + ((i%4)-1.5)*.02); p.scale.setScalar(u < .1 ? u/.1 : 1-u*.7); });
+    drawGame(lp, t, true, 'GTX 1660');
+    lIn.material.opacity = lOut.material.opacity = cl01(t,.8,1.4);
+    setStat('Two-slot card and a 400W Flex ATX supply inside');
+  }});
+}
+
+// the four printers
+[[eg,[1.15,.6,-.3],.18],[a1,[.95,.5,-.1],.12],[ff,[-.45,.6,-1.55],.14],[mini,[-.95,.55,-.35],.12]].forEach((p,i)=>{
+  const c = wp(p[0]), j = jobs[i];
+  defDemo('print'+i, mkView(new V3(c.x,c.y+p[2],c.z), p[1]), null, { start(){ j.on = false; startPrint(j); },
+    tick(){ setStat(j.on ? 'Printing ' + j.what + ': ' + Math.round(j.p*100) + '%' : 'Finished ' + j.what); } });
+});
+
+// this room: one full turn with the LEDs cycling
+defDemo('spin', mkView(HOME.tgt, [HOME.pos.x-HOME.tgt.x, HOME.pos.y-HOME.tgt.y, HOME.pos.z-HOME.tgt.z], true), null, { start(){ this.n = 0; },
+  tick(t){ yawGoal = Math.min(t*.8, Math.PI*2); const n = Math.floor(t/2); if(n !== this.n && n < 4){ this.n = n; cycleLeds(); } setStat('Hand modeled from photos of my room'); }, stop(){ yawGoal = 0; } });
+
+// autonomous mower concept: map the edge by hand, then mow lanes
+{ const g = new THREE.Group();
+  const X0 = -1.0, Z0 = -1.7, LW = 1.05, LH = 2.8, lc = document.createElement('canvas'); lc.width = LW*100; lc.height = LH*100;
+  const lt = new THREE.CanvasTexture(lc); lt.colorSpace = THREE.SRGBColorSpace; const lg = lc.getContext('2d');
+  const lawnMat = new THREE.MeshBasicMaterial({map:lt, transparent:true, opacity:0, depthWrite:false});
+  const lawn = mesh(new THREE.PlaneGeometry(LW,LH), lawnMat, [X0+LW/2,.011,Z0+LH/2], g, false); lawn.rotation.x = -Math.PI/2; lawn.renderOrder = 3;
+  const mw = sub(g);
+  box(.26,.03,.3, M.matte, [0,.05,0], mw); box(.2,.07,.26, std({color:0xb4d02a, roughness:.5}), [0,.1,0], mw); box(.08,.06,.1, std({color:0x25272b, roughness:.5}), [0,.165,-.05], mw); box(.082,.012,.102, emis(0xb4d02a,.8), [0,.2,-.05], mw);
+  box(.075,.01,.055, std({color:0x1f7a3a, roughness:.5}), [0,.14,.08], mw);
+  const lidar = sub(mw); lidar.position.set(0,.215,-.05); cyl(.028,.028,.025, M.black, [0,0,0], lidar, 16); mesh(new THREE.SphereGeometry(.006,6,5), basic(0xff3b30), [.028,0,0], lidar, false);
+  [[-.135,-.1],[.135,-.1],[-.135,.1],[.135,.1]].forEach(w=> cyl(.045,.045,.03, M.matte, [w[0],.045,w[1]], mw, 16).rotation.z = Math.PI/2);
+  const edge = [[-.92,-1.6],[-.05,-1.6],[-.05,.98],[-.92,.98],[-.92,-1.6]];
+  const lanes = [[-.92,-1.6],[-.82,-1.5]]; [-.82,-.6,-.38,-.16].forEach((x,i)=>{ const a = i%2 ? .88 : -1.5, b = i%2 ? -1.5 : .88; lanes.push([x,a],[x,b]); });
+  const path = edge.concat(lanes.slice(1)), len = [0]; for(let i=1;i<path.length;i++) len.push(len[i-1] + Math.hypot(path[i][0]-path[i-1][0], path[i][1]-path[i-1][1]));
+  const edgeLen = len[edge.length-1], total = len[len.length-1], px = p => [(p[0]-X0)*100, (p[1]-Z0)*100];
+  let pts = [], heading = 0;
+  defDemo('mower', mkView(new V3(-.5,.05,-.35), [1.0,3.5,-.7]), g, { start(){ pts = []; heading = Math.PI/2; },
+    tick(t, dt){
+      lawnMat.opacity = cl01(t,0,.8)*.92;
+      const d = Math.min(total, Math.max(0,t-.9)*1.25); let i = 1; while(i < path.length-1 && d > len[i]) i++;
+      const a = path[i-1], b = path[i], f = (d-len[i-1])/(len[i]-len[i-1]), x = a[0]+(b[0]-a[0])*f, z = a[1]+(b[1]-a[1])*f;
+      mw.position.set(x,0,z); let dh = Math.atan2(b[0]-a[0], b[1]-a[1]) - heading; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); heading += dh*Math.min(1, dt*10 + (t === 0 ? 1 : 0)); mw.rotation.y = heading; lidar.rotation.y = t*9;
+      const last = pts[pts.length-1]; if(!last || Math.hypot(x-last[0], z-last[1]) > .03) pts.push([x,z,d]);
+      lg.fillStyle = '#2f7a34'; lg.fillRect(0,0,lc.width,lc.height);
+      lg.lineCap = 'round'; lg.lineJoin = 'round';
+      lg.strokeStyle = '#7fd35a'; lg.lineWidth = 21; lg.beginPath(); let started = false; pts.forEach(p=>{ if(p[2] < edgeLen + .15) return; const q = px(p); if(started) lg.lineTo(q[0],q[1]); else { lg.moveTo(q[0],q[1]); started = true; } }); lg.stroke();
+      lg.strokeStyle = '#f3ead9'; lg.lineWidth = 3; lg.setLineDash([7,7]); lg.beginPath(); pts.forEach((p,k)=>{ if(p[2] > edgeLen) return; const q = px(p); k ? lg.lineTo(q[0],q[1]) : lg.moveTo(q[0],q[1]); }); lg.stroke(); lg.setLineDash([]);
+      lt.needsUpdate = true;
+      setStat(d < edgeLen ? 'Step 1: drive the edge with an Xbox controller' : d < total ? 'Step 2: it mows the lanes on its own' : 'Done. Load it up for the next yard.');
+    }});
+}
+
+// home server
+{ const g = holo();
+  box(.5,.12,.44, std({color:0x1a1c21, roughness:.4, metalness:.6}), [0,.36,0], g); box(.04,.3,.3, M.steel, [-.2,.15,0], g); box(.04,.3,.3, M.steel, [.2,.15,0], g);
+  for(let i=0;i<4;i++) box(.09,.07,.01, std({color:0x2b2e35, roughness:.5}), [-.165+i*.1,.36,.222], g, false);
+  const leds = []; for(let i=0;i<6;i++) leds.push(box(.012,.012,.006, new THREE.MeshBasicMaterial({color:0x2bff7a}), [.2,.325+(i%3)*.03,.224 - 0], g, false)); leds.forEach((l,i)=> l.position.x = .19 + Math.floor(i/3)*.025);
+  const specs = ['Xeon E-2276G','32GB RAM','4TB storage'].map((s,i)=> label(s, g, [-.56,.2+i*.13,.12], .4));
+  const vms = [0x19e6c0,0x39b8ff,0xa45cff,0xffb057].map((c,i)=> box(.09,.09,.09, std({color:c, emissive:c, emissiveIntensity:.8, transparent:true, opacity:.85}), [0,0,0], g, false));
+  defDemo('server', mkView(new V3(PAD.x,.62,PAD.z), PADOFF), g, { tick(t){
+    leds.forEach((l,i)=> l.material.color.setHex(Math.sin(t*(7+i*2.3)+i) > 0 ? 0x2bff7a : 0x0c3a1c));
+    specs.forEach((s,i)=> s.material.opacity = cl01(t,.5+i*.5,1+i*.5));
+    let n = 0; vms.forEach((v,i)=>{ const k = smo(cl01(t, 2.2+i*.7, 2.9+i*.7)); if(k > 0) n++; const a = t*.9 + i*Math.PI/2; v.visible = k > 0; v.scale.setScalar(Math.max(.001,k)); v.position.set(Math.cos(a)*.42, .34 + Math.sin(t*1.6+i)*.04, Math.sin(a)*.3); v.rotation.set(t*.6, t*.8+i, 0); });
+    setStat('Virtual machines running: ' + n);
+  }});
+}
+
+// arcade printer enclosure
+{ const g = holo();
+  const pr = sub(g); pr.position.y = .03; box(.2,.03,.2, M.plastic, [0,.015,0], pr); box(.014,.26,.014, M.steel, [-.09,.16,-.06], pr); box(.014,.26,.014, M.steel, [.09,.16,-.06], pr); box(.2,.014,.014, M.steel, [0,.29,-.06], pr);
+  const bar = box(.2,.012,.012, M.steel, [0,.1,-.06], pr), head = box(.035,.035,.035, emis(0x19e6c0,1), [0,.1,-.04], pr);
+  const coneGeo = new THREE.ConeGeometry(.045,.14,20); coneGeo.translate(0,.07,0); const part = mesh(coneGeo, std({color:0xffb057, roughness:.5}), [0,.03,.01], pr);
+  const cab = sub(g), cm = (c,e)=> std({color:c, emissive:e||0, emissiveIntensity:e ? 1.1 : 0, roughness:.5, transparent:true}), body = cm(0x1b1d3a), trim = cm(0xa45cff,0xa45cff), scrM = cm(0x0a1830,0x1a6cff), red = cm(0xd13b2e,0xd13b2e);
+  box(.02,.7,.36, body, [-.16,.35,0], cab); box(.02,.7,.36, body, [.16,.35,0], cab); box(.32,.7,.02, body, [0,.35,-.17], cab); box(.34,.02,.38, body, [0,.71,0], cab);
+  box(.3,.09,.02, trim, [0,.645,.17], cab); const scr = box(.3,.2,.015, scrM, [0,.5,.14], cab); scr.rotation.x = -.25;
+  box(.3,.025,.16, body, [0,.38,.2], cab); cyl(.006,.006,.05, M.steel, [-.07,.415,.2], cab, 8); mesh(new THREE.SphereGeometry(.016,10,8), red, [-.07,.445,.2], cab, false);
+  [[.03,0x19e6c0],[.08,0xffb057]].forEach(b=> cyl(.014,.014,.01, cm(b[1],b[1]), [b[0],.397,.2], cab, 12)); box(.3,.36,.02, body, [0,.19,.17], cab);
+  const mats = []; cab.traverse(o=>{ if(o.material && !mats.includes(o.material)) mats.push(o.material); });
+  defDemo('arcade', mkView(new V3(PAD.x,.42,PAD.z), PADOFF), g, { tick(t){
+    const u = (t*.25)%1; head.position.x = Math.sin(t*5)*.06; head.position.y = bar.position.y = .05 + u*.15; part.scale.y = Math.max(.02,u);
+    const drop = smo(cl01(t,2,3.2)); cab.visible = t > 2; cab.position.y = (1-drop)*.9;
+    const see = t > 4.4 ? .5 - .5*Math.cos((t-4.4)*1.3) : 0; mats.forEach(m=> m.opacity = (1 - see*.72)*cl01(t,2,2.4));
+    setStat(t < 2 ? 'A normal 3D printer' : see > .5 ? 'Still printing inside' : 'Now it looks like an arcade machine');
+  }});
 }
 
 /* ---------- render loop ---------- */
@@ -1201,7 +1429,8 @@ function frame(){
   screenLight.intensity = .8 + Math.sin(time*2.1)*.04;
   neonMat.color.setRGB(.37+Math.sin(time*1.7)*.02, .9, 1);
 
-  tickJobs(dt, time); tickRoomba(dt);
+  tickJobs(dt, time); tickRoomba(dt); tickDemo(dt);
+  m1Body.opacity += ((jobs[3].on ? .2 : 1) - m1Body.opacity)*s; m1Body.depthWrite = m1Body.opacity > .95; m1Win.opacity += ((jobs[3].on ? .12 : .75) - m1Win.opacity)*s;
   renderer.render(scene, camera);
 
   for(const id in HOT){ const h = HOT[id]; proj.copy(h.anchor).project(camera);
@@ -1217,7 +1446,7 @@ requestAnimationFrame(()=>{
   document.body.classList.add('ready');
   window.dispatchEvent(new Event('room:ready'));
 });
-window.__room = {scene, camera, renderer, go, startRoomba, startPrint, jobs, yaw:v=>{ yawGoal = v; }, ff:s=>{ for(let i=0;i<s*30;i++){ tickJobs(1/30, i/30); tickRoomba(1/30); } }};
+window.__room = {scene, camera, renderer, go, startRoomba, startPrint, jobs, yaw:v=>{ yawGoal = v; }, ff:s=>{ for(let i=0;i<s*30;i++){ tickJobs(1/30, i/30); tickRoomba(1/30); tickDemo(1/30); } }};
 </script>
 </body>
 </html>
