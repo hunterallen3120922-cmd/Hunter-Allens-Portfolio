@@ -1,6 +1,6 @@
 # Hunter's Room
 
-A personal portfolio where the landing page is a 3D bedroom at night. Click the monitor, bed, bookshelf, corkboard or phone to open each section. The desk lamp works too.
+A personal portfolio where the landing page is my actual room, rebuilt in 3D from photos. Click the monitors, the PC build desk, the 3D printers, the pegboard, the shelves or the phone to open each section. Click the LED strip to change its color.
 
 ## Run it
 
@@ -14,7 +14,7 @@ Three.js loads from a CDN, so you need to be online.
 
 ## Status
 
-First draft. The room and all section copy are placeholders until the real room photos, bio and projects are in.
+Second draft. The room is modeled by hand from photos. Projects and contact details are still placeholders.
 
 ## Hosting
 
