@@ -212,7 +212,7 @@ body.ready #loader{opacity:0}
     <li><button type="button" data-open="interests" aria-pressed="false">Shelves</button></li>
     <li><button type="button" data-open="contact" aria-pressed="false">Say hi</button></li>
   </ul>
-  <p class="hint">Drag to spin the room all the way around. Click anything with a dot. Click the LED strip to change its color.</p>
+  <p class="hint">Drag to spin the room. Click a dot to read more. Click a 3D printer, the Roomba or the LED strip to set it off.</p>
 </nav>
 
 <aside id="panel" role="dialog" aria-labelledby="panelTitle" hidden>
@@ -649,13 +649,13 @@ const kbTop = mesh(new THREE.PlaneGeometry(.385,.128), std({map:kbTex, roughness
 const mouse = mesh(new THREE.SphereGeometry(.032,20,14), M.white, [.16,.782,.52], desk); mouse.scale.set(.85,.5,1.35);
 cyl(.028,.032,.15, std({color:0x2a2622, roughness:.2, transparent:true, opacity:.85}), [-.98,.84,.58], desk, 16); cyl(.014,.014,.03, M.white, [-.98,.93,.58], desk, 10);
 // little cube printer on the window end of the desk
-const mini = hot(sub(W2.f), 'printing'); mini.position.set(1.68,.76,.4); mini.rotation.y = .12;
+const mini = sub(W2.f); hotGroups.push(mini); mini.position.set(1.68,.76,.4); mini.rotation.y = .12;
 const m1White = std({color:0xeef1f2, roughness:.35}), m1Blue = std({color:0x4fb3e0, roughness:.4});
 rbox(.25,.05,.25,.02, m1Blue, [0,.025,0], mini);
 rbox(.24,.2,.24,.025, m1White, [0,.15,0], mini);
 rbox(.25,.045,.25,.02, m1Blue, [0,.262,0], mini);
 box(.17,.15,.006, std({color:0x0d1117, roughness:.1, metalness:.2, transparent:true, opacity:.75}), [0,.145,.1215], mini);
-box(.12,.008,.12, std({color:0x2b2e35, roughness:.4}), [0,.1,.02], mini); box(.03,.035,.03, m1Blue, [.02,.19,.03], mini);
+const m1Bed = box(.12,.008,.12, std({color:0x2b2e35, roughness:.4}), [0,.1,.02], mini), m1Head = box(.03,.035,.03, m1Blue, [.02,.19,.03], mini);
 box(.07,.03,.004, basic(0x9fd8ff), [0,.262,.127], mini, false);
 const m1handle = mesh(new THREE.TorusGeometry(.045,.008,8,16,Math.PI), m1White, [0,.283,0], mini);
 box(.012,.05,.05, m1White, [-.128,.17,0], mini);
@@ -730,20 +730,20 @@ mesh(new THREE.TorusGeometry(.05,.009,10,28), basic(0x39b8ff), [0,.28,-.19], pc,
 box(.2,.012,.4, basic(0x2f8bff), [0,.026,0], pc, false);
 glow(0x39b8ff,.5,[.05,.24,.1],pc,.45);
 box(.08,.07,.07, std({color:0xb5633f, roughness:.8}), [0,.455,.1], pc); mesh(new THREE.SphereGeometry(.045,10,8), std({color:0x3f7d54, roughness:.8}), [0,.52,.1], pc);
-const ff = hot(sub(bdesk), 'printing'); ff.position.set(.78,.76,.27);
+const ff = sub(bdesk); hotGroups.push(ff); ff.position.set(.78,.76,.27);
 [[-.21,-.21],[.21,-.21],[-.21,.21],[.21,.21]].forEach(p=> box(.035,.52,.035, M.plastic, [p[0],.26,p[1]], ff));
 box(.455,.05,.455, M.plastic, [0,.025,0], ff); box(.455,.06,.455, M.plastic, [0,.5,0], ff); box(.4,.42,.01, M.plastic, [0,.26,-.21], ff);
 mesh(new THREE.PlaneGeometry(.39,.42), M.glass, [0,.26,.212], ff, false);
 const sg1 = mesh(new THREE.PlaneGeometry(.39,.42), M.glass, [-.212,.26,0], ff, false); sg1.rotation.y = -Math.PI/2;
 const sg2 = mesh(new THREE.PlaneGeometry(.39,.42), M.glass, [.212,.26,0], ff, false); sg2.rotation.y = Math.PI/2;
-box(.3,.012,.3, std({color:0x2c2f36, roughness:.4}), [0,.16,0], ff); box(.36,.02,.03, M.steel, [0,.4,0], ff); box(.05,.06,.05, M.plastic, [.05,.38,.01], ff);
+const ffBed = box(.3,.012,.3, std({color:0x2c2f36, roughness:.4}), [0,.16,0], ff), ffBar = box(.36,.02,.03, M.steel, [0,.4,0], ff), ffHead = box(.05,.06,.05, M.plastic, [.05,.38,.01], ff);
 box(.1,.06,.02, basic(0x9fd8ff), [-.02,.545,.17], ff, false).rotation.x = -.5;
 const ffLight = new THREE.PointLight(0x3aa8ff, .5, 1.6, 2); ffLight.position.set(0,.3,0); ff.add(ffLight); glow(0x3aa8ff,.6,[0,.28,.1],ff,.3);
 // Roomba under the black desk
 box(.16,.11,.07, M.plastic, [.62,.055,.04], bdesk); box(.2,.012,.14, M.plastic, [.62,.006,.1], bdesk); box(.03,.008,.004, basic(0x49e08a), [.62,.09,.077], bdesk, false);
 const roomba = sub(bdesk); roomba.position.set(.62,0,.27);
 cyl(.17,.17,.085, M.plastic, [0,.045,0], roomba, 40); cyl(.12,.12,.006, std({color:0x2e3138, roughness:.3}), [0,.09,0], roomba, 32);
-cyl(.03,.03,.008, basic(0x49e08a), [0,.094,0], roomba, 16);
+const roombaLed = cyl(.03,.03,.008, basic(0x49e08a), [0,.094,0], roomba, 16); box(.05,.006,.02, M.steel, [0,.094,.13], roomba, false);
 
 /* ---------- W4: angled closet wall ---------- */
 const closet = sub(W4.w);
@@ -817,9 +817,9 @@ box(1.3,.05,.62, M.walnut, [-.1,.45,.36], bench); box(1.24,.03,.56, M.walnut, [-
 [[-.72,.08],[.52,.08],[-.72,.64],[.52,.64]].forEach(p=> box(.06,.45,.06, M.walnut, [p[0],.225,p[1]], bench));
 box(.05,.3,.56, M.walnut, [-.72,.26,.36], bench); box(.05,.3,.56, M.walnut, [.52,.26,.36], bench);
 const eg = sub(bench); eg.position.set(.1,.475,.34);
-box(.44,.06,.46, M.plastic, [0,.03,0], eg); box(.4,.012,.4, std({color:0x2b2e35, roughness:.35, metalness:.3}), [0,.07,.02], eg);
+box(.44,.06,.46, M.plastic, [0,.03,0], eg); const egBed = box(.4,.012,.4, std({color:0x2b2e35, roughness:.35, metalness:.3}), [0,.07,.02], eg);
 [-.24,.24].forEach(x=> box(.045,.66,.045, M.plastic, [x,.36,-.1], eg)); box(.53,.045,.045, M.plastic, [0,.7,-.1], eg);
-box(.5,.04,.04, M.steel, [0,.4,-.08], eg); box(.08,.1,.08, M.plastic, [-.06,.41,-.03], eg);
+const egBar = box(.5,.04,.04, M.steel, [0,.4,-.08], eg), egHead = box(.08,.1,.08, M.plastic, [-.06,.41,-.03], eg);
 box(.44,.012,.02, basic(0xeaf2ff), [0,.685,-.07], eg, false);
 const egSpot = new THREE.SpotLight(0xdfeaff, 1.6, 2.2, .7, .7, 2); egSpot.position.set(0,.68,-.06); egSpot.target.position.set(0,0,.06); eg.add(egSpot, egSpot.target);
 box(.03,.2,.03, M.plastic, [0,.82,-.1], eg);
@@ -827,15 +827,15 @@ const egSpool = cyl(.1,.1,.07, M.matte, [0,.94,-.1], eg, 28); egSpool.rotation.x
 const egHub = cyl(.03,.03,.075, std({color:0x9aa0a6, roughness:.5}), [0,.94,-.1], eg, 14); egHub.rotation.x = Math.PI/2;
 box(.07,.11,.02, M.plastic, [.29,.09,.2], eg).rotation.x = -.5; mesh(new THREE.PlaneGeometry(.055,.09), basic(0x7fb6ff), [.29,.092,.212], eg, false).rotation.x = -.5;
 // the helmet print sitting on the bed
-const helm = mesh(new THREE.SphereGeometry(.12,24,16,0,Math.PI*2,0,Math.PI*.6), std({color:0x1c1d20, roughness:.55}), [-.02,.15,.03], eg); helm.scale.set(1,1.05,1.15);
-box(.2,.03,.05, std({color:0x1c1d20, roughness:.55}), [-.02,.14,.16], eg);
+const helm = mesh(new THREE.SphereGeometry(.12,24,16,0,Math.PI*2,0,Math.PI*.6), std({color:0x1c1d20, roughness:.55}), [-.02,.115,.03], eg); helm.scale.set(1,1.05,1.15);
+const helmV = box(.2,.03,.05, std({color:0x1c1d20, roughness:.55}), [-.02,.12,.16], eg);
 // Bambu Lab A1 mini on the door end of the bench
 const a1 = sub(bench); a1.position.set(-.48,.475,.34); a1.rotation.y = .25;
 const a1grey = std({color:0xcfd2d4, roughness:.45});
-rbox(.22,.05,.3,.012, a1grey, [0,.025,0], a1); box(.19,.008,.19, std({color:0x25282e, roughness:.4}), [0,.06,.03], a1);
-box(.05,.36,.06, a1grey, [-.1,.23,-.1], a1); box(.26,.04,.045, a1grey, [.03,.33,-.1], a1); rbox(.06,.09,.07,.012, a1grey, [.06,.3,-.05], a1);
+rbox(.22,.05,.3,.012, a1grey, [0,.025,0], a1); const a1Bed = box(.19,.008,.19, std({color:0x25282e, roughness:.4}), [0,.06,.03], a1);
+box(.05,.36,.06, a1grey, [-.1,.23,-.1], a1); const a1Arm = box(.26,.04,.045, a1grey, [.03,.33,-.1], a1), a1Head = rbox(.06,.09,.07,.012, a1grey, [.06,.3,-.05], a1);
 box(.07,.05,.012, basic(0x9fd8ff), [.07,.055,.156], a1, false);
-mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([new V3(-.1,.41,-.1),new V3(-.04,.5,-.08),new V3(.04,.47,-.06),new V3(.06,.35,-.05)]), 20, .004, 5), M.white, null, a1, false);
+const a1Tube = mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([new V3(-.1,.41,-.1),new V3(-.04,.5,-.08),new V3(.04,.47,-.06),new V3(.06,.35,-.05)]), 20, .004, 5), M.white, null, a1, false);
 for(let i=0;i<9;i++){ const m = box(rr(.03,.09),rr(.02,.06),rr(.03,.09), std({color:pick([0xf0f0ec,0xf0f0ec,0x76c043,0x2f6fd0,0xe9e9e6]), roughness:.6}), [rr(-.55,.35),.14+rr(0,.02),rr(.2,.56)], bench); m.rotation.y = rr(0,3); }
 for(let i=0;i<4;i++){ const m = cyl(.008,.008,.11, std({color:pick([0x2f6fd0,0xd13b2e,0xe9e9e6]), roughness:.5}), [rr(-.3,-.16),.484,rr(.5,.62)], bench, 6); m.rotation.z = Math.PI/2; m.rotation.y = rr(0,3); }
 
@@ -879,6 +879,94 @@ box(.05,.12,.03, M.black, [0,.7,.0], backG); mesh(rboxGeo(.3,.15,.07,.03), chair
 [-.28,.28].forEach(x=>{ box(.05,.03,.26, M.plastic, [x,.7,.0], chair); box(.03,.2,.03, M.black, [x,.6,.04], chair); });
 cyl(.025,.025,.36, M.black, [0,.27,0], chair, 12);
 for(let i=0;i<5;i++){ const a = i/5*Math.PI*2, leg = box(.3,.025,.04, M.black, [Math.cos(a)*.15,.075,Math.sin(a)*.15], chair); leg.rotation.y = -a; mesh(new THREE.SphereGeometry(.03,10,8), M.plastic, [Math.cos(a)*.3,.03,Math.sin(a)*.3], chair); }
+
+/* ---------- things that run when clicked: the printers and the Roomba ---------- */
+renderer.localClippingEnabled = true;
+const jobs = [];
+// each part is revealed from the bed up by a clipping plane at nozzle height, so it grows layer by layer
+function printJob(name, what, host, parts, dur, done, anim){
+  const plane = new THREE.Plane(new V3(0,-1,0), -10);
+  parts.forEach(m=>{ m.material = m.material.clone(); m.material.clippingPlanes = [plane]; m.material.side = THREE.DoubleSide; m.castShadow = false; });
+  const j = {name, what, host, plane, dur, anim, p:done ? 1 : 0, on:false, started:done, clipY:-10, y0:null, g:0};
+  host.userData.action = 'print:' + jobs.length; jobs.push(j); return j;
+}
+const partMat = c => std({color:c, roughness:.6});
+// Elegoo: bed slides front to back, gantry climbs
+const egBedG = sub(eg), egGan = sub(eg); egBedG.add(egBed, helm, helmV); egGan.add(egBar, egHead);
+printJob('Elegoo', 'a helmet', eg, [helm, helmV], 16, true, (j,t,k)=>{
+  const top = .076 + j.p*.166; j.clipY = top;
+  egGan.position.y += ((j.on ? top - .36 : 0) - egGan.position.y)*k;
+  egHead.position.x = -.06 + (j.on ? Math.sin(t*6.5)*.13 + .04 : 0); egBedG.position.z = j.on ? Math.sin(t*4.2)*.05 : 0;
+});
+// Bambu A1 mini: same idea, smaller
+const a1BedG = sub(a1), a1Gan = sub(a1);
+const vasePts = [[.001,0],[.03,0],[.042,.03],[.034,.07],[.022,.1],[.03,.125]].map(p=> new THREE.Vector2(p[0],p[1]));
+const vase = mesh(new THREE.LatheGeometry(vasePts, 28), partMat(0x76c043), [0,.064,.03], a1);
+a1BedG.add(a1Bed, vase); a1Gan.add(a1Arm, a1Head, a1Tube);
+printJob('Bambu A1 mini', 'a vase', a1, [vase], 12, false, (j,t,k)=>{
+  const top = .064 + j.p*.125; j.clipY = top;
+  a1Gan.position.y += ((j.on ? top - .255 : 0) - a1Gan.position.y)*k;
+  a1Head.position.x = .06 + (j.on ? Math.sin(t*7)*.06 - .05 : 0); a1BedG.position.z = j.on ? Math.sin(t*4.6)*.035 : 0;
+});
+// Flashforge AD5M: the head stays at one height and the bed drops away
+const ffBedG = sub(ff);
+const knot = mesh(new THREE.TorusKnotGeometry(.045,.016,90,12), partMat(0xff9d3c), [0,.166+.075,0], ff); knot.rotation.x = Math.PI/2;
+ffBedG.add(ffBed, knot);
+printJob('Flashforge AD5M', 'a knot', ff, [knot], 13, false, (j,t,k)=>{
+  j.clipY = j.started ? .345 : -10;
+  ffBedG.position.y += ((j.started ? .179 - j.p*.15 : 0) - ffBedG.position.y)*(j.on ? 1 : k);
+  ffHead.position.x = j.on ? Math.sin(t*6)*.09 : .05; ffHead.position.z = .01 + (j.on ? Math.cos(t*4.4)*.07 : 0);
+});
+// Geeetech M1S
+const rocket = mesh(new THREE.ConeGeometry(.026,.07,20), partMat(0xd13b2e), [0,.104+.035,.02], mini);
+printJob('Geeetech M1S', 'a little rocket', mini, [rocket], 10, false, (j,t,k)=>{
+  const top = .104 + j.p*.07; j.clipY = top;
+  m1Head.position.y += ((j.on ? top + .018 : .19) - m1Head.position.y)*k;
+  m1Head.position.x = .02 + (j.on ? Math.sin(t*7)*.03 - .02 : 0); m1Head.position.z = .03 + (j.on ? Math.cos(t*5)*.02 - .01 : 0);
+});
+function startPrint(j){
+  if(j.on){ window.RoomUI.toast(j.name + ' is ' + Math.round(j.p*100) + '% done.'); return; }
+  j.p = 0; j.on = true; j.started = true; window.RoomUI.toast(j.name + ': printing ' + j.what + '.');
+}
+const wpos = new V3();
+function tickJobs(dt, t){
+  const k = 1 - Math.exp(-dt*6);
+  for(const j of jobs){
+    if(j.y0 === null){ j.host.getWorldPosition(wpos); j.y0 = wpos.y; }
+    if(j.on){ j.p = Math.min(1, j.p + dt/j.dur); if(j.p >= 1){ j.on = false; window.RoomUI.toast(j.name + ': print finished.'); } }
+    j.anim(j, t, k); j.plane.constant = j.y0 + j.clipY;
+  }
+}
+
+// Roomba: leaves the dock, runs lanes across the open floor (and under the main desk), then parks again
+scene.updateMatrixWorld(true); scene.attach(roomba); roomba.userData.action = 'roomba'; hotGroups.push(roomba);
+const DOCK = [1.18,.88];
+const route = [DOCK,[1.38,.72],[1.38,-.95],[.85,-.95],[.75,-1.3],[.75,-1.95],[-.86,-1.95],[-.86,1.3],[-.5,1.3],[-.5,-1.75],[-.15,-1.75],[-.15,1.3],[.2,1.3],[.2,-1.25],[.75,-1.25],[.85,-.95],[1.38,-.95],[1.38,.72],DOCK];
+const routeLen = [0]; for(let i=1;i<route.length;i++) routeLen.push(routeLen[i-1] + Math.hypot(route[i][0]-route[i-1][0], route[i][1]-route[i-1][1]));
+const trailC = document.createElement('canvas'); trailC.width = 360; trailC.height = 500;
+const trailTex = new THREE.CanvasTexture(trailC); trailTex.colorSpace = THREE.SRGBColorSpace;
+const trailMat = new THREE.MeshBasicMaterial({map:trailTex, transparent:true, opacity:0, depthWrite:false});
+const trail = mesh(new THREE.PlaneGeometry(3.6,5.0), trailMat, [0,.009,-.15], scene, false); trail.rotation.x = -Math.PI/2; trail.receiveShadow = false; trail.renderOrder = 2;
+const rb = {on:false, s:0, seg:1, heading:Math.PI, pts:[]};
+function startRoomba(){
+  if(rb.on){ window.RoomUI.toast('Roomba is ' + Math.round(rb.s/routeLen[routeLen.length-1]*100) + '% through the room.'); return; }
+  rb.on = true; rb.s = 0; rb.seg = 1; rb.pts = [DOCK.slice()]; trailMat.opacity = 1; roombaLed.material.color.set(0x39b8ff);
+  window.RoomUI.toast('Roomba: cleaning the floor.');
+}
+function tickRoomba(dt){
+  if(!rb.on){ if(trailMat.opacity > 0) trailMat.opacity = Math.max(0, trailMat.opacity - dt/7); return; }
+  rb.s += dt*.85;
+  const total = routeLen[routeLen.length-1];
+  while(rb.seg < route.length-1 && rb.s > routeLen[rb.seg]) rb.seg++;
+  const a = route[rb.seg-1], b = route[rb.seg], f = Math.min(1, (rb.s-routeLen[rb.seg-1])/(routeLen[rb.seg]-routeLen[rb.seg-1]));
+  const x = a[0]+(b[0]-a[0])*f, z = a[1]+(b[1]-a[1])*f;
+  roomba.position.set(x,0,z);
+  let d = Math.atan2(b[0]-a[0], b[1]-a[1]) - rb.heading; d = Math.atan2(Math.sin(d), Math.cos(d)); rb.heading += d*Math.min(1, dt*9); roomba.rotation.set(0, rb.heading, 0);
+  const last = rb.pts[rb.pts.length-1]; if(Math.hypot(x-last[0], z-last[1]) > .04) rb.pts.push([x,z]);
+  const g = trailC.getContext('2d'); g.clearRect(0,0,360,500); g.lineWidth = 26; g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = 'rgba(236,248,244,.34)';
+  g.beginPath(); rb.pts.forEach((p,i)=> i ? g.lineTo((p[0]+1.8)*100,(p[1]+2.65)*100) : g.moveTo((p[0]+1.8)*100,(p[1]+2.65)*100)); g.stroke(); trailTex.needsUpdate = true;
+  if(rb.s >= total){ rb.on = false; roomba.position.set(DOCK[0],0,DOCK[1]); roombaLed.material.color.set(0x49e08a); window.RoomUI.toast('Roomba docked. Floor is clean.'); }
+}
 
 /* ---------- LED strip around the top of every wall ---------- */
 const LEDS = [['teal',0x19e6c0],['green',0x2bff7a],['blue',0x2f8bff],['purple',0xa45cff]];
@@ -991,6 +1079,8 @@ function up(e){
   if(down && moved <= 6){
     const id = hit(e);
     if(id === '@led') cycleLeds();
+    else if(id === '@roomba') startRoomba();
+    else if(id && id.startsWith('@print:')) startPrint(jobs[+id.slice(7)]);
     else if(id) window.RoomUI.open(id);
     else if(focusId) window.RoomUI.close();
   }
@@ -1027,6 +1117,7 @@ function frame(){
   screenLight.intensity = .8 + Math.sin(time*2.1)*.04;
   neonMat.color.setRGB(.37+Math.sin(time*1.7)*.02, .9, 1);
 
+  tickJobs(dt, time); tickRoomba(dt);
   renderer.render(scene, camera);
 
   for(const id in HOT){ const h = HOT[id]; proj.copy(h.anchor).project(camera);
@@ -1042,7 +1133,7 @@ requestAnimationFrame(()=>{
   document.body.classList.add('ready');
   window.dispatchEvent(new Event('room:ready'));
 });
-window.__room = {scene, camera, renderer, go, yaw:v=>{ yawGoal = v; }};
+window.__room = {scene, camera, renderer, go, startRoomba, startPrint, jobs, yaw:v=>{ yawGoal = v; }, ff:s=>{ for(let i=0;i<s*30;i++){ tickJobs(1/30, i/30); tickRoomba(1/30); } }};
 </script>
 </body>
 </html>
