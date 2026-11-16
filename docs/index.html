@@ -6,7 +6,7 @@
 <meta name="description" content="Hunter Allen's portfolio: PC builds, hardware projects and experiments, inside a 3D model of his room.">
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 <title>Hunter's Room</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&family=Caveat:wght@500;700&display=swap">
 <style>
 /* Layout: one full-bleed 3D diorama of a bedroom at night. Type floats in the corners,
    content arrives as a side sheet (bottom sheet on phones). Single dark look by choice:
@@ -221,6 +221,150 @@ body.ready #loader{opacity:0}
   .marker i::after{animation:none}
   #panel,#loader,.dock{transition:none}
 }
+
+/* ---------- text that belongs to the room ----------
+   Labels are label-maker tape. Each panel takes the look of the thing you clicked:
+   an index card on the pegboard, a receipt, a blueprint, a printer screen, a terminal,
+   the whiteboard, a cardboard box, a phone. */
+:root{--tape:#0d0e11;--tape-ink:#f4f1e8;--font-hand:'Caveat','Segoe Print','Bradley Hand',cursive}
+.marker span,.dock button,#panel .eyebrow,#toast,.demo-text b,.demo-btns button,.brand h1 b,.copy{
+  font-family:var(--font-mono);font-weight:500;text-transform:uppercase;letter-spacing:.14em;
+  background:var(--tape);color:var(--tape-ink);border:0;border-radius:2px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14), inset 0 -1px 0 rgba(0,0,0,.6), 0 2px 5px rgba(0,0,0,.45);
+  text-shadow:0 -1px 0 rgba(0,0,0,.9), 0 1px 0 rgba(255,255,255,.16)}
+.brand h1{font-size:1rem;line-height:1;letter-spacing:0;font-weight:400}
+.brand h1 b{display:inline-block;font-size:clamp(1.2rem, 3.1vw, 2.2rem);letter-spacing:.2em;padding:.38em .6em .3em;transform:rotate(-1.6deg);transform-origin:left center}
+.brand h1 span{font-family:var(--font-hand);font-weight:500;font-size:clamp(1.5rem, 2.7vw, 2.1rem);letter-spacing:0;color:var(--paper);margin:.5em 0 0 .5em;transform:rotate(-1.6deg);transform-origin:left center}
+
+.marker i{width:10px;height:10px;margin-left:-5px;box-shadow:0 0 0 2px rgba(0,0,0,.55), 0 0 10px 2px rgba(255,183,102,.45)}
+.marker i::after{display:none}
+.marker span{padding:4px 8px 3px;font-size:.62rem;border-radius:2px;transform:rotate(-1.4deg)}
+.marker:nth-child(even) span{transform:rotate(1.2deg)}
+.marker:hover span,.marker.is-hot span,.marker:focus-visible span{background:var(--lamp);color:#20140a;text-shadow:none;transform:rotate(0) scale(1.06)}
+
+.dock ul{background:none;border:0;-webkit-backdrop-filter:none;backdrop-filter:none;padding:0;gap:7px;border-radius:0}
+.dock button{padding:8px 12px 7px;font-size:.68rem;border-radius:2px;color:var(--tape-ink)}
+.dock li:nth-child(odd) button{transform:rotate(-1.2deg)}
+.dock li:nth-child(even) button{transform:rotate(1deg)}
+.dock button:hover{background:#25272e;color:var(--tape-ink)}
+.dock button[aria-pressed="true"]{background:var(--lamp);color:#20140a;text-shadow:none}
+.hint{font-family:var(--font-hand);font-size:1.12rem;letter-spacing:0;color:var(--paper-soft)}
+#toast{background:var(--lamp);color:#20140a;text-shadow:none;border-radius:2px;letter-spacing:.1em}
+#loader p{font-family:var(--font-hand);font-size:1.5rem;letter-spacing:0;text-transform:none}
+
+#demobar{background:rgba(9,10,15,.92);border:0;border-left:4px solid var(--lamp);border-radius:3px;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.demo-text{gap:7px;align-items:flex-start}
+.demo-text b{display:inline-block;font-size:.76rem;padding:4px 9px 3px;transform:rotate(-.8deg)}
+.demo-text span{font-size:.95rem}
+.demo-text em{background:#06140f;color:#7dffc3;padding:4px 9px;border-radius:2px;box-shadow:inset 0 0 0 1px #12382a;text-shadow:0 0 6px rgba(125,255,195,.35);min-height:0}
+.demo-text em:empty{display:none}
+.demo-btns button{border-radius:2px;border:0;font-size:.66rem}
+.demo-btns #demoBack{background:var(--lamp);color:#20140a;text-shadow:none}
+#minimap{border-radius:3px}
+
+#panel{--p-radius:6px;border-radius:var(--p-radius);-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--p-bg, #131529);color:var(--paper);border:var(--p-border, 1px solid var(--line));box-shadow:0 18px 50px rgba(0,0,0,.55)}
+#panel .eyebrow{display:inline-block;font-size:.6rem;padding:3px 8px 2px;transform:rotate(-1deg)}
+.panel-head h2{font-family:var(--p-head, var(--font-display));margin-top:10px}
+.close{border-radius:2px;color:var(--paper)}
+.panel-body .foot{text-align:center;color:var(--paper-faint);font-size:.8rem;letter-spacing:.1em}
+.plays{counter-reset:play;gap:0;border-top:1px dashed var(--line)}
+.plays li{counter-increment:play;border-bottom:1px dashed var(--line)}
+.plays button{border:0;border-radius:0;background:none;padding:13px 2px;gap:12px;font-family:var(--p-item, var(--font-body));font-weight:600;font-size:1.04rem;letter-spacing:0;color:var(--paper);align-items:baseline}
+.plays button::before{content:counter(play, decimal-leading-zero);font-family:var(--font-mono);font-weight:400;font-size:.72rem;color:var(--paper-faint)}
+.plays button::after{content:"play \25B8";font-family:var(--font-mono);font-weight:500;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--lamp);white-space:nowrap;transition:letter-spacing .2s}
+.plays button:hover,.plays button:focus-visible{background:var(--fill);transform:none}
+.plays button:hover::after{letter-spacing:.22em}
+.plays i{display:none}
+.plays small.st{border:0;padding:0;border-radius:0}
+.tags{gap:4px 10px;align-items:baseline}
+.tags span{border:0;padding:0;border-radius:0;color:var(--paper-soft);font-size:.72rem}
+.tags span + span::before{content:"/";margin-right:10px;color:var(--paper-faint)}
+.tags a,.tags button{border:0;border-radius:0;padding:0;color:var(--lamp);font-size:.74rem;text-decoration:underline;text-underline-offset:3px}
+.tags a::after,.tags button::after{content:" \2192"}
+.tags a:hover,.tags button:hover{background:none;color:var(--paper)}
+.shelf{gap:0 18px}
+.shelf li{border:0;border-top:1px dashed var(--line);border-radius:0;background:none;padding:10px 0}
+.shelf b{font-family:var(--p-item, var(--font-body))}
+.facts{border-top:0;padding-top:0;gap:6px 14px}
+.contact li{border:0;border-bottom:1px dashed var(--line);border-radius:0;background:none;padding:10px 0}
+
+/* index card pinned to the pegboard */
+#panel[data-skin="about"]{--p-bg:#f2ebd9;--paper:#1f1c16;--paper-soft:rgba(31,28,22,.8);--paper-faint:rgba(31,28,22,.52);--line:rgba(31,28,22,.3);--fill:rgba(31,28,22,.06);--lamp:#c2362b;--screen:#1f5fae;--p-head:var(--font-hand);--p-border:0;--p-radius:3px;
+  background:repeating-linear-gradient(transparent 0 27px, rgba(31,95,174,.2) 27px 28px), #f2ebd9;font-family:var(--font-mono);font-size:.88rem}
+#panel[data-skin="about"]::before{content:"";position:absolute;top:-9px;left:50%;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #ff8a7a, #c2362b 60%, #7a1a12);box-shadow:0 4px 6px rgba(0,0,0,.4)}
+#panel[data-skin="about"] .panel-head{border-bottom:2px solid rgba(194,54,43,.55)}
+#panel[data-skin="about"] h2{font-size:3rem;font-weight:700;letter-spacing:0;line-height:1}
+#panel[data-skin="about"] .lead{font-family:var(--font-hand);font-size:1.5rem;line-height:1.2}
+
+/* receipt */
+#panel[data-skin="builds"]{--p-bg:#f7f6f1;--paper:#17171b;--paper-soft:rgba(23,23,27,.82);--paper-faint:rgba(23,23,27,.5);--line:rgba(23,23,27,.38);--fill:rgba(23,23,27,.06);--lamp:#17171b;--screen:#17171b;--p-head:var(--font-mono);--p-item:var(--font-mono);--p-border:0;--p-radius:0px;font-family:var(--font-mono);font-size:.86rem;
+  -webkit-mask:conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50%/16px 100%;mask:conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50%/16px 100%}
+#panel[data-skin="builds"] h2{font-size:1.5rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+#panel[data-skin="builds"] .panel-head{border-bottom:1px dashed var(--line);margin-bottom:14px}
+#panel[data-skin="builds"] .facts{grid-template-columns:1fr auto;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);padding:12px 0}
+#panel[data-skin="builds"] .facts dt{text-transform:none;letter-spacing:0;font-size:.86rem;color:var(--paper)}
+#panel[data-skin="builds"] .facts dd{text-align:right;font-weight:500}
+#panel[data-skin="builds"] .lead{font-size:.95rem}
+#panel[data-skin="builds"] .plays button{font-weight:500;text-transform:uppercase;font-size:.84rem;letter-spacing:.06em}
+#panel[data-skin="builds"] .panel-body{padding-bottom:40px}
+
+/* blueprint */
+#panel[data-skin="hardware"]{--p-bg:#14407a;--paper:#eef5ff;--paper-soft:rgba(238,245,255,.84);--paper-faint:rgba(238,245,255,.58);--line:rgba(238,245,255,.42);--fill:rgba(255,255,255,.09);--lamp:#ffe08a;--screen:#bfe0ff;--p-head:var(--font-mono);--p-item:var(--font-mono);--p-border:0;--p-radius:0px;font-family:var(--font-mono);font-size:.88rem;
+  background:linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px) 0 0/100% 20px, linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px) 0 0/20px 100%, #14407a;outline:1.5px solid rgba(238,245,255,.7);outline-offset:-9px}
+#panel[data-skin="hardware"] h2{font-size:1.55rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+#panel[data-skin="hardware"] .plays button{font-weight:500;text-transform:uppercase;font-size:.86rem;letter-spacing:.06em}
+
+/* printer screen */
+#panel[data-skin="printing"]{--p-bg:#07100c;--paper:#b9ffdc;--paper-soft:rgba(185,255,220,.78);--paper-faint:rgba(185,255,220,.48);--line:rgba(185,255,220,.26);--fill:rgba(185,255,220,.08);--lamp:#19e6c0;--screen:#19e6c0;--p-head:var(--font-mono);--p-item:var(--font-mono);--p-border:10px solid #1d1f24;--p-radius:12px;font-family:var(--font-mono);font-size:.88rem;
+  background:repeating-linear-gradient(rgba(0,0,0,.28) 0 1px, transparent 1px 3px), #07100c;text-shadow:0 0 7px rgba(120,255,190,.3)}
+#panel[data-skin="printing"] h2{font-size:1.5rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+#panel[data-skin="printing"] .plays button{font-weight:500;font-size:.9rem}
+#panel[data-skin="printing"] .plays button::after{content:"print \25B8"}
+
+/* terminal */
+#panel[data-skin="software"]{--p-bg:#16131f;--p-head:var(--font-mono);--p-item:var(--font-mono);--p-border:1px solid #2c2740;--p-radius:10px;font-family:var(--font-mono);font-size:.88rem;overflow:hidden}
+#panel[data-skin="software"] .panel-head{padding-top:52px;background:radial-gradient(circle at 22px 18px, #ff5f57 0 6px, transparent 7px), radial-gradient(circle at 42px 18px, #febc2e 0 6px, transparent 7px), radial-gradient(circle at 62px 18px, #28c840 0 6px, transparent 7px), linear-gradient(#211c30, #211c30) 0 0/100% 36px no-repeat}
+#panel[data-skin="software"] h2{font-size:1.5rem;font-weight:500;letter-spacing:0}
+#panel[data-skin="software"] h2::before{content:"~/";color:var(--screen)}
+#panel[data-skin="software"] .lead::before{content:"# ";color:var(--paper-faint)}
+#panel[data-skin="software"] .plays button{font-weight:500;font-size:.92rem}
+#panel[data-skin="software"] .plays button::before{content:"$";color:var(--screen);font-size:.92rem}
+#panel[data-skin="software"] .plays button::after{content:"run \25B8"}
+
+/* whiteboard */
+#panel[data-skin="experiments"]{--p-bg:#f5f6f4;--paper:#1b1c20;--paper-soft:rgba(27,28,32,.84);--paper-faint:rgba(27,28,32,.5);--line:rgba(27,28,32,.3);--fill:rgba(47,111,208,.09);--lamp:#d13b2e;--screen:#2f6fd0;--p-head:var(--font-hand);--p-item:var(--font-hand);--p-border:9px solid #a9afb5;--p-radius:8px;font-family:var(--font-hand);font-size:1.3rem;line-height:1.25}
+#panel[data-skin="experiments"] h2{font-size:3.4rem;font-weight:700;letter-spacing:0;line-height:1;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+#panel[data-skin="experiments"] .lead{font-size:1.5rem}
+#panel[data-skin="experiments"] .plays,#panel[data-skin="experiments"] .plays li{border-style:solid;border-color:transparent}
+#panel[data-skin="experiments"] .plays button{font-size:1.6rem;font-weight:700;padding:8px 2px}
+#panel[data-skin="experiments"] .plays button::before{content:"-";font-family:var(--font-hand);font-size:1.6rem;color:var(--paper)}
+#panel[data-skin="experiments"] .plays button::after{font-family:var(--font-hand);font-size:1.25rem;letter-spacing:0;text-transform:none}
+#panel[data-skin="experiments"] .plays small.st{font-family:var(--font-hand);font-size:1.15rem;text-transform:none;letter-spacing:0;color:var(--screen);border:2px solid var(--screen);border-radius:50%/60%;padding:0 10px;transform:rotate(-3deg)}
+#panel[data-skin="experiments"] .tags span{font-family:var(--font-hand);font-size:1.2rem;color:var(--screen)}
+
+/* cardboard box */
+#panel[data-skin="interests"]{--p-bg:#b98f5e;--paper:#24160a;--paper-soft:rgba(36,22,10,.84);--paper-faint:rgba(36,22,10,.56);--line:rgba(36,22,10,.42);--fill:rgba(36,22,10,.09);--lamp:#24160a;--screen:#24160a;--p-head:var(--font-mono);--p-item:var(--font-mono);--p-border:0;--p-radius:3px;font-family:var(--font-mono);font-size:.88rem;
+  background:linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/5px 100%, #b98f5e}
+#panel[data-skin="interests"] .panel-head{background:linear-gradient(rgba(240,226,190,.5), rgba(240,226,190,.5)) 0 0/100% 12px no-repeat}
+#panel[data-skin="interests"] h2{font-size:1.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+#panel[data-skin="interests"] .shelf b{text-transform:uppercase;font-weight:500;letter-spacing:.08em;font-size:.9rem}
+
+/* phone */
+#panel[data-skin="contact"]{--p-bg:#0b0e14;--p-border:7px solid #272b33;--p-radius:38px}
+#panel[data-skin="contact"]::before{content:"";position:absolute;top:0;left:50%;width:110px;height:22px;margin-left:-55px;background:#272b33;border-radius:0 0 14px 14px}
+#panel[data-skin="contact"] .panel-head{padding-top:40px}
+#panel[data-skin="contact"] h2{font-size:1.9rem}
+#panel[data-skin="contact"] .lead{align-self:flex-start;max-width:88%;background:#1c8a76;color:#fff;font-size:1rem;padding:10px 14px;border-radius:18px 18px 18px 4px}
+
+@media (max-width:720px){
+  #panel[data-skin]{border-radius:var(--p-radius) var(--p-radius) 0 0;border-bottom:0;-webkit-mask:none;mask:none}
+  .dock ul{gap:5px}
+  .dock button{padding:7px 7px 6px;font-size:.54rem;letter-spacing:.08em}
+  .hint{font-size:.98rem}
+  .marker i{width:13px;height:13px}
+  #demobar{flex-direction:column;align-items:stretch;gap:10px}
+  .demo-btns{flex-direction:row;justify-content:flex-end}
+}
 </style>
 </head>
 <body>
@@ -230,8 +374,7 @@ body.ready #loader{opacity:0}
 <div id="fallback" hidden><p>The 3D room could not load in this browser. Everything in it is still here: use the buttons below.</p></div>
 
 <header class="brand">
-  <div class="eyebrow">Portfolio · Room 01</div>
-  <h1>Hunter Allen<span>Welcome to my workspace. Click around to see what I have built.</span></h1>
+  <h1><b>Hunter Allen</b><span>my actual room. click stuff.</span></h1>
 </header>
 <div class="status" aria-hidden="true">
   <div>Local time <b id="clockText">--:--</b></div>
@@ -243,12 +386,12 @@ body.ready #loader{opacity:0}
 <nav class="dock" aria-label="Sections">
   <ul>
     <li><button type="button" data-open="about" aria-pressed="false">About</button></li>
-    <li><button type="button" data-open="builds" aria-pressed="false">Business</button></li>
-    <li><button type="button" data-open="hardware" aria-pressed="false">Engineering</button></li>
-    <li><button type="button" data-open="experiments" aria-pressed="false">Experiments</button></li>
+    <li><button type="button" data-open="builds" aria-pressed="false">PC business</button></li>
+    <li><button type="button" data-open="hardware" aria-pressed="false">Hardware</button></li>
+    <li><button type="button" data-open="experiments" aria-pressed="false">Ideas</button></li>
     <li><button type="button" data-open="contact" aria-pressed="false">Contact</button></li>
   </ul>
-  <p class="hint">Drag to spin the room. Click a dot, then pick a project to watch it happen. Click a 3D printer or the Roomba to set it off, or the LED strip for a light show.</p>
+  <p class="hint">drag to spin. click a label. the printers, the roomba and the LED strip all do something.</p>
 </nav>
 
 <aside id="panel" role="dialog" aria-labelledby="panelTitle" hidden>
@@ -269,103 +412,104 @@ body.ready #loader{opacity:0}
 <div id="loader"><p>Opening the door</p></div>
 
 <template id="tpl-about">
-  <p class="lead">I'm Hunter Allen, a student and entrepreneur from Pennsylvania. I build things, sell things and fix things.</p>
-  <ul class="shelf">
-    <li><b>Builder</b><span>Take it apart, put it back better.</span></li>
-    <li><b>Entrepreneur</b><span>Turn experiments into products.</span></li>
-    <li><b>Problem solver</b><span>Find the unconventional fix.</span></li>
-    <li><b>Athlete</b><span>Varsity runner, club hockey.</span></li>
-  </ul>
-  <h4>Experience</h4>
+  <p class="lead">I'm Hunter. I'm in high school in Pennsylvania, and I build things and sell them.</p>
+  <p>It started with PCs. Then the 3D printers showed up, then a server, then an idea for a robot mower. This room is where all of it happens.</p>
+  <h4>Work</h4>
   <dl class="facts">
-    <dt>Late 2025 to now</dt><dd>Founder, HunterPCBuilds</dd>
+    <dt>Late 2025 to now</dt><dd>HunterPCBuilds, founder</dd>
     <dt>Summer 2026</dt><dd>School IT internship</dd>
-    <dt>2025 to 2026</dt><dd>Crew, Dave's Famous Hot Wiener</dd>
+    <dt>2025 to 2026</dt><dd>Dave's Famous Hot Wiener, crew</dd>
   </dl>
   <h4>School</h4>
   <dl class="facts">
-    <dt>School</dt><dd>South Western High School, GIEP</dd>
+    <dt>Where</dt><dd>South Western High School, GIEP</dd>
     <dt>GPA</dt><dd>3.955, ranked 80 of 346</dd>
-    <dt>Courses</dt><dd>AP Computer Science A and Principles, Physics, Digital Media</dd>
+    <dt>Classes</dt><dd>AP Computer Science A and Principles, Physics, Digital Media</dd>
   </dl>
   <h4>Sports</h4>
-  <dl class="facts">
-    <dt>Running</dt><dd>Four years of varsity cross country and track</dd>
-    <dt>Hockey</dt><dd>Eight years of club, defense. York Devils and Palmyra Black Knights</dd>
-  </dl>
   <ul class="plays">
-    <li><button type="button" data-demo="runner" data-line="Four years of varsity cross country and track."><i></i><span>Cross country</span></button></li>
-    <li><button type="button" data-demo="hockey" data-line="About eight years of club hockey as a defenseman, with the York Devils and the Palmyra Black Knights."><i></i><span>Hockey</span></button></li>
+    <li><button type="button" data-demo="runner" data-line="Varsity cross country and track, all four years."><i></i><span>Cross country</span></button></li>
+    <li><button type="button" data-demo="hockey" data-line="About eight years of club hockey on defense, for the York Devils and the Palmyra Black Knights."><i></i><span>Hockey</span></button></li>
   </ul>
-  <div class="tags"><button type="button" data-go="builds">See my business</button><button type="button" data-go="hardware">See what I build</button></div>
+  <div class="tags"><button type="button" data-go="builds">the PC business</button><button type="button" data-go="hardware">the hardware</button></div>
 </template>
 
 <template id="tpl-builds">
-  <p class="lead">My PC building and reselling business, since late 2025.</p>
+  <p class="lead">I buy used parts, build PCs and sell them. It started in late 2025 with a $375 build for a friend on my cross country team.</p>
+  <dl class="facts">
+    <dt>PCs built and sold</dt><dd>75 to 80</dd>
+    <dt>Sales</dt><dd>about $30,000</dd>
+    <dt>Profit</dt><dd>about $5,000</dd>
+    <dt>On eBay</dt><dd>about 60 sales, $11,000</dd>
+    <dt>PassMark</dt><dd>top 5%, best builds</dd>
+    <dt>Fortnite</dt><dd>1,000+ FPS from $1k</dd>
+  </dl>
   <ul class="plays">
-    <li><button type="button" data-demo="explode" data-line="My own PC, pulled apart so you can see every part, then snapped back together."><i></i><span>Exploded build</span></button></li>
-    <li><button type="button" data-demo="boot" data-line="Power on: fans, RGB, then the monitor."><i></i><span>Boot-up</span></button></li>
-    <li><button type="button" data-demo="cpu" data-line="The step you only get one try at."><i></i><span>CPU drop-in</span></button></li>
-    <li><button type="button" data-demo="pcbuild" data-line="Source the parts, test them, build it, sell it. It started with a $375 PC for a cross country teammate."><i></i><span>Watch a PC get built</span></button></li>
-    <li><button type="button" data-demo="numbers" data-line="About $30,000 in sales and $5,000 in profit so far."><i></i><span>See the numbers</span></button></li>
+    <li><button type="button" data-demo="explode" data-line="My own PC with every part pulled out, then put back."><i></i><span>Exploded build</span></button></li>
+    <li><button type="button" data-demo="boot" data-line="Power button, fans, RGB, monitor."><i></i><span>Boot-up</span></button></li>
+    <li><button type="button" data-demo="cpu" data-line="The one step you really don't want to mess up."><i></i><span>CPU drop-in</span></button></li>
+    <li><button type="button" data-demo="pcbuild" data-line="Source the parts, test them, build it, sell it."><i></i><span>A PC gets built</span></button></li>
+    <li><button type="button" data-demo="numbers" data-line="About $30,000 in sales and $5,000 in profit so far."><i></i><span>The numbers</span></button></li>
+    <li><button type="button" data-demo="bench" data-line="A few of my builds score in the top 5% on PassMark, and I've hit over 1,000 FPS in Fortnite on builds as cheap as $1,000."><i></i><span>Benchmark run</span></button></li>
   </ul>
-  <div class="tags"><a href="https://www.ebay.com/usr/hunter.pcbuilds" target="_blank" rel="noopener">eBay store: hunter.pcbuilds</a><span>Xeon to Ryzen</span><span>refurbishing</span><span>repair</span></div>
+  <div class="tags"><span>Xeon to Ryzen</span><span>refurbs</span><span>repairs</span><a href="https://www.ebay.com/usr/hunter.pcbuilds" target="_blank" rel="noopener">eBay: hunter.pcbuilds</a></div>
+  <p class="foot">* thanks for looking *</p>
 </template>
 
 <template id="tpl-hardware">
-  <p class="lead">Hardware I designed around a ThinkPad.</p>
+  <p class="lead">I wanted my ThinkPad to game, so I designed a dock for it.</p>
   <ul class="plays">
-    <li><button type="button" data-demo="egpu" data-line="A ThinkPad T480 drops into a dock I designed, and a GTX 1660 takes over the graphics through Thunderbolt."><i></i><span>ThinkPad eGPU dock</span><small class="st built">working</small></button></li>
-    <li><button type="button" data-demo="cooling" data-line="One stand that cools the laptop and houses the graphics card. Cool air in the front, hot air out the side."><i></i><span>Cooling and eGPU stand</span><small class="st proto">prototype</small></button></li>
+    <li><button type="button" data-demo="egpu" data-line="A ThinkPad T480 drops into a dock I designed and printed. A GTX 1660 handles the graphics over Thunderbolt."><i></i><span>ThinkPad eGPU dock</span><small class="st built">working</small></button></li>
+    <li><button type="button" data-demo="cooling" data-line="One stand that cools the laptop and holds the graphics card. Cool air in the front, hot air out the side."><i></i><span>Cooling and eGPU stand</span><small class="st proto">prototype</small></button></li>
   </ul>
-  <div class="tags"><button type="button" data-go="printing">3D printing</button><button type="button" data-go="software">Software and AI</button><button type="button" data-go="interests">Workshop shelves</button></div>
+  <div class="tags"><button type="button" data-go="printing">3D printing</button><button type="button" data-go="software">software</button><button type="button" data-go="interests">the shelves</button></div>
 </template>
 
 <template id="tpl-printing">
-  <p class="lead">Four printers. Pick one and it prints a part.</p>
+  <p class="lead">4 printers online. Pick one and it prints.</p>
   <ul class="plays">
-    <li><button type="button" data-demo="print0" data-line="The big one, for large parts."><i></i><span>Elegoo Neptune 4 Max</span></button></li>
-    <li><button type="button" data-demo="print1" data-line="Small, quick and reliable."><i></i><span>Bambu Lab A1 Mini</span></button></li>
-    <li><button type="button" data-demo="print2" data-line="An arm's reach from my chair."><i></i><span>Flashforge Adventurer 5M</span></button></li>
-    <li><button type="button" data-demo="print3" data-line="The little blue and white one on the main desk."><i></i><span>Geeetech M1S</span></button></li>
-    <li><button type="button" data-demo="filament" data-line="The cardboard boxes on the rack are all filament."><i></i><span>Filament boxes</span></button></li>
+    <li><button type="button" data-demo="print0" data-line="The big one. Large parts go here."><i></i><span>Elegoo Neptune 4 Max</span></button></li>
+    <li><button type="button" data-demo="print1" data-line="Small, fast, and it just works."><i></i><span>Bambu Lab A1 Mini</span></button></li>
+    <li><button type="button" data-demo="print2" data-line="Arm's reach from my chair."><i></i><span>Flashforge Adventurer 5M</span></button></li>
+    <li><button type="button" data-demo="print3" data-line="The little blue one on my desk."><i></i><span>Geeetech M1S</span></button></li>
+    <li><button type="button" data-demo="filament" data-line="Every cardboard box on that rack is filament."><i></i><span>Filament boxes</span></button></li>
   </ul>
-  <div class="tags"><span>dock parts</span><span>cooling mounts</span><span>enclosures</span><span>prototypes</span><button type="button" data-go="hardware">Hardware projects</button></div>
+  <div class="tags"><span>dock parts</span><span>cooling mounts</span><span>enclosures</span><span>prototypes</span><button type="button" data-go="hardware">hardware</button></div>
 </template>
 
 <template id="tpl-software">
-  <p class="lead">Websites and tools, built with AI in the loop.</p>
+  <p class="lead">I build sites and tools, and I use AI to move faster.</p>
   <ul class="plays">
-    <li><button type="button" data-demo="web" data-line="Code turns into a page."><i></i><span>Website build</span></button></li>
-    <li><button type="button" data-demo="monitors" data-line="Three screens, one at a time, and the LEDs follow."><i></i><span>Monitors on</span></button></li>
-    <li><button type="button" data-demo="spin" data-line="My real room, rebuilt in three.js so you can click around it."><i></i><span>This room</span></button></li>
+    <li><button type="button" data-demo="web" data-line="Code goes in, a page comes out."><i></i><span>Website build</span></button></li>
+    <li><button type="button" data-demo="monitors" data-line="Three screens, one at a time. The LEDs follow."><i></i><span>Monitors on</span></button></li>
+    <li><button type="button" data-demo="spin" data-line="This site. My real room, rebuilt in three.js."><i></i><span>This room</span></button></li>
   </ul>
-  <div class="tags"><span>Claude Code</span><span>three.js</span><span>AP CS A</span><span>AP CS Principles</span><button type="button" data-go="hardware">Hardware projects</button></div>
+  <div class="tags"><span>Claude Code</span><span>three.js</span><span>AP CS A</span><span>AP CS Principles</span><button type="button" data-go="hardware">hardware</button></div>
 </template>
 
 <template id="tpl-experiments">
-  <p class="lead">Not finished yet. These are ideas and prototypes.</p>
+  <p class="lead">Stuff I haven't finished yet.</p>
   <ul class="plays">
-    <li><button type="button" data-demo="mower" data-line="A $600 mower a crew drops off. Drive it once with an Xbox controller to map the yard, then it mows on its own. So far: a Raspberry Pi and an L298 motor driver."><i></i><span>Autonomous mower</span><small class="st idea">concept</small></button></li>
-    <li><button type="button" data-demo="server" data-line="A Xeon E-2276G with 32GB of RAM and 4TB of storage, for virtual machines and compute experiments."><i></i><span>Home server</span><small class="st built">running</small></button></li>
-    <li><button type="button" data-demo="arcade" data-line="A 3D printer hidden inside an arcade cabinet."><i></i><span>Arcade printer enclosure</span><small class="st idea">concept</small></button></li>
+    <li><button type="button" data-demo="mower" data-line="I built the prototype around a Raspberry Pi. Drive it once with an Xbox controller to map the yard, then it mows by itself."><i></i><span>Robot mower</span><small class="st proto">prototype</small></button></li>
+    <li><button type="button" data-demo="server" data-line="A Xeon E-2276G with 32GB of RAM and 4TB. It runs virtual machines and whatever I'm testing."><i></i><span>Home server</span><small class="st built">running</small></button></li>
+    <li><button type="button" data-demo="arcade" data-line="A 3D printer hiding inside an arcade cabinet."><i></i><span>Arcade printer enclosure</span><small class="st idea">concept</small></button></li>
   </ul>
   <div class="tags"><span>Raspberry Pi</span><span>robotics</span><span>dorm printer box</span></div>
 </template>
 
 <template id="tpl-interests">
-  <p class="lead">The workshop: hardware I collect and work with.</p>
+  <p class="lead">Everything that isn't a computer yet.</p>
   <ul class="shelf">
-    <li><b>GPUs and CPUs</b><span>Waiting for a build.</span></li>
-    <li><b>Finished PCs</b><span>Waiting for owners.</span></li>
-    <li><b>Electronics</b><span>Boards and Pis.</span></li>
-    <li><b>Tools</b><span>For building and repair.</span></li>
+    <li><b>GPUs and CPUs</b><span>waiting for a build</span></li>
+    <li><b>Finished PCs</b><span>waiting for a buyer</span></li>
+    <li><b>Boards and Pis</b><span>for the experiments</span></li>
+    <li><b>Tools</b><span>for building and fixing</span></li>
   </ul>
-  <div class="tags"><button type="button" data-go="builds">See HunterPCBuilds</button></div>
+  <div class="tags"><button type="button" data-go="builds">the PC business</button></div>
 </template>
 
 <template id="tpl-contact">
-  <p class="lead">The phone is on the desk mat. I do answer it.</p>
+  <p class="lead">Want a PC built, something printed, or have a project idea? Message me.</p>
   <ul class="contact">
     <li><div><small>eBay store</small><code id="c-eb">ebay.com/usr/hunter.pcbuilds</code></div><button type="button" class="copy" data-copy="c-eb">Copy</button></li>
     <li><div><small>Email</small><code id="c-email">you@example.com</code></div><button type="button" class="copy" data-copy="c-email">Copy</button></li>
@@ -378,14 +522,14 @@ body.ready #loader{opacity:0}
 /* ---------- UI: works with or without the 3D scene ---------- */
 (function(){
   const SECTIONS = {
-    about:{eyebrow:'01 · On the pegboard', title:'About me'},
-    builds:{eyebrow:'02 · Business', title:'HunterPCBuilds'},
-    hardware:{eyebrow:'03 · On the blue dresser', title:'Hardware projects'},
-    printing:{eyebrow:'03 · On the bench', title:'3D printing'},
-    software:{eyebrow:'03 · On the ultrawide', title:'Software and AI'},
-    experiments:{eyebrow:'04 · On the whiteboard', title:'Ideas and experiments'},
-    interests:{eyebrow:'By the window', title:'My workshop'},
-    contact:{eyebrow:'05 · On the desk mat', title:'Contact'}
+    about:{eyebrow:'Pinned to the pegboard', title:"Hi, I'm Hunter"},
+    builds:{eyebrow:'Receipt', title:'HunterPCBuilds'},
+    hardware:{eyebrow:'Drawing no. 03', title:'ThinkPad dock'},
+    printing:{eyebrow:'Print queue', title:'3D printing'},
+    software:{eyebrow:'On the ultrawide', title:'code'},
+    experiments:{eyebrow:'On the whiteboard', title:'Ideas'},
+    interests:{eyebrow:'This side up', title:'The shelves'},
+    contact:{eyebrow:'On the desk mat', title:'Contact'}
   };
   const panel = document.getElementById('panel');
   const body = document.getElementById('panelBody');
@@ -425,6 +569,7 @@ body.ready #loader{opacity:0}
     document.getElementById('panelTitle').textContent = SECTIONS[id].title;
     body.replaceChildren(document.getElementById('tpl-' + id).content.cloneNode(true));
     body.scrollTop = 0;
+    panel.dataset.skin = id;
     panel.hidden = false;
     document.body.classList.add('has-panel');
     requestAnimationFrame(()=>requestAnimationFrame(()=>panel.classList.add('open')));
@@ -907,11 +1052,14 @@ const tower = sub(W6.f); tower.position.set(.16,0,.18);
 cyl(.11,.11,.42, std({color:0x15161a, roughness:.7}), [0,.21,0], tower, 6);
 [0xe9e9e6,0x1b1c20,0xd8c8a8,0x1b1c20,0xe9e9e6].forEach((c,i)=>{ cyl(.1,.1,.012, M.matte, [0,.43+i*.075,0], tower, 24); cyl(.085,.085,.05, std({color:c, roughness:.6}), [0,.465+i*.075,0], tower, 24); });
 // whiteboard above the rack
-box(.74,.52,.02, M.steel, [.58,1.95,.012], W6.w); { const wc = document.createElement('canvas'); wc.width = 700; wc.height = 480; const g = wc.getContext('2d'); g.fillStyle = '#f4f5f3'; g.fillRect(0,0,700,480);
-  g.font = '600 34px sans-serif'; g.fillStyle = '#1b1c20'; g.fillText('IDEAS', 34, 56); g.fillRect(34,68,120,4);
-  g.font = '26px sans-serif'; [['#d13b2e','mower v6: Pi + L298 + 40V'],['#2f6fd0','eGPU dock kit'],['#1b1c20','arcade printer enclosure'],['#2f6fd0','dorm printer box'],['#d13b2e','homelab: idle compute?']].forEach((r,i)=>{ g.fillStyle = r[0]; g.fillText('- ' + r[1], 34, 124+i*48); });
-  g.strokeStyle = '#2f6fd0'; g.lineWidth = 4; g.strokeRect(470,250,170,110); g.beginPath(); g.arc(505,385,22,0,7); g.stroke(); g.beginPath(); g.arc(605,385,22,0,7); g.stroke(); g.strokeStyle = '#d13b2e'; g.beginPath(); for(let i=0;i<4;i++){ g.moveTo(480,268+i*24); g.lineTo(630,268+i*24); } g.stroke();
+box(.74,.52,.02, M.steel, [.58,1.95,.012], W6.w); { const wc = document.createElement('canvas'); wc.width = 700; wc.height = 480; const g = wc.getContext('2d');
   const wt = new THREE.CanvasTexture(wc); wt.colorSpace = THREE.SRGBColorSpace; wt.anisotropy = 8;
+  const drawWB = ()=>{ const hand = "'Caveat', 'Segoe Print', 'Bradley Hand', cursive"; g.fillStyle = '#f4f5f3'; g.fillRect(0,0,700,480);
+    g.font = '700 54px ' + hand; g.fillStyle = '#1b1c20'; g.fillText('ideas', 34, 62); g.strokeStyle = '#1b1c20'; g.lineWidth = 4; g.beginPath(); g.moveTo(32,76); g.quadraticCurveTo(90,84,150,72); g.stroke();
+    g.font = '500 38px ' + hand; [['#d13b2e','mower v6: Pi + L298 + 40V'],['#2f6fd0','eGPU dock kit?'],['#1b1c20','arcade printer enclosure'],['#2f6fd0','dorm printer box'],['#d13b2e','homelab: idle compute?']].forEach((r,i)=>{ g.fillStyle = r[0]; g.fillText('- ' + r[1], 34, 132+i*52); });
+    g.strokeStyle = '#2f6fd0'; g.lineWidth = 4; g.strokeRect(490,270,160,100); g.beginPath(); g.arc(522,394,20,0,7); g.stroke(); g.beginPath(); g.arc(618,394,20,0,7); g.stroke(); g.strokeStyle = '#d13b2e'; g.beginPath(); for(let i=0;i<4;i++){ g.moveTo(500,286+i*22); g.lineTo(640,286+i*22); } g.stroke();
+    wt.needsUpdate = true; };
+  drawWB(); if(document.fonts && document.fonts.load) document.fonts.load("500 38px Caveat").then(drawWB, ()=>{});
   const wbHot = hot(sub(W6.w), 'experiments'); mesh(new THREE.PlaneGeometry(.7,.48), std({map:wt, roughness:.25}), [.58,1.95,.024], wbHot, false); }
 box(.7,.02,.05, M.steel, [.58,1.69,.035], W6.w);
 [0xd13b2e,0x2f6fd0,0x1b1c20].forEach((c,i)=>{ const p = cyl(.008,.008,.1, std({color:c, roughness:.5}), [.4+i*.13,1.708,.04], W6.w, 8); p.rotation.z = Math.PI/2; });
@@ -1107,14 +1255,14 @@ scene.environmentIntensity = .5;
 
 /* ---------- hotspots, camera, interaction ---------- */
 const HOT = {
-  about:{label:'About me', anchor:new V3(.98,2.12,1.1), pos:new V3(.2,1.75,-1.35), tgt:new V3(1.05,1.5,1.15)},
+  about:{label:'about me', anchor:new V3(.98,2.12,1.1), pos:new V3(.2,1.75,-1.35), tgt:new V3(1.05,1.5,1.15)},
   builds:{label:'HunterPCBuilds', anchor:new V3(-1.45,1.3,-1.85), pos:new V3(1.1,2.1,-.1), tgt:new V3(-1.5,.6,-1.6)},
-  hardware:{label:'Hardware projects', anchor:new V3(1.57,1.12,-1.53), pos:new V3(.15,1.55,-.95), tgt:new V3(1.6,.75,-1.55)},
-  printing:{label:'3D printing', anchor:new V3(-1.45,1.6,-.02), pos:new V3(.55,1.6,-.75), tgt:new V3(-1.5,.8,.25)},
-  software:{label:'Software and AI', anchor:new V3(1.58,1.5,-.12), pos:new V3(-.75,1.75,-1.0), tgt:new V3(1.6,1.08,-.06)},
-  experiments:{label:'Ideas', anchor:new V3(-1.74,2.26,1.07), pos:new V3(-.1,1.85,.35), tgt:new V3(-1.8,1.9,1.07)},
-  interests:{label:'My workshop', anchor:new V3(-.05,2.15,-2.4), pos:new V3(-.2,1.7,.4), tgt:new V3(.3,1.0,-2.6)},
-  contact:{label:'Contact', anchor:new V3(1.16,.86,-.53), pos:new V3(.3,1.45,-.03), tgt:new V3(1.3,.85,-.5)}
+  hardware:{label:'ThinkPad dock', anchor:new V3(1.57,1.12,-1.53), pos:new V3(.15,1.55,-.95), tgt:new V3(1.6,.75,-1.55)},
+  printing:{label:'3D printers', anchor:new V3(-1.45,1.6,-.02), pos:new V3(.55,1.6,-.75), tgt:new V3(-1.5,.8,.25)},
+  software:{label:'code', anchor:new V3(1.58,1.5,-.12), pos:new V3(-.75,1.75,-1.0), tgt:new V3(1.6,1.08,-.06)},
+  experiments:{label:'ideas', anchor:new V3(-1.74,2.26,1.07), pos:new V3(-.1,1.85,.35), tgt:new V3(-1.8,1.9,1.07)},
+  interests:{label:'shelves', anchor:new V3(-.05,2.15,-2.4), pos:new V3(-.2,1.7,.4), tgt:new V3(.3,1.0,-2.6)},
+  contact:{label:'contact', anchor:new V3(1.16,.86,-.53), pos:new V3(.3,1.45,-.03), tgt:new V3(1.3,.85,-.5)}
 };
 const HOME = {pos:new V3(-5.4,4.4,-5.5), tgt:new V3(.05,.85,-.25)};
 const markersEl = document.getElementById('markers');
@@ -1217,9 +1365,10 @@ const faceY = off => Math.atan2(off[0], off[2]);   // turn a group so its +z loo
 const setStat = t => window.RoomUI.stat(t);
 const cl01 = (t,a,b)=> THREE.MathUtils.clamp((t-a)/(b-a),0,1), smo = x => x*x*(3-2*x);
 const emis = (c,i=1.4)=> std({color:c, emissive:c, emissiveIntensity:i, roughness:.45});
-function label(text, parent, pos, w=.5, color='#f3ead9'){
-  const t = ctex(512,128,(g)=>{ g.fillStyle = 'rgba(12,14,24,.86)'; g.beginPath(); if(g.roundRect) g.roundRect(6,10,500,108,34); else g.rect(6,10,500,108); g.fill();
-    g.font = '600 50px system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = color; g.fillText(text,256,66); });
+function label(text, parent, pos, w=.5, color='#f4f1e8'){
+  const t = ctex(512,128,(g)=>{ g.fillStyle = '#0d0e11'; g.fillRect(4,16,504,96); g.fillStyle = 'rgba(255,255,255,.13)'; g.fillRect(4,16,504,3); g.fillStyle = 'rgba(0,0,0,.7)'; g.fillRect(4,109,504,3);
+    g.font = "500 40px 'DM Mono', ui-monospace, Menlo, Consolas, monospace"; if('letterSpacing' in g) g.letterSpacing = '5px'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    const T = text.toUpperCase(); g.fillStyle = 'rgba(0,0,0,.9)'; g.fillText(T,256,64); g.fillStyle = color; g.fillText(T,256,66); });
   const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:t, transparent:true, depthTest:false})); sp.scale.set(w,w/4,1); sp.position.set(pos[0],pos[1],pos[2]); sp.renderOrder = 6; parent.add(sp); return sp;
 }
 const demos = {}; let demo = null, demoT = 0;
@@ -1278,6 +1427,26 @@ const PADVIEW = mkView(new V3(PAD.x,.5,PAD.z), PADOFF);
   defDemo('numbers', PADVIEW, g, { tick(t){
     bars.forEach((b,i)=>{ const k = smo(cl01(t, .5+i*.6, 1.9+i*.6)); b.m.scale.y = Math.max(.002, k*b.h); b.l.position.y = .14 + k*b.h; b.l.material.opacity = cl01(t,.3+i*.6,.8+i*.6); });
     const k = smo(cl01(t,.5,3.6)); setStat(k >= 1 ? 'PCs built and sold: 75 to 80' : 'PCs built and sold: ' + Math.round(k*75));
+  }});
+}
+
+// benchmark run: a build on the pad, its monitor counts up
+{ const g = holo();
+  box(.2,.36,.36, M.black, [-.3,.2,0], g); const side = box(.004,.3,.3, emis(0x19e6c0,.5), [-.198,.2,0], g, false);
+  const bc = document.createElement('canvas'); bc.width = 512; bc.height = 288; const bg = bc.getContext('2d');
+  const bt = new THREE.CanvasTexture(bc); bt.colorSpace = THREE.SRGBColorSpace;
+  box(.6,.36,.02, M.black, [.14,.36,.02], g); cyl(.012,.012,.16, M.black, [.14,.1,.03], g, 10); box(.2,.012,.12, M.black, [.14,.026,.03], g);
+  mesh(new THREE.PlaneGeometry(.57,.33), new THREE.MeshBasicMaterial({map:bt}), [.14,.36,.034], g, false);
+  const tag = label('$1k build', g, [-.3,.5,0], .34);
+  defDemo('bench', PADVIEW, g, { tick(t){
+    const k = smo(cl01(t,.8,4.2)), p = smo(cl01(t,4.6,6.6)); tag.material.opacity = cl01(t,.3,.9); side.material.emissiveIntensity = .3 + k*.9;
+    bg.fillStyle = '#0b0d12'; bg.fillRect(0,0,512,288); bg.textBaseline = 'alphabetic';
+    bg.font = '500 22px "DM Mono", monospace'; bg.fillStyle = '#7d8799'; bg.textAlign = 'left'; bg.fillText('FORTNITE', 28, 44); bg.fillText('PASSMARK', 28, 214);
+    bg.font = '500 92px "DM Mono", monospace'; bg.fillStyle = '#19e6c0'; bg.fillText(k >= 1 ? '1,000+' : String(Math.round(k*1000)), 26, 138); bg.font = '500 26px "DM Mono", monospace'; bg.fillText('FPS', 400, 138);
+    bg.fillStyle = '#1b2029'; bg.fillRect(28,232,456,22); bg.fillStyle = '#ffb057'; bg.fillRect(28,232,456*.95*p,22); bg.fillStyle = '#f4f1e8'; bg.fillRect(28+456*.95-2,226,3,34);
+    if(p >= 1){ bg.font = '500 22px "DM Mono", monospace'; bg.fillStyle = '#ffb057'; bg.textAlign = 'right'; bg.fillText('TOP 5%', 484, 214); }
+    bt.needsUpdate = true;
+    setStat(t < 4.6 ? 'Fortnite: over 1,000 FPS' : 'PassMark: top 5% of scores');
   }});
 }
 
@@ -1364,7 +1533,7 @@ const printed = std({color:0xff7a1a, roughness:.6});
 defDemo('spin', mkView(HOME.tgt, [HOME.pos.x-HOME.tgt.x, HOME.pos.y-HOME.tgt.y, HOME.pos.z-HOME.tgt.z], true), null, { start(){ this.n = 0; },
   tick(t){ yawGoal = Math.min(t*.8, Math.PI*2); const n = Math.floor(t/2); if(n !== this.n && n < 4){ this.n = n; cycleLeds(); } setStat('Hand modeled from photos of my room'); }, stop(){ yawGoal = 0; } });
 
-// autonomous mower concept: map the edge by hand, then mow lanes
+// robot mower prototype: map the edge by hand, then mow lanes
 { const g = new THREE.Group();
   const X0 = -1.0, Z0 = -1.7, LW = 1.05, LH = 2.8, lc = document.createElement('canvas'); lc.width = LW*100; lc.height = LH*100;
   const lt = new THREE.CanvasTexture(lc); lt.colorSpace = THREE.SRGBColorSpace; const lg = lc.getContext('2d');
@@ -1379,10 +1548,11 @@ defDemo('spin', mkView(HOME.tgt, [HOME.pos.x-HOME.tgt.x, HOME.pos.y-HOME.tgt.y, 
   const lanes = [[-.92,-1.6],[-.82,-1.5]]; [-.82,-.6,-.38,-.16].forEach((x,i)=>{ const a = i%2 ? .88 : -1.5, b = i%2 ? -1.5 : .88; lanes.push([x,a],[x,b]); });
   const path = edge.concat(lanes.slice(1)), len = [0]; for(let i=1;i<path.length;i++) len.push(len[i-1] + Math.hypot(path[i][0]-path[i-1][0], path[i][1]-path[i-1][1]));
   const edgeLen = len[edge.length-1], total = len[len.length-1], px = p => [(p[0]-X0)*100, (p[1]-Z0)*100];
+  const piTag = label('Raspberry Pi', mw, [0,.42,.08], .36);
   let pts = [], heading = 0;
   defDemo('mower', mkView(new V3(-.5,.05,-.35), [1.0,3.5,-.7]), g, { start(){ pts = []; heading = Math.PI/2; },
     tick(t, dt){
-      lawnMat.opacity = cl01(t,0,.8)*.92;
+      lawnMat.opacity = cl01(t,0,.8)*.92; piTag.material.opacity = cl01(t,.4,1.1);
       const d = Math.min(total, Math.max(0,t-.9)*1.25); let i = 1; while(i < path.length-1 && d > len[i]) i++;
       const a = path[i-1], b = path[i], f = (d-len[i-1])/(len[i]-len[i-1]), x = a[0]+(b[0]-a[0])*f, z = a[1]+(b[1]-a[1])*f;
       mw.position.set(x,0,z); let dh = Math.atan2(b[0]-a[0], b[1]-a[1]) - heading; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); heading += dh*Math.min(1, dt*10 + (t === 0 ? 1 : 0)); mw.rotation.y = heading; lidar.rotation.y = t*9;
