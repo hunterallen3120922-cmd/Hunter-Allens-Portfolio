@@ -401,6 +401,68 @@ body.has-tour #demobar.run::after{animation:tourbar var(--tour-d,12s) linear for
 body.roomba-on #minimap{opacity:.7}
 body.has-demo #minimap,body.has-panel #minimap{opacity:0}
 @media (prefers-reduced-motion:reduce){ #demobar,.demo-text.swap span{animation:none} }
+
+/* the PC you can sit at */
+#pc{position:fixed;inset:0;z-index:8;display:grid;place-items:center;padding:16px;pointer-events:none;opacity:0;transform:scale(.94);transition:opacity .6s, transform .6s cubic-bezier(.2,.8,.2,1)}
+#pc.on{opacity:1;transform:none;pointer-events:auto}
+.pc-screen{position:relative;width:min(1080px, 100%);height:min(560px, 100%);background:radial-gradient(120% 90% at 30% 20%, #241d38 0%, #16131f 60%);border:10px solid #0b0c0f;border-radius:14px;box-shadow:0 0 0 1px #2a2c33, 0 30px 80px rgba(0,0,0,.7), 0 0 60px rgba(127,224,208,.12);display:flex;flex-direction:column;overflow:hidden;font-family:var(--font-mono);color:#f4f1e8}
+.pc-desk{flex:1;display:flex;flex-wrap:wrap;gap:26px;align-content:flex-start;padding:28px}
+.pc-desk button{width:112px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 4px;border-radius:4px;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase}
+.pc-desk button:hover,.pc-desk button:focus-visible{background:rgba(255,255,255,.07)}
+.pc-desk i{width:56px;height:56px;border-radius:10px;display:block;box-shadow:inset 0 0 0 2px rgba(255,255,255,.14)}
+.ic-gpu{background:linear-gradient(#0d0e11,#0d0e11) 10px 14px/36px 20px no-repeat, radial-gradient(circle at 20px 24px, #19e6c0 0 6px, transparent 7px), radial-gradient(circle at 37px 24px, #19e6c0 0 6px, transparent 7px), #23262d}
+.ic-gpu{background:radial-gradient(circle at 19px 28px, #19e6c0 0 7px, transparent 8px), radial-gradient(circle at 38px 28px, #19e6c0 0 7px, transparent 8px), linear-gradient(#0d0e11,#0d0e11) 8px 16px/40px 24px no-repeat, #2a2d35}
+.ic-lawn{background:repeating-linear-gradient(90deg, #2f7a34 0 9px, #7fd35a 9px 18px)}
+.ic-shop{background:linear-gradient(#ffb766,#ffb766) 12px 12px/32px 6px no-repeat, linear-gradient(#f4f1e8,#f4f1e8) 12px 24px/32px 20px no-repeat, #1b1e25}
+.pc-note{flex-basis:100%;margin:6px 0 0;font-family:var(--font-hand);font-size:1.3rem;color:rgba(244,241,232,.6)}
+.pc-task{display:flex;align-items:center;gap:14px;padding:6px 10px;background:#0b0c0f;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,232,.6)}
+.pc-task span:first-child{margin-right:auto}
+.pc-task button,.pc-go{background:var(--lamp);color:#20140a;padding:6px 12px 5px;border-radius:2px;font-family:var(--font-mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase}
+.pc-win{position:absolute;inset:0 0 34px 0;display:flex;flex-direction:column;background:#101218}
+.pc-bar{display:flex;align-items:center;gap:12px;padding:8px 10px 8px 14px;background:#1b1e26;font-size:.68rem;letter-spacing:.1em}
+.pc-bar b{font-weight:500;text-transform:uppercase}
+.pc-bar span{margin-left:auto;color:#7dffc3;font-variant-numeric:tabular-nums;text-transform:uppercase}
+.pc-bar button{width:28px;height:28px;border-radius:2px;background:rgba(255,255,255,.08)}
+.pc-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;padding:12px 14px;overflow:auto}
+.pc-intro{margin:auto;max-width:44ch;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+.pc-intro p{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.5;color:#f4f1e8}
+.pc-go{font-size:.74rem;padding:9px 18px 8px}
+.pc-fine{margin:0;font-size:.62rem;letter-spacing:.06em;color:rgba(244,241,232,.5)}
+.gt-head,.gt-row{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:8px;align-items:center;padding:0 12px;font-size:.72rem;text-align:left}
+.gt-head{color:rgba(244,241,232,.45);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase}
+.gt-list{flex:1;min-height:0;display:flex;flex-direction:column;gap:5px;overflow:hidden}
+.gt-row{width:100%;min-height:38px;background:#1a1d25;border-left:3px solid #39b8ff;border-radius:2px;color:#f4f1e8;font-family:var(--font-mono);animation:gtIn .3s both}
+.gt-row:hover:not(:disabled){background:#232733}
+.gt-tag{justify-self:end;text-transform:uppercase;letter-spacing:.1em;font-size:.6rem;color:var(--lamp)}
+.gt-row.good{border-left-color:#7dffc3;background:#0f2a20}.gt-row.good .gt-tag{color:#7dffc3}
+.gt-row.bad{border-left-color:#ff6b5e;background:#2c1414}.gt-row.bad .gt-tag{color:#ff6b5e}
+.gt-row.gone{opacity:.35}
+@keyframes gtIn{from{opacity:0;transform:translateY(-8px)}}
+.lawn-cv{flex:1;min-height:0;width:100%;display:block;border-radius:2px;touch-action:none;cursor:crosshair}
+.shop{flex:1;display:flex;flex-direction:column;gap:10px;background:#f6f4ee;color:#17181c;border-radius:3px;padding:12px 14px;min-height:0}
+.shop-nav{display:flex;align-items:baseline;gap:12px;border-bottom:1px dashed #b9b4a6;padding-bottom:8px}
+.shop-nav b{font-size:.9rem;letter-spacing:.12em;text-transform:uppercase}.shop-nav span{font-size:.64rem;color:#6a675f}
+.shop-order{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+.shop-case{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;counter-reset:s}
+.shop-case li{counter-increment:s;border:1px dashed #b9b4a6;border-radius:2px;padding:8px;font-size:.66rem;color:#9a968b}
+.shop-case li::before{content:counter(s) ". "}
+.shop-case li.in{border-style:solid;border-color:#17181c;color:#17181c;background:#e4f5d8}
+.shop-tray{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:auto}
+.shop-part{background:#0d0e11;color:#f4f1e8;padding:11px 6px 10px;border-radius:2px;font-family:var(--font-mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 2px 0 rgba(0,0,0,.4)}
+.shop-part:disabled{opacity:.25}
+.shop-part.no{animation:shake .3s}
+.shop .pc-fine{color:#6a675f}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+#panel[data-skin="software"] .plays button[data-sit] span{color:var(--lamp)}
+@media (max-width:720px){
+  #pc{padding:8px}
+  .pc-screen{height:min(640px, 100%);border-width:6px}
+  .pc-desk{gap:12px;padding:18px 10px;justify-content:center}
+  .pc-desk button{width:98px}
+  .shop-case,.shop-tray{grid-template-columns:repeat(2,1fr)}
+  .gt-head,.gt-row{font-size:.64rem;padding:0 8px}
+}
+@media (prefers-reduced-motion:reduce){ #pc{transition:none} .gt-row,.shop-part.no{animation:none} }
 </style>
 </head>
 <body>
@@ -428,7 +490,7 @@ body.has-demo #minimap,body.has-panel #minimap{opacity:0}
     <li><button type="button" data-open="experiments" aria-pressed="false">Ideas</button></li>
     <li><button type="button" data-open="contact" aria-pressed="false">Contact</button></li>
   </ul>
-  <p class="hint">drag to spin. click a label. the printers, the roomba and the LED strip all do something.</p>
+  <p class="hint">drag to spin. click a label. the printers, the roomba and the LED strip all do something. the chair is free.</p>
 </nav>
 
 <aside id="panel" role="dialog" aria-labelledby="panelTitle" hidden>
@@ -517,6 +579,7 @@ body.has-demo #minimap,body.has-panel #minimap{opacity:0}
 <template id="tpl-software">
   <p class="lead">I build sites and tools, and I use AI to move faster.</p>
   <ul class="plays">
+    <li><button type="button" data-sit><i></i><span>Sit down and play</span></button></li>
     <li><button type="button" data-demo="web" data-line="Code goes in, a page comes out."><i></i><span>Website build</span></button></li>
     <li><button type="button" data-demo="monitors" data-line="Three screens, one at a time. The LEDs follow."><i></i><span>Monitors on</span></button></li>
     <li><button type="button" data-demo="spin" data-line="This site. My real room, rebuilt in three.js."><i></i><span>This room</span></button></li>
@@ -688,6 +751,154 @@ body.has-demo #minimap,body.has-panel #minimap{opacity:0}
       const h = location.hash.slice(1); if(SECTIONS[h]) open(h);
     }
   }, 9000);
+})();
+</script>
+
+<div id="pc" hidden role="dialog" aria-label="Hunter's PC">
+  <div class="pc-screen">
+    <div class="pc-desk" id="pcDesk">
+      <button type="button" data-app="gpu"><i class="ic-gpu"></i><span>GPU tracker</span></button>
+      <button type="button" data-app="lawn"><i class="ic-lawn"></i><span>LawnCo</span></button>
+      <button type="button" data-app="shop"><i class="ic-shop"></i><span>HunterPCBuilds</span></button>
+      <p class="pc-note">three small games. pick one.</p>
+    </div>
+    <div class="pc-win" id="pcWin" hidden>
+      <div class="pc-bar"><b id="pcTitle"></b><span id="pcScore"></span><button type="button" id="pcX" aria-label="Close this game">&#10005;</button></div>
+      <div class="pc-body" id="pcBody"></div>
+    </div>
+    <div class="pc-task"><span>hunter-pc</span><span id="pcClock"></span><button type="button" id="pcUp">stand up</button></div>
+  </div>
+</div>
+<script>
+/* ---------- the PC: sit down, three small games ---------- */
+(function(){
+  const $ = id => document.getElementById(id);
+  const pc = $('pc'), win = $('pcWin'), body = $('pcBody'), scoreEl = $('pcScore');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let on = false, stop = null, showT = 0;
+  const el = (tag, cls, txt)=>{ const e = document.createElement(tag); if(cls) e.className = cls; if(txt != null) e.textContent = txt; return e; };
+  const score = t => { scoreEl.textContent = t; };
+  function intro(text, go, label){ body.replaceChildren(); const w = el('div','pc-intro'); w.append(el('p','',text)); const b = el('button','pc-go',label || 'start'); b.type = 'button'; b.addEventListener('click', go); w.append(b); body.append(w); b.focus({preventScroll:true}); }
+
+  function sit(){
+    if(on || document.body.classList.contains('has-demo')) return;
+    on = true; if(window.RoomUI.current) window.RoomUI.close();
+    document.body.classList.add('has-demo','has-sit'); pc.hidden = false;
+    window.dispatchEvent(new CustomEvent('room:sit',{detail:true}));
+    showT = setTimeout(()=>{ pc.classList.add('on'); $('pcUp').focus({preventScroll:true}); }, still ? 0 : 1300);
+  }
+  function stand(){
+    if(!on) return; on = false; closeApp(); clearTimeout(showT);
+    pc.classList.remove('on'); document.body.classList.remove('has-demo','has-sit');
+    setTimeout(()=>{ if(!on) pc.hidden = true; }, 500);
+    window.dispatchEvent(new CustomEvent('room:sit',{detail:false}));
+  }
+  function closeApp(){ if(stop){ stop(); stop = null; } win.hidden = true; body.replaceChildren(); score(''); }
+  function openApp(id){ closeApp(); win.hidden = false; win.dataset.app = id; $('pcTitle').textContent = APPS[id].title; stop = APPS[id].run() || null; }
+  window.RoomSit = sit;
+  $('pcUp').addEventListener('click', stand); $('pcX').addEventListener('click', closeApp);
+  $('pcDesk').addEventListener('click', e=>{ const b = e.target.closest('[data-app]'); if(b) openApp(b.dataset.app); });
+  document.addEventListener('click', e=>{ if(e.target.closest('[data-sit]')) sit(); });
+  window.addEventListener('keydown', e=>{ if(on && e.key === 'Escape'){ if(!win.hidden) closeApp(); else stand(); } });
+  const clock = ()=>{ const d = new Date(); $('pcClock').textContent = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); };
+  clock(); setInterval(clock, 20000);
+
+  const APPS = {
+    /* listings scroll past. grab the ones priced under market before they sell. */
+    gpu:{title:'gpu tracker', run(){
+      const CARDS = [['GTX 1660',110],['GTX 1660 Super',125],['RTX 2060',150],['RTX 3060',210],['RTX 3060 Ti',240],['RTX 3070',280],['RX 580',70],['RX 6600',160],['RX 6700 XT',250]];
+      let timers = [], saved = 0, misses = 0, left = 30, live = false;
+      const clear = ()=>{ timers.forEach(t=>{ clearInterval(t); clearTimeout(t); }); timers = []; live = false; };
+      function start(){
+        clear(); saved = 0; misses = 0; left = 30; live = true; body.replaceChildren();
+        const head = el('div','gt-head'); head.append(el('span','','card'), el('span','','market'), el('span','','listed'), el('span','','')); 
+        const list = el('div','gt-list'); body.append(head, list, el('p','pc-fine','game prices, not real ones. tap a listing that is well under market.'));
+        const hud = ()=> score('saved $' + saved + ' / ' + left + 's');
+        hud();
+        timers.push(setInterval(()=>{ left--; hud(); if(left <= 0) end(); }, 1000));
+        const add = ()=>{
+          const c = CARDS[Math.floor(Math.random()*CARDS.length)], deal = Math.random() < .38;
+          const price = Math.round(c[1]*(deal ? .55 + Math.random()*.2 : .92 + Math.random()*.3)/5)*5;
+          const row = el('button','gt-row'); row.type = 'button';
+          row.append(el('span','',c[0]), el('span','','$' + c[1]), el('span','','$' + price), el('span','gt-tag','buy'));
+          row.addEventListener('click', ()=>{ if(!live || row.disabled) return; row.disabled = true;
+            if(deal){ saved += c[1]-price; row.classList.add('good'); row.lastChild.textContent = '-$' + (c[1]-price); }
+            else { misses++; row.classList.add('bad'); row.lastChild.textContent = 'overpaid'; }
+            hud(); });
+          list.prepend(row); while(list.children.length > 7) list.lastChild.remove();
+          timers.push(setTimeout(()=>{ if(!row.disabled){ row.disabled = true; row.classList.add('gone'); row.lastChild.textContent = 'sold'; } }, 3200));
+        };
+        add(); timers.push(setInterval(add, 850));
+      }
+      function end(){ clear(); intro('Time. You saved $' + saved + (misses ? ' and overpaid ' + misses + (misses === 1 ? ' time.' : ' times.') : ' and never overpaid.'), start, 'again'); score('saved $' + saved); }
+      intro('Cheap used GPUs are how every build starts. Listings scroll past for 30 seconds. Tap the ones priced well under market before someone else buys them.', start);
+      return clear;
+    }},
+    /* steer the mower, cut every stripe */
+    lawn:{title:'lawnco', run(){
+      let raf = 0, live = false, off = [];
+      const clear = ()=>{ cancelAnimationFrame(raf); off.forEach(f=>f()); off = []; live = false; };
+      function start(){
+        clear(); body.replaceChildren(); const cv = el('canvas','lawn-cv'); body.append(cv, el('p','pc-fine','move the mouse, drag, or use the arrow keys.'));
+        const w = cv.clientWidth || 600, h = cv.clientHeight || 300, dpr = Math.min(devicePixelRatio || 1, 2); cv.width = w*dpr; cv.height = h*dpr;
+        const g = cv.getContext('2d'); g.scale(dpr,dpr);
+        const cs = Math.max(14, Math.round(Math.min(w,h)/11)), cols = Math.floor(w/cs), rows = Math.floor(h/cs), ox = (w-cols*cs)/2, oy = (h-rows*cs)/2;
+        const cut = new Uint8Array(cols*rows); let done = 0, t0 = performance.now(), last = t0;
+        const m = {x:ox+cs, y:oy+cs, tx:ox+cs, ty:oy+cs, a:0}, keys = {};
+        const pt = e=>{ const r = cv.getBoundingClientRect(); m.tx = e.clientX-r.left; m.ty = e.clientY-r.top; };
+        const kd = e=>{ if(e.key.startsWith('Arrow')){ keys[e.key] = true; e.preventDefault(); } }, ku = e=>{ keys[e.key] = false; };
+        cv.addEventListener('pointermove', pt); cv.addEventListener('pointerdown', pt); window.addEventListener('keydown', kd); window.addEventListener('keyup', ku);
+        off.push(()=>{ window.removeEventListener('keydown', kd); window.removeEventListener('keyup', ku); });
+        live = true;
+        (function loop(now){
+          if(!live) return; const dt = Math.min(.05, (now-last)/1000); last = now;
+          const kx = (keys.ArrowRight ? 1 : 0) - (keys.ArrowLeft ? 1 : 0), ky = (keys.ArrowDown ? 1 : 0) - (keys.ArrowUp ? 1 : 0);
+          if(kx || ky){ m.tx = m.x + kx*60; m.ty = m.y + ky*60; }
+          const dx = m.tx-m.x, dy = m.ty-m.y, d = Math.hypot(dx,dy), sp = cs*9*dt;
+          if(d > 2){ m.x += dx/d*Math.min(sp,d); m.y += dy/d*Math.min(sp,d); m.a = Math.atan2(dy,dx); }
+          m.x = Math.max(ox+cs*.5, Math.min(ox+cols*cs-cs*.5, m.x)); m.y = Math.max(oy+cs*.5, Math.min(oy+rows*cs-cs*.5, m.y));
+          const ci = Math.floor((m.x-ox)/cs), cj = Math.floor((m.y-oy)/cs);
+          if(!cut[cj*cols+ci]){ cut[cj*cols+ci] = 1; done++; }
+          g.fillStyle = '#10151a'; g.fillRect(0,0,w,h);
+          for(let j=0;j<rows;j++) for(let i=0;i<cols;i++){ const c = cut[j*cols+i]; g.fillStyle = c ? ((i+j)%2 ? '#7fd35a' : '#72c650') : ((i+j)%2 ? '#2f7a34' : '#2b7130'); g.fillRect(ox+i*cs, oy+j*cs, cs, cs); }
+          g.save(); g.translate(m.x,m.y); g.rotate(m.a); g.fillStyle = '#15171b'; g.fillRect(-cs*.45,-cs*.38,cs*.9,cs*.76); g.fillStyle = '#b4d02a'; g.fillRect(-cs*.32,-cs*.27,cs*.6,cs*.54); g.fillStyle = '#1f7a3a'; g.fillRect(cs*.02,-cs*.12,cs*.2,cs*.24); g.restore();
+          const secs = (now-t0)/1000; score(Math.round(done/cut.length*100) + '% / ' + secs.toFixed(1) + 's');
+          if(done >= cut.length){ live = false; let best = secs; try{ const b = parseFloat(localStorage.getItem('lawnBest')); if(b && b < best) best = b; localStorage.setItem('lawnBest', String(best)); }catch(e){}
+            clear(); intro('Yard done in ' + secs.toFixed(1) + ' seconds. Best: ' + best.toFixed(1) + '.', start, 'next yard'); return; }
+          raf = requestAnimationFrame(loop);
+        })(t0);
+      }
+      intro('Mow the whole yard as fast as you can. Every square has to be cut.', start);
+      return clear;
+    }},
+    /* build PCs in the right order, sell as many as you can */
+    shop:{title:'hunterpcbuilds', run(){
+      const ORDER = ['Motherboard','CPU','Cooler','RAM','Graphics card','Power supply'];
+      let timer = 0, left = 40, sold = 0, step = 0, live = false;
+      const clear = ()=>{ clearInterval(timer); live = false; };
+      function start(){
+        clear(); left = 40; sold = 0; live = true; body.replaceChildren();
+        const page = el('div','shop'); const nav = el('div','shop-nav'); nav.append(el('b','','HunterPCBuilds'), el('span','','used parts in, gaming PCs out'));
+        const order = el('div','shop-order'), tower = el('ol','shop-case'), tray = el('div','shop-tray'), msg = el('p','pc-fine','click the parts in the order they go into the case.');
+        page.append(nav, order, tower, tray, msg); body.append(page);
+        const hud = ()=> score('sold ' + sold + ' / ' + left + 's');
+        function fresh(){
+          step = 0; order.textContent = 'order #' + (sold+1) + ': one gaming PC'; tower.replaceChildren(); tray.replaceChildren();
+          ORDER.forEach(()=> tower.append(el('li','','empty')));
+          ORDER.slice().sort(()=> Math.random()-.5).forEach(name=>{ const b = el('button','shop-part',name); b.type = 'button';
+            b.addEventListener('click', ()=>{ if(!live) return;
+              if(name === ORDER[step]){ tower.children[step].textContent = name; tower.children[step].className = 'in'; b.disabled = true; step++; msg.textContent = step < ORDER.length ? 'good. keep going.' : 'sold.';
+                if(step === ORDER.length){ sold++; hud(); setTimeout(()=>{ if(live) fresh(); }, 450); } }
+              else { left = Math.max(0, left-2); hud(); msg.textContent = 'not yet. that cost you 2 seconds.'; b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); } });
+            tray.append(b); });
+        }
+        fresh(); hud();
+        timer = setInterval(()=>{ left--; hud(); if(left <= 0){ clear(); score('sold ' + sold); intro('You built and sold ' + sold + (sold === 1 ? ' PC' : ' PCs') + ' in 40 seconds. I have done 75 to 80 the slow way.', start, 'again'); } }, 1000);
+      }
+      intro('An order comes in. Click the parts in the order they go into the case. A wrong part costs 2 seconds. Sell as many PCs as you can in 40 seconds.', start);
+      return clear;
+    }}
+  };
 })();
 </script>
 
@@ -1187,7 +1398,7 @@ mesh(rboxGeo(.4,.14,.02,.006), M.plastic, [1.5,.775,.55], build).rotation.x = -M
 /* ---------- loose in the room: chair, floor mat, bin ---------- */
 const mat = mesh(new THREE.PlaneGeometry(1.0,1.35), std({color:0x0d0e10, roughness:.8}), [.72,.006,-.12], scene, false); mat.rotation.x = -Math.PI/2;
 cyl(.12,.095,.28, M.matte, [.87,.14,.58], scene, 20);
-const chair = new THREE.Group(); chair.position.set(.72,0,-.12); chair.rotation.y = -Math.PI/2 + .4; scene.add(chair);
+const chair = new THREE.Group(); chair.position.set(.72,0,-.12); chair.rotation.y = -Math.PI/2 + .4; scene.add(chair); hot(chair, '@sit');
 const chairFab = fabric(0x1c1d22);
 mesh(rboxGeo(.5,.09,.48,.035), fabric(0x8f9296), [0,.49,0], chair);
 const backG = sub(chair); backG.position.set(0,.52,.22); backG.rotation.x = .14;
@@ -1344,7 +1555,8 @@ const cam = {pos:new V3(), tgt:new V3(), init:false};
 let shiftX = 0, shiftY = 0, yaw = 0, pitch = 0, yawGoal = 0, pitchGoal = 0, parX = 0, parY = 0, parXG = 0, parYG = 0;
 const isNarrow = ()=> W <= 720;
 let demoView = null;
-function panelInset(){ if(!focusId) return [0,0]; if(demoView) return isNarrow() ? [0, H*.17] : [0, H*.09]; return isNarrow() ? [0, H*.62] : [Math.min(440, W-32) + 16, 0]; }
+let sitOn = false;
+function panelInset(){ if(!focusId || sitOn) return [0,0]; if(demoView) return isNarrow() ? [0, H*.17] : [0, H*.09]; return isNarrow() ? [0, H*.62] : [Math.min(440, W-32) + 16, 0]; }
 function goal(id){
   const v = demoView || (id ? HOT[id] : HOME), a = W/H, dir = v.pos.clone().sub(v.tgt);
   let k;
@@ -1405,6 +1617,7 @@ function up(e){
   if(down && moved <= 6){
     const id = hit(e);
     if(id === '@led') lightShow();
+    else if(id === '@sit'){ if(!demoView) window.RoomSit(); }
     else if(id === '@roomba') startRoomba();
     else if(id && id.startsWith('@print:')) startPrint(jobs[+id.slice(7)]);
     else if(id) window.RoomUI.open(id);
@@ -1451,6 +1664,10 @@ window.addEventListener('room:demo', e=>{
   if(e.detail && demos[e.detail]){ demoView = demos[e.detail].view; startDemo(e.detail); go('@demo', 1.4); }
   else demoView = null;
 });
+
+// sitting at the main desk: the camera drops into the chair, the page draws the screen
+const SITVIEW = mkView(HOT.software.tgt.clone(), [-.95,.1,-.3]);
+window.addEventListener('room:sit', e=>{ sitOn = !!e.detail; stopDemo(); demoView = sitOn ? SITVIEW : null; go(sitOn ? '@demo' : null, 1.6); });
 
 // a glowing pad in the middle of the floor, for things that are not physically in the room
 const PAD = new V3(-.3,0,.05), PADOFF = [-1.15,1.75,-1.45];
