@@ -659,17 +659,27 @@ body.has-demo #minimap,body.has-panel #minimap{opacity:0}
   document.getElementById('demoBack').addEventListener('click', endDemo);
 
   // the tour: a fixed run of demos, one stop at a time
-  const TOUR = [['software','spin',13],['about','runner',12],['builds','explode',12],['builds','bench',11],['hardware','egpu',15],['printing','print0',12],['software','web',12],['experiments','mower',14],['experiments','server',11]];
+  const TOUR = [
+    ['software','spin',13,'hi',"I'm Hunter. I'm in high school in Pennsylvania, and this is my actual room. Almost everything I make starts in here."],
+    ['builds','pcbuild',15,'the first build',"It started in late 2025. A friend on my cross country team needed a PC, so I found the parts and built him one for $375."],
+    ['builds','numbers',13,'the business',"I kept going. 75 to 80 PCs later it has a name, HunterPCBuilds, and about $30,000 in sales."],
+    ['builds','bench',13,'how fast',"Cheap doesn't mean slow. A few of my builds score in the top 5% on PassMark, and I've passed 1,000 FPS in Fortnite on builds that cost as little as $1,000."],
+    ['hardware','egpu',16,'the dock',"After enough PCs I wanted to make my own hardware. So I designed a dock that lets my ThinkPad T480 game on a GTX 1660."],
+    ['printing','print0',13,'the printers',"The dock is 3D printed, like most of what I prototype. I run four printers. This is the big one."],
+    ['experiments','server',12,'the server',"I also run a home server: a Xeon E-2276G with 32GB of RAM and 4TB. It is where I test whatever I am working on next."],
+    ['experiments','mower',15,'what\'s next',"Now all of it is going into a robot mower. The prototype runs on a Raspberry Pi: drive the yard once, then it mows by itself."],
+    ['about','runner',13,'outside this room',"When I'm not in here I'm usually running. Four years of varsity cross country and track, and about eight years of club hockey."]
+  ];
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let tourI = -1, tourTimer = 0;
   function tourClear(){ tourI = -1; clearTimeout(tourTimer); document.body.classList.remove('has-tour'); bar.classList.remove('run'); }
   function tourGo(i){
-    if(i >= TOUR.length){ tourClear(); demoFrom = null; open('contact'); toast("that's the tour. say hi."); return; }
+    if(i >= TOUR.length){ tourClear(); demoFrom = null; open('contact'); toast("that's me. say hi."); return; }
     i = Math.max(0, i); const st = TOUR[i], btn = document.getElementById('tpl-' + st[0]).content.querySelector('[data-demo="' + st[1] + '"]');
     clearTimeout(tourTimer); tourI = i; document.body.classList.add('has-tour');
     playDemo(btn); demoFrom = null;
-    document.getElementById('demoTitle').textContent = 'Stop ' + (i+1) + ' of ' + TOUR.length + ' / ' + (i ? btn.querySelector('span').textContent : 'the room');
-    if(!i) document.getElementById('demoLine').textContent = "This is my actual room, rebuilt so you can click around it. I'll show you what happens in here.";
+    document.getElementById('demoTitle').textContent = (i+1) + ' of ' + TOUR.length + ' / ' + st[3];
+    document.getElementById('demoLine').textContent = st[4];
     document.getElementById('tourPrev').disabled = !i; document.getElementById('tourNext').textContent = i === TOUR.length-1 ? 'Finish' : 'Next';
     document.getElementById('tourNext').focus({preventScroll:true});
     bar.classList.remove('run');
