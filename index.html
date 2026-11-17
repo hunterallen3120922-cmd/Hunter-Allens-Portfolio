@@ -190,6 +190,7 @@ body.has-demo #toast{bottom:calc(env(safe-area-inset-bottom, 0px) + 170px)}
 .contact div{min-width:0;display:flex;flex-direction:column}
 .contact small{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-faint)}
 .contact code{font-family:var(--font-mono);font-size:.92rem;color:var(--paper);overflow-wrap:anywhere;user-select:all}
+.contact a{color:inherit;text-decoration:underline;text-decoration-color:var(--screen);text-underline-offset:3px}
 .copy{flex:none;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;border:1px solid var(--line);color:var(--paper-soft)}
 .copy:hover{background:var(--lamp);color:#20140a;border-color:transparent}
 
@@ -656,11 +657,10 @@ body.has-fpv #scene{cursor:crosshair}
 <template id="tpl-contact">
   <p class="lead">Want a PC built, something printed, or have a project idea? Message me.</p>
   <ul class="contact">
+    <li><div><small>HunterPCBuilds website</small><a href="https://hunterpcbuilds.netlify.app/" target="_blank" rel="noopener"><code id="c-web">hunterpcbuilds.netlify.app</code></a></div><button type="button" class="copy" data-copy="c-web">Copy</button></li>
+    <li><div><small>Email</small><code id="c-email">hunterallen3120922@gmail.com</code></div><button type="button" class="copy" data-copy="c-email">Copy</button></li>
     <li><div><small>eBay store</small><code id="c-eb">ebay.com/usr/hunter.pcbuilds</code></div><button type="button" class="copy" data-copy="c-eb">Copy</button></li>
-    <li><div><small>Email</small><code id="c-email">you@example.com</code></div><button type="button" class="copy" data-copy="c-email">Copy</button></li>
-    <li><div><small>GitHub</small><code id="c-gh">github.com/your-handle</code></div><button type="button" class="copy" data-copy="c-gh">Copy</button></li>
   </ul>
-  <span class="ph">Email and GitHub are placeholders until I add the real ones.</span>
 </template>
 
 <script>
