@@ -190,6 +190,7 @@ body.has-demo #toast{bottom:calc(env(safe-area-inset-bottom, 0px) + 170px)}
 .contact div{min-width:0;display:flex;flex-direction:column}
 .contact small{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-faint)}
 .contact code{font-family:var(--font-mono);font-size:.92rem;color:var(--paper);overflow-wrap:anywhere;user-select:all}
+.contact a{color:inherit;text-decoration:underline;text-decoration-color:var(--screen);text-underline-offset:3px}
 .copy{flex:none;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;border:1px solid var(--line);color:var(--paper-soft)}
 .copy:hover{background:var(--lamp);color:#20140a;border-color:transparent}
 
@@ -379,6 +380,12 @@ body.has-tour .demo-btns #tourNext{background:var(--lamp);color:#20140a;text-sha
 #demobar::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--lamp)}
 body.has-tour #demobar.run::after{animation:tourbar var(--tour-d,12s) linear forwards}
 @keyframes tourbar{from{width:0}to{width:100%}}
+/* story: a handwritten chapter title, and captions big enough to read like subtitles */
+#chapter{position:fixed;z-index:4;left:50%;top:calc(env(safe-area-inset-top, 0px) + 8vh);font-family:var(--font-hand);font-weight:700;font-size:clamp(2.4rem, 7vw, 4.6rem);line-height:1;color:var(--paper);text-shadow:0 2px 16px rgba(0,0,0,.75);pointer-events:none;opacity:0;white-space:nowrap;transform:translateX(-50%) rotate(-2deg)}
+body:not(.has-tour) #chapter{display:none}
+#chapter.show{animation:chap 3.4s ease both}
+@keyframes chap{0%{opacity:0;transform:translate(-50%,10px) rotate(-2deg)}14%,72%{opacity:1;transform:translate(-50%,0) rotate(-2deg)}100%{opacity:0;transform:translate(-50%,-4px) rotate(-2deg)}}
+@media (prefers-reduced-motion:reduce){ #chapter.show{animation:none;opacity:1} }
 
 /* quieter: small corner note, slim caption bar */
 #toast,body.has-demo #toast{left:calc(var(--gutter-l) + 8px);bottom:calc(env(safe-area-inset-bottom, 0px) + 20px);transform:translateY(6px);background:rgba(13,14,17,.8);color:var(--paper-soft);font-size:.6rem;letter-spacing:.12em;padding:5px 9px 4px;box-shadow:none;border-left:2px solid var(--lamp);transition:opacity .5s, transform .5s}
@@ -398,6 +405,9 @@ body.has-tour #demobar.run::after{animation:tourbar var(--tour-d,12s) linear for
   #toast.show{transform:translate(-50%,0)}
   #demobar{gap:6px}
 }
+body.has-tour #demobar{width:min(680px, calc(100% - 32px))}
+body.has-tour .demo-text span{font-size:1rem;line-height:1.45;color:var(--paper)}
+@media (max-width:720px){ body.has-tour .demo-text span{font-size:.92rem} }
 body.roomba-on #minimap{opacity:.7}
 body.has-demo #minimap,body.has-panel #minimap{opacity:0}
 @media (prefers-reduced-motion:reduce){ #demobar,.demo-text.swap span{animation:none} }
@@ -505,7 +515,7 @@ body.has-fpv #scene{cursor:crosshair}
 
 <header class="brand">
   <h1><b>Hunter Allen</b><span>my actual room. click stuff.</span></h1>
-  <button type="button" id="tourStart" class="tour-btn">take a tour &#9656;</button>
+  <button type="button" id="tourStart" class="tour-btn">watch my story &#9656;</button>
 </header>
 <div class="status" aria-hidden="true">
   <div>Local time <b id="clockText">--:--</b></div>
@@ -540,11 +550,15 @@ body.has-fpv #scene{cursor:crosshair}
   <div class="demo-btns"><button type="button" id="demoReplay">Replay</button><button type="button" id="demoBack">Back</button><button type="button" id="tourPrev" class="tour-only">Back</button><button type="button" id="tourNext" class="tour-only">Next</button><button type="button" id="tourExit" class="tour-only">Exit</button></div>
 </div>
 <div id="toast" role="status"></div>
+<div id="chapter" aria-hidden="true"></div>
 <div id="loader"><p>Opening the door</p></div>
 
 <template id="tpl-about">
-  <p class="lead">I'm Hunter. I'm in high school in Pennsylvania, and I build things and sell them.</p>
-  <p>It started with PCs. Then the 3D printers showed up, then a server, then an idea for a robot mower. This room is where all of it happens.</p>
+  <p class="lead">I'm Hunter. I'm a senior in Pennsylvania, and I build PCs and sell them.</p>
+  <p>I got a Kano computer kit for my 8th birthday and built my first real PC by myself in 8th grade. In late 2025 I built a $375 PC for a teammate, and that turned into HunterPCBuilds. About 80 PCs later, I'm headed to Shippensburg University to study entrepreneurship.</p>
+  <ul class="plays">
+    <li><button type="button" data-story><i></i><span>Watch the whole story</span></button></li>
+  </ul>
   <h4>Work</h4>
   <dl class="facts">
     <dt>Late 2025 to now</dt><dd>HunterPCBuilds, founder</dd>
@@ -643,11 +657,10 @@ body.has-fpv #scene{cursor:crosshair}
 <template id="tpl-contact">
   <p class="lead">Want a PC built, something printed, or have a project idea? Message me.</p>
   <ul class="contact">
+    <li><div><small>HunterPCBuilds website</small><a href="https://hunterpcbuilds.netlify.app/" target="_blank" rel="noopener"><code id="c-web">hunterpcbuilds.netlify.app</code></a></div><button type="button" class="copy" data-copy="c-web">Copy</button></li>
+    <li><div><small>Email</small><code id="c-email">hunterallen3120922@gmail.com</code></div><button type="button" class="copy" data-copy="c-email">Copy</button></li>
     <li><div><small>eBay store</small><code id="c-eb">ebay.com/usr/hunter.pcbuilds</code></div><button type="button" class="copy" data-copy="c-eb">Copy</button></li>
-    <li><div><small>Email</small><code id="c-email">you@example.com</code></div><button type="button" class="copy" data-copy="c-email">Copy</button></li>
-    <li><div><small>GitHub</small><code id="c-gh">github.com/your-handle</code></div><button type="button" class="copy" data-copy="c-gh">Copy</button></li>
   </ul>
-  <span class="ph">Email and GitHub are placeholders until I add the real ones.</span>
 </template>
 
 <script>
@@ -670,10 +683,10 @@ body.has-fpv #scene{cursor:crosshair}
   const bar = document.getElementById('demobar');
   let demoOn = false, demoFrom = null, demoName = null, lastStat = null;
   function stat(t){ if(t !== lastStat){ lastStat = t; document.getElementById('demoStat').textContent = t; } }
-  function playDemo(btn){
-    demoFrom = current || demoFrom; demoName = btn.dataset.demo; demoOn = true;
-    document.getElementById('demoTitle').textContent = btn.querySelector('span').textContent;
-    document.getElementById('demoLine').textContent = btn.dataset.line || '';
+  function playDemo(name, title, line){
+    demoFrom = current || demoFrom; demoName = name; demoOn = true;
+    document.getElementById('demoTitle').textContent = title;
+    document.getElementById('demoLine').textContent = line || '';
     stat(''); { const dx = bar.querySelector('.demo-text'); dx.classList.remove('swap'); void dx.offsetWidth; dx.classList.add('swap'); }
     current = null; panel.classList.remove('open'); document.body.classList.remove('has-panel'); clearTimeout(hideTimer); hideTimer = setTimeout(()=>{ panel.hidden = true; }, 600);
     dock.forEach(b=>b.setAttribute('aria-pressed','false'));
@@ -690,34 +703,51 @@ body.has-fpv #scene{cursor:crosshair}
   }
   document.getElementById('demoBack').addEventListener('click', endDemo);
 
-  // the tour: a fixed run of demos, one stop at a time
+  // the story: my life in order. The room starts empty and fills up in the order things
+  // actually came into it. [demo, seconds, room era, chapter, caption in my words]
   const TOUR = [
-    ['software','spin',13,'hi',"I'm Hunter. I'm in high school in Pennsylvania, and this is my actual room. Almost everything I make starts in here."],
-    ['builds','pcbuild',15,'the first build',"It started in late 2025. A friend on my cross country team needed a PC, so I found the parts and built him one for $375."],
-    ['builds','numbers',13,'the business',"I kept going. 75 to 80 PCs later it has a name, HunterPCBuilds, and about $30,000 in sales."],
-    ['builds','bench',13,'how fast',"Cheap doesn't mean slow. A few of my builds score in the top 5% on PassMark, and I've passed 1,000 FPS in Fortnite on builds that cost as little as $1,000."],
-    ['hardware','egpu',16,'the dock',"After enough PCs I wanted to make my own hardware. So I designed a dock that lets my ThinkPad T480 game on a GTX 1660."],
-    ['printing','print0',13,'the printers',"The dock is 3D printed, like most of what I prototype. I run four printers. This is the big one."],
-    ['experiments','server',12,'the server',"I also run a home server: a Xeon E-2276G with 32GB of RAM and 4TB. It is where I test whatever I am working on next."],
-    ['experiments','mower',15,'what\'s next',"Now all of it is going into a robot mower. The prototype runs on a Raspberry Pi: drive the yard once, then it mows by itself."],
-    ['about','runner',13,'outside this room',"When I'm not in here I'm usually running. Four years of varsity cross country and track, and about eight years of club hockey."]
+    ['kano',12,0,'age 8',"It started on my 8th birthday with a Kano computer kit. It crashed almost right away, and figuring out why is what got me hooked."],
+    ['firstpc',10,1,'8th grade',"In 8th grade I built my first real PC, by myself. The computer desks were the first things in this room."],
+    ['gpuvid',11,1,'the video',"Years later, on the couch after a cross country meet, I watched a video about how graphics cards work. It gave me goosebumps. I wanted to build PCs, not just use them."],
+    ['pcbuild',11,2,'the first build',"I couldn't afford my own, so I asked a teammate if I could build his. $375, every part tracked in a Google Sheet. I was most nervous about the CPU. Then the fan spun."],
+    ['lan',13,2,'the LAN party',"Then I hosted a LAN party for 14 people. I had to set up and test every computer, and I realized I liked that part more than playing."],
+    ['ledger',11,2,'first sales',"My first eBay sale lost $80. Then my uncle asked for a PC, and I built it at cost for the experience. By January 11 I had built 6 and set a goal of 25 for the year."],
+    ['fiveat',11,3,'five at once',"By spring I had five builds going at once, mostly older parts. Old doesn't mean useless. For someone's first gaming PC it can be exactly right."],
+    ['crash',13,3,'the low point',"Not every build went well. A PC I sold on eBay kept crashing. It came down to the motherboard, and I refunded the customer. That was the closest I got to giving up."],
+    ['milestones',12,3,'25, 50, 80',"I kept going. I hit 25, my goal for the whole year, then 50, which is when it started to feel like a real business. I'm at about 80 now."],
+    ['print0',11,4,'the printers',"Then the printers came. There are four now, and most of what I prototype gets printed here, even the HunterPCBuilds plaque."],
+    ['egpu',13,4,'my own hardware',"After enough PCs I wanted to design my own hardware, like this dock that lets my ThinkPad T480 game on a GTX 1660."],
+    ['dronefly',11,5,'the drone',"The newest thing in here is an FPV drone, a hobby I just picked up. You can fly it yourself after this."],
+    ['runner',9,5,'senior year',"Now it's senior year. Cross country during the day, building PCs at night."],
+    ['outro',16,9,"what's next","Next is Shippensburg University, for entrepreneurship. If there's something you want to start, you don't need it figured out first. Start somewhere. I'm just getting started."]
   ];
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const chap = document.getElementById('chapter');
   let tourI = -1, tourTimer = 0;
-  function tourClear(){ tourI = -1; clearTimeout(tourTimer); document.body.classList.remove('has-tour'); bar.classList.remove('run'); }
+  function tourClear(){ const was = tourI >= 0; tourI = -1; clearTimeout(tourTimer); document.body.classList.remove('has-tour'); bar.classList.remove('run'); chap.classList.remove('show');
+    if(was) window.dispatchEvent(new CustomEvent('room:story',{detail:false})); }
+  function storyEnd(){
+    tourClear(); demoFrom = null; demoOn = false; document.body.classList.remove('has-demo'); bar.hidden = true;
+    window.dispatchEvent(new CustomEvent('room:demo',{detail:null})); window.dispatchEvent(new CustomEvent('room:focus',{detail:null}));
+    document.getElementById('tourStart').innerHTML = 'watch it again &#9656;';
+    setTimeout(()=> toast('now look around. everything is clickable.'), 900);
+  }
   function tourGo(i){
-    if(i >= TOUR.length){ tourClear(); demoFrom = null; open('contact'); toast("that's me. say hi."); return; }
-    i = Math.max(0, i); const st = TOUR[i], btn = document.getElementById('tpl-' + st[0]).content.querySelector('[data-demo="' + st[1] + '"]');
+    if(i >= TOUR.length){ storyEnd(); return; }
+    i = Math.max(0, i); const st = TOUR[i], first = tourI < 0;
     clearTimeout(tourTimer); tourI = i; document.body.classList.add('has-tour');
-    playDemo(btn); demoFrom = null;
+    if(first) window.dispatchEvent(new CustomEvent('room:story',{detail:true}));
+    window.dispatchEvent(new CustomEvent('room:era',{detail:st[2]}));
+    playDemo(st[0], '', st[4]); demoFrom = null;
     document.getElementById('demoTitle').textContent = (i+1) + ' of ' + TOUR.length + ' / ' + st[3];
-    document.getElementById('demoLine').textContent = st[4];
-    document.getElementById('tourPrev').disabled = !i; document.getElementById('tourNext').textContent = i === TOUR.length-1 ? 'Finish' : 'Next';
+    chap.textContent = st[3]; chap.classList.remove('show'); void chap.offsetWidth; chap.classList.add('show');
+    document.getElementById('tourPrev').disabled = !i; document.getElementById('tourNext').textContent = i === TOUR.length-1 ? 'Look around' : 'Next';
     document.getElementById('tourNext').focus({preventScroll:true});
     bar.classList.remove('run');
-    if(!still){ bar.style.setProperty('--tour-d', st[2] + 's'); void bar.offsetWidth; bar.classList.add('run'); tourTimer = setTimeout(()=> tourGo(tourI+1), st[2]*1000); }
+    if(!still){ bar.style.setProperty('--tour-d', st[1] + 's'); void bar.offsetWidth; bar.classList.add('run'); tourTimer = setTimeout(()=> tourGo(tourI+1), st[1]*1000); }
   }
   document.getElementById('tourStart').addEventListener('click', ()=> tourGo(0));
+  window.__tourJump = i=> tourGo(i);
   document.getElementById('tourNext').addEventListener('click', ()=> tourGo(tourI+1));
   document.getElementById('tourPrev').addEventListener('click', ()=> tourGo(tourI-1));
   document.getElementById('tourExit').addEventListener('click', endDemo);
@@ -760,7 +790,8 @@ body.has-fpv #scene{cursor:crosshair}
   document.getElementById('panelClose').addEventListener('click', close);
   window.addEventListener('keydown', e=>{ if(e.key === 'Escape'){ if(!endDemo()) close(); } });
   body.addEventListener('click', e=>{
-    const pd = e.target.closest('[data-demo]'); if(pd){ playDemo(pd); return; }
+    const pd = e.target.closest('[data-demo]'); if(pd){ playDemo(pd.dataset.demo, pd.querySelector('span').textContent, pd.dataset.line); return; }
+    if(e.target.closest('[data-story]')){ tourGo(0); return; }
     const go = e.target.closest('[data-go]'); if(go){ open(go.dataset.go); body.scrollTop = 0; return; }
     const btn = e.target.closest('.copy'); if(!btn) return;
     const el = document.getElementById(btn.dataset.copy);
@@ -1008,6 +1039,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.m
 const V3 = THREE.Vector3;
 const canvas = document.getElementById('scene');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let storyOn = false;   // true while the story is playing
 
 let renderer;
 try{
@@ -1497,7 +1529,7 @@ mesh(rboxGeo(.4,.14,.02,.006), M.plastic, [1.5,.775,.55], build).rotation.x = -M
 
 /* ---------- loose in the room: chair, floor mat, bin ---------- */
 const mat = mesh(new THREE.PlaneGeometry(1.0,1.35), std({color:0x0d0e10, roughness:.8}), [.72,.006,-.12], scene, false); mat.rotation.x = -Math.PI/2;
-cyl(.12,.095,.28, M.matte, [.87,.14,.58], scene, 20);
+const bin = cyl(.12,.095,.28, M.matte, [.87,.14,.58], scene, 20);
 const chair = new THREE.Group(); chair.position.set(.72,0,-.12); chair.rotation.y = -Math.PI/2 + .4; scene.add(chair); hot(chair, '@sit');
 const chairFab = fabric(0x1c1d22);
 mesh(rboxGeo(.5,.09,.48,.035), fabric(0x8f9296), [0,.49,0], chair);
@@ -1751,7 +1783,7 @@ const emis = (c,i=1.4)=> std({color:c, emissive:c, emissiveIntensity:i, roughnes
 function label(text, parent, pos, w=.5, color='#f4f1e8'){
   const t = ctex(512,128,(g)=>{ g.fillStyle = '#0d0e11'; g.fillRect(4,16,504,96); g.fillStyle = 'rgba(255,255,255,.13)'; g.fillRect(4,16,504,3); g.fillStyle = 'rgba(0,0,0,.7)'; g.fillRect(4,109,504,3);
     g.font = "500 40px 'DM Mono', ui-monospace, Menlo, Consolas, monospace"; if('letterSpacing' in g) g.letterSpacing = '5px'; g.textAlign = 'center'; g.textBaseline = 'middle';
-    const T = text.toUpperCase(); g.fillStyle = 'rgba(0,0,0,.9)'; g.fillText(T,256,64); g.fillStyle = color; g.fillText(T,256,66); });
+    const T = text.toUpperCase(); for(let fs = 38; g.measureText(T).width > 470 && fs >= 20; fs -= 2) g.font = "500 " + fs + "px 'DM Mono', ui-monospace, Menlo, Consolas, monospace"; g.fillStyle = 'rgba(0,0,0,.9)'; g.fillText(T,256,64); g.fillStyle = color; g.fillText(T,256,66); });
   const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:t, transparent:true, depthTest:false})); sp.scale.set(w,w/4,1); sp.position.set(pos[0],pos[1],pos[2]); sp.renderOrder = 6; parent.add(sp); return sp;
 }
 const demos = {}; let demo = null, demoT = 0;
@@ -1800,13 +1832,13 @@ const PADVIEW = mkView(new V3(PAD.x,.5,PAD.z), PADOFF);
   const led = glow(0x39b8ff, .5, [.02,.25,0], g, 0); const inner = new THREE.PointLight(0x39b8ff, 0, .9); inner.position.set(.03,.22,0); g.add(inner);
   const c0 = wp(openC), off = [1.35,.8,.9];
   defDemo('pcbuild', mkView(new V3(c0.x,c0.y+.22,c0.z), off), g, { tick(t){
-    let say = 'Sourcing and testing the parts';
+    let say = storyOn ? 'Budget: $375, every part in a Google Sheet' : 'Sourcing and testing the parts';
     parts.forEach((p,i)=>{ const k = smo(cl01(t, .7+i*.85, 1.5+i*.85)); p.m.visible = k > 0;
       p.m.position.set(p.to[0] + (1-k)*.5, p.to[1] + (1-k)*(.22+i*.04) + Math.sin(k*Math.PI)*.12, p.to[2]); if(k > 0) say = p.say; });
     const on = cl01(t, 5.2, 6);
     fanMat.emissiveIntensity = on*1.8; fanMat.emissive.setHSL((t*.12)%1, .9, .5); fanMat.color.copy(fanMat.emissive);
     parts[3].m.rotation.z = t*on*9; led.material.opacity = on*.4; inner.intensity = .25 + on*.6; inner.color.copy(on ? fanMat.emissive : white); led.material.color.copy(fanMat.emissive);
-    if(on >= 1) say = 'Stress tested and ready to sell';
+    if(on >= 1) say = storyOn ? 'The fan spun. It worked.' : 'Stress tested and ready to sell';
     setStat(say);
   }});
 }
@@ -2233,10 +2265,196 @@ function tickFpv(dt){
   if(window.__fpvOsd) window.__fpvOsd(fpv.pos.y, Math.hypot(fpv.vel.x, fpv.vel.y, fpv.vel.z), k >= 1);
 }
 function tickDrone(time){
-  if(!drone.visible) return;
+  if(!drone.visible || droneAuto) return;
   drone.position.y = DRONE_HOME.y + Math.sin(time*1.7)*.025; drone.rotation.z = Math.sin(time*1.1)*.04; drone.rotation.x = Math.cos(time*.9)*.03;
   droneProps.forEach((p,i)=>{ p.rotation.y = time*40*(i%2 ? 1 : -1); });
 }
+
+/* ---------- the story: the room fills up in the order things came into it ---------- */
+// era 0: empty room. 1: the computer desks. 2: the build desk by the window. 3: the shelves. 4: the printers. 5: the drone.
+const ERAS = [[], [desk, bdesk, roomba, chair, mat, bin, peg], [build, tools], [wood, metal, dresser, tri], [bench, rack, tower, ff, mini], [drone]];
+const eraObjs = [], puffs = [];
+ERAS.forEach((list, n)=> list.forEach((o, i)=>{ o.userData.era = {n, i, k:1, goal:1, wait:0, s0:o.scale.clone()}; eraObjs.push(o); }));
+let eraNow = 99;
+function setEra(n){
+  eraNow = n;
+  eraObjs.forEach(o=>{ const e = o.userData.era, g = e.n <= n ? 1 : 0; if(g !== e.goal){ e.goal = g; e.wait = reduceMotion ? 0 : g ? .45 + e.i*.3 : (ERAS[e.n].length - e.i)*.05; } });
+}
+const backOut = x => 1 + 2.4*Math.pow(x-1,3) + 1.4*Math.pow(x-1,2);
+function puff(o){ const p = wp(o); puffs.push({s:glow(0xffd9a0, .2, [p.x, Math.max(.06, p.y + .05), p.z], scene, 0), t:0}); }
+function tickEras(dt){
+  for(const o of eraObjs){ const e = o.userData.era; if(e.k === e.goal) continue;
+    if(e.wait > 0){ e.wait -= dt; continue; }
+    if(e.k === 0 && e.goal && !reduceMotion) puff(o);
+    e.k = reduceMotion ? e.goal : THREE.MathUtils.clamp(e.k + (e.goal ? dt/.85 : -dt/.45), 0, 1);
+    const v = e.goal ? backOut(e.k) : smo(e.k);
+    o.scale.set(e.s0.x*(.4+.6*v), e.s0.y*Math.max(.001, v), e.s0.z*(.4+.6*v)); o.visible = e.k > 0;
+  }
+  for(let i = puffs.length-1; i >= 0; i--){ const p = puffs[i]; p.t += dt; p.s.scale.setScalar(.3 + p.t*1.8); p.s.material.opacity = .55*(1 - p.t/.9); if(p.t >= .9){ scene.remove(p.s); puffs.splice(i,1); } }
+}
+window.addEventListener('room:story', e=>{ storyOn = !!e.detail; setEra(storyOn ? 0 : 99); });
+window.addEventListener('room:era', e=> setEra(e.detail));
+const canvasTex = (w,h)=>{ const c = document.createElement('canvas'); c.width = w; c.height = h; const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return {c, g:c.getContext('2d'), t}; };
+
+// age 8: a computer kit goes together, boots, crashes, gets fixed
+{ const g = holo(), K = sub(g); K.position.y = .03;
+  const S = canvasTex(320,200);
+  const scr = sub(K); box(.36,.24,.02, M.white, [0,.14,0], scr); mesh(new THREE.PlaneGeometry(.33,.2), new THREE.MeshBasicMaterial({map:S.t}), [0,.145,.011], scr, false); box(.12,.02,.07, M.white, [0,.01,-.01], scr);
+  const orange = std({color:0xff7a1a, roughness:.5});
+  const board = sub(K); box(.13,.012,.09, std({color:0x1f7a3a, roughness:.5}), [0,.006,0], board); box(.03,.012,.03, M.steel, [-.02,.017,0], board); box(.02,.016,.045, M.plastic, [.04,.018,0], board);
+  mesh(new THREE.BoxGeometry(.17,.06,.12), std({color:0xf4f4f2, roughness:.3, transparent:true, opacity:.35}), [0,.03,0], board, false);
+  const kb = sub(K); box(.32,.018,.11, orange, [0,.009,0], kb);
+  for(let r=0;r<3;r++) for(let c=0;c<10;c++) box(.022,.008,.022, M.white, [-.135+c*.03,.022,-.03+r*.03], kb, false);
+  const cable = mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([new V3(.2,.02,.06), new V3(.12,.01,.0), new V3(.05,.02,-.06)]), 16, .005, 5), orange, null, K, false);
+  const parts = [[scr,[0,.7,-.1],[0,0,-.1]],[board,[.6,.5,.05],[.25,0,.04]],[kb,[-.5,.6,.15],[-.02,0,.16]]];
+  const draw = t=>{ const x = S.g; x.textAlign = 'center'; x.textBaseline = 'middle';
+    if(t < 2.8){ x.fillStyle = '#05060a'; x.fillRect(0,0,320,200); }
+    else if(t < 4.8){ x.fillStyle = '#1a1030'; x.fillRect(0,0,320,200); x.fillStyle = '#f4f1e8'; x.font = '700 46px system-ui, sans-serif'; x.fillText('hello', 160, 86); x.fillStyle = '#2a2140'; x.fillRect(60,140,200,10); x.fillStyle = '#ff7a1a'; x.fillRect(60,140,200*cl01(t,2.9,4.6),10); }
+    else if(t < 7){ const f = Math.floor(t*14)%3; x.fillStyle = f ? '#2a0b0b' : '#120404'; x.fillRect(0,0,320,200); for(let i=0;i<6;i++){ x.fillStyle = i%2 ? 'rgba(255,70,50,.5)' : 'rgba(255,255,255,.15)'; x.fillRect(0,((t*90+i*37)%200),320,4+i%3*5); } x.fillStyle = '#ff6b5a'; x.font = '700 40px ui-monospace, monospace'; x.fillText('ERROR', 160, 100); }
+    else if(t < 8.8){ x.fillStyle = '#0a0c12'; x.fillRect(0,0,320,200); x.textAlign = 'left'; x.font = '18px ui-monospace, monospace'; x.fillStyle = '#7fe0d0'; ['> why did it crash?','> checking the cables','> checking the card'].forEach((s,i)=>{ if(t > 7.1 + i*.5) x.fillText(s, 18, 50 + i*36); }); }
+    else { x.fillStyle = '#0c3a24'; x.fillRect(0,0,320,200); x.fillStyle = '#7dffc3'; x.font = '700 40px system-ui, sans-serif'; x.fillText('fixed it', 160, 100); }
+    S.t.needsUpdate = true; };
+  defDemo('kano', mkView(new V3(PAD.x,.32,PAD.z), [PADOFF[0]*.85, PADOFF[1]*.75, PADOFF[2]*.85]), g, { tick(t){
+    parts.forEach((p,i)=>{ const k = smo(cl01(t,.3+i*.6,1.3+i*.6)); p[0].visible = k > 0; lerp3(p[0], p[1], p[2], k); p[0].rotation.y = (1-k)*1.2; });
+    cable.visible = t > 2.2; draw(t);
+    setStat(t < 2.8 ? 'Birthday present: a computer kit you build yourself' : t < 4.8 ? 'It booted' : t < 7 ? 'Then it crashed' : t < 8.8 ? 'Figuring out what went wrong' : 'Fixed. That is where it started.');
+  }});
+}
+
+// 8th grade: the computer desks arrive, then the screens come on
+{ const screens = []; desk.traverse(o=>{ if(o.isMesh && o.material.isMeshBasicMaterial && o.material.map) screens.push(o.material); });
+  defDemo('firstpc', mkView(new V3(1.15,.85,.3), [-2.7,1.9,-1.75]), null, {
+    start(){ screens.forEach(m=> m.color.setRGB(0,0,0)); }, stop(){ screens.forEach(m=> m.color.setRGB(1,1,1)); },
+    tick(t){ screens.forEach((m,i)=>{ const k = cl01(t, 2.4+i*.5, 2.9+i*.5); m.color.setRGB(k,k,k); });
+      setStat(t < 2.4 ? 'The computer desks came first' : '8th grade: my first real PC, built by myself'); }});
+}
+
+// the video: a graphics card, slowly turning, while the pieces get named
+{ const g = holo(), G = sub(g); G.position.y = .42;
+  const shroud = std({color:0x1a1b20, roughness:.4, metalness:.5});
+  box(.62,.2,.05, shroud, [0,0,0], G); box(.62,.2,.006, M.steel, [0,0,-.03], G); box(.014,.24,.06, M.steel, [-.32,0,0], G);
+  box(.5,.03,.008, std({color:0x1f5a34, roughness:.5}), [-.02,-.115,-.02], G); box(.2,.014,.009, std({color:0xd8b04a, metalness:.8, roughness:.3}), [-.06,-.133,-.02], G);
+  const strip = emis(0x19e6c0, .4); box(.5,.01,.008, strip, [0,.103,.027], G, false);
+  const fans = [-.17,.05,.24].map(x=>{ const r = mesh(new THREE.TorusGeometry(.075,.008,8,32), M.steel, [x,0,.026], G, false); const f = sub(G); f.position.set(x,0,.03);
+    for(let i=0;i<7;i++){ const b = box(.065,.004,.022, std({color:0x2a2c33, roughness:.4}), [0,0,0], f, false); b.geometry.translate(.035,0,0); b.rotation.z = i/7*Math.PI*2; b.rotation.x = .4; } return f; });
+  const names = [['the chip',[-.05,.7,.1]],['memory',[.32,.62,.1]],['cooling',[-.38,.6,.1]]].map(n=> label(n[0], g, n[1], .26, '#7fe0d0'));
+  const bumps = []; for(let i=0;i<46;i++) bumps.push(mesh(new THREE.SphereGeometry(.007,6,5), basic(0x9ff5e6), null, g, false));
+  defDemo('gpuvid', mkView(new V3(PAD.x,.45,PAD.z), PADOFF), g, { tick(t){
+    G.rotation.y = -.35 + Math.sin(t*.35)*.35; const spin = cl01(t,1,2.5); fans.forEach((f,i)=> f.rotation.z = t*spin*(10+i));
+    names.forEach((n,i)=> n.material.opacity = cl01(t,2.6+i*.9,3.1+i*.9) * (1 - cl01(t,7.4,8)));
+    const gb = cl01(t,6.4,7.4); strip.emissiveIntensity = .4 + gb*(1.2 + Math.sin(t*5)*.5);
+    bumps.forEach((b,i)=>{ const u = (t*.22 + i/bumps.length)%1, a = i*2.4 + t*.6, r = .36 + (i%5)*.025; b.visible = gb > 0; b.position.set(Math.cos(a)*r, .05 + u*.9, Math.sin(a)*r); b.scale.setScalar(gb*(u < .1 ? u/.1 : 1-u)*1.4); });
+    setStat(t < 2.6 ? 'On the couch after a cross country meet' : t < 6.4 ? 'How all the parts work together' : 'Goosebumps');
+  }});
+}
+
+// the LAN party: 14 stations wired up one by one, then the players show up
+{ const g = holo(), N = 14, hub = box(.08,.03,.06, M.plastic, [0,.03,0], g); const hubLed = box(.06,.006,.004, basic(0x2bff7a), [0,.035,.031], g, false);
+  const cols = [0x19e6c0,0x39b8ff,0xa45cff,0xffb057];
+  const st = []; for(let i=0;i<N;i++){ const a = i/N*Math.PI*2, s = sub(g); s.position.set(Math.cos(a)*.33, .015, Math.sin(a)*.33); s.rotation.y = -a - Math.PI/2;
+    box(.1,.03,.055, M.white, [0,.015,0], s); box(.022,.045,.04, M.plastic, [.035,.053,-.005], s);
+    const scrM = new THREE.MeshBasicMaterial({color:0x05060a}); box(.065,.04,.004, M.plastic, [-.01,.06,-.012], s); mesh(new THREE.PlaneGeometry(.06,.035), scrM, [-.01,.06,-.0095], s, false).rotation.y = Math.PI;
+    const cab = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new V3(0,.02,0), new V3(Math.cos(a)*.3,.02,Math.sin(a)*.3)]), new THREE.LineBasicMaterial({color:0x7fe0d0, transparent:true, opacity:0})); g.add(cab);
+    const p = person(g, cols[i%4], .9); p.p.position.set(Math.cos(a)*.43, .015, Math.sin(a)*.43); p.p.rotation.y = -a + Math.PI/2; p.p.visible = false;
+    st.push({s, scrM, cab, p, c:new THREE.Color(cols[(i*3)%4])}); }
+  defDemo('lan', mkView(new V3(PAD.x,.2,PAD.z), [PADOFF[0]*.9, PADOFF[1]*1.05, PADOFF[2]*.9]), g, { tick(t){
+    let n = 0;
+    st.forEach((s,i)=>{ const k = cl01(t, .8+i*.42, 1.1+i*.42); if(k >= 1) n++; s.cab.material.opacity = k*.8; s.scrM.color.setRGB(0,0,0).lerp(s.c, k);
+      const pk = smo(cl01(t, 7.4+i*.08, 7.9+i*.08)); s.p.p.visible = pk > 0; s.p.p.scale.setScalar(.9*Math.max(.001,pk)); s.p.legs.forEach(l=> l.rotation.x = 0); });
+    hubLed.material.color.setHex(Math.sin(t*20) > 0 ? 0x2bff7a : 0x0c3a1c);
+    setStat(t < 7.2 ? 'Setting up: ' + n + ' of 14 PCs online' : t < 9.4 ? 'Game night' : 'Turns out I liked the setup more than the games');
+  }});
+}
+
+// first sales: a sale that lost money, a build at cost, then a goal
+{ const g = holo();
+  const tw = sub(g); box(.14,.28,.26, M.black, [0,.14,0], tw); box(.004,.22,.2, emis(0x39b8ff,.6), [.071,.15,0], tw, false);
+  const carton = box(.2,.34,.32, M.card, [0,.17,0], g); 
+  const tw2 = sub(g); box(.14,.28,.26, M.black, [0,.14,0], tw2); box(.004,.22,.2, emis(0xffb057,.6), [.071,.15,0], tw2, false);
+  const six = []; for(let i=0;i<6;i++){ const m = sub(g); m.position.set(-.25+i*.1, 0, -.22); box(.06,.12,.1, M.black, [0,.06,0], m); box(.002,.09,.07, emis(cols6(i),.7), [.031,.065,0], m, false); six.push(m); }
+  function cols6(i){ return [0x19e6c0,0x39b8ff,0xa45cff,0xffb057,0x2bff7a,0xff5fa0][i]; }
+  const tags = [['first eBay sale','#f4f1e8',[.36,.62,0]],['-$80','#ff6b5a',[.36,.5,0]],["uncle's PC, at cost",'#f4f1e8',[-.38,.62,0]],['jan 11: 6 built','#7dffc3',[-.38,.5,0]],['goal: 25 this year','#ffb057',[0,.8,0]]].map(d=> label(d[0], g, d[2], .42, d[1]));
+  defDemo('ledger', PADVIEW, g, { tick(t){
+    const box1 = smo(cl01(t,1.0,1.7)), ship = smo(cl01(t,2.0,3.0));
+    tw.visible = t < 1.7; carton.visible = box1 > 0 && ship < 1; carton.scale.set(1, Math.max(.001, box1), 1); carton.position.set(ship*.8, .17*box1 + ship*.5, -ship*.4); carton.rotation.y = ship*1.2;
+    const u = smo(cl01(t,3.6,4.4)), go = smo(cl01(t,5.2,5.8)); tw2.visible = u > 0 && go < 1; tw2.scale.setScalar(Math.max(.001, u*(1-go)));
+    six.forEach((m,i)=>{ const k = smo(cl01(t, 5.6+i*.18, 6.1+i*.18)); m.visible = k > 0; m.scale.setScalar(Math.max(.001,k)); });
+    [.4,2.2,3.8,5.6,7.2].forEach((a,i)=> tags[i].material.opacity = cl01(t,a,a+.4));
+    setStat(t < 2.2 ? 'My first online sale' : t < 3.8 ? 'Lost $80 on it' : t < 5.6 ? "My uncle's PC, about $600, built at cost" : t < 7.2 ? 'January 11: 6 PCs in 3 months' : 'Goal for the whole year: 25');
+  }});
+}
+
+// five at once: open cases on the floor in front of the shelves
+{ const g = new THREE.Group(), edge = new THREE.LineBasicMaterial({color:0xffb057});
+  const cases = [-.95,-.5,-.05,.4,.85].map((x,i)=>{ const c = sub(g); c.position.set(x, 0, -1.72); c.rotation.y = .15 - i*.07;
+    c.add(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(.2,.38,.38)), edge)); c.children[0].position.y = .19;
+    box(.2,.012,.38, M.plastic, [0,.006,0], c); box(.008,.26,.26, std({color:0x1f5a34, roughness:.5}), [-.09,.22,-.02], c);
+    if(i%2 === 0) box(.03,.07,.2, std({color:0x16171b, roughness:.4}), [-.03,.17,0], c);
+    if(i !== 3) box(.01,.07,.012, emis(0xa45cff,.8), [-.07,.27,.08], c, false);
+    label('in progress', c, [0,.5,0], .26, '#ffb057'); return c; });
+  const specs = ['Ryzen 5 5500','16GB DDR4','RTX 2060-class card'].map((s,i)=> label(s, g, [-.05,.78+i*.13,-1.72], .44, '#7fe0d0'));
+  defDemo('fiveat', mkView(new V3(-.05,.55,-2.0), [-.35,1.0,2.95]), g, { tick(t){
+    let n = 0; cases.forEach((c,i)=>{ const k = smo(cl01(t, 1.6+i*.45, 2.1+i*.45)); if(k > .5) n++; c.visible = k > 0; c.scale.set(1, Math.max(.001,k), 1); });
+    specs.forEach((s,i)=> s.material.opacity = cl01(t, 5.4+i*.5, 5.8+i*.5));
+    setStat(t < 1.6 ? 'The shelves showed up next' : t < 5.4 ? 'Builds going at once: ' + n : 'Older parts with plenty of life left in them');
+  }});
+}
+
+// the low point: a sold PC keeps crashing, the board comes out, the money goes back
+{ const g = holo();
+  const tw = sub(g); tw.position.set(-.28,0,0); box(.2,.36,.36, M.black, [0,.2,0], tw); box(.004,.3,.3, emis(0x39b8ff,.4), [.102,.2,0], tw, false);
+  const mb = sub(g); box(.012,.26,.26, std({color:0x1f5a34, roughness:.5}), [0,0,0], mb); box(.016,.05,.05, M.steel, [.008,.04,0], mb);
+  const S = canvasTex(512,288);
+  box(.6,.36,.02, M.black, [.16,.36,.02], g); cyl(.012,.012,.16, M.black, [.16,.1,.03], g, 10); box(.2,.012,.12, M.black, [.16,.026,.03], g);
+  mesh(new THREE.PlaneGeometry(.57,.33), new THREE.MeshBasicMaterial({map:S.t}), [.16,.36,.034], g, false);
+  const sold = label('sold on eBay', g, [-.28,.5,0], .32), badL = label('bad motherboard', g, [-.5,.66,.05], .4, '#ff6b5a'), ref = label('refunded', g, [.16,.66,.05], .38, '#ff6b5a');
+  const red = new THREE.Color(0x6a1410);
+  const blue = (x)=>{ x.fillStyle = '#123a8c'; x.fillRect(0,0,512,288); x.fillStyle = '#fff'; x.textAlign = 'left'; x.font = '700 80px system-ui, sans-serif'; x.fillText(':(', 40, 110); x.font = '22px system-ui, sans-serif'; x.fillText('Your PC ran into a problem', 40, 170); x.fillText('and needs to restart.', 40, 202); };
+  const game = (x,t)=>{ x.fillStyle = '#0b0d18'; x.fillRect(0,0,512,288); x.fillStyle = '#19e6c0'; for(let i=0;i<5;i++) x.fillRect(((t*140 + i*120)%600)-60, 190 - i*24, 50, 14); x.fillStyle = '#a45cff'; x.fillRect(220, 120 + Math.sin(t*6)*30, 60, 60); };
+  let frozen = 0;
+  defDemo('crash', PADVIEW, g, {
+    start(){ ledGoal.copy(red); renderer.toneMappingExposure = 1.0; }, stop(){ ledGoal.set(LEDS[ledIx][1]); renderer.toneMappingExposure = 1.3; },
+    tick(t){ const x = S.g;
+      if(t < 2) { game(x,t); frozen = t; } else if(t < 3) game(x, frozen); else if(t < 4.6) blue(x); else if(t < 5.3){ x.fillStyle = '#000'; x.fillRect(0,0,512,288); } else if(t < 6.4) game(x,t); else if(t < 7.6) blue(x); else { x.fillStyle = '#05060a'; x.fillRect(0,0,512,288); }
+      S.t.needsUpdate = true;
+      const out = smo(cl01(t,8,9.2)); mb.visible = out > 0; mb.position.set(-.28 - out*.3, .2 + out*.2, 0); mb.rotation.y = out*.8;
+      sold.material.opacity = cl01(t,.2,.7)*(1-cl01(t,7.6,8)); badL.material.opacity = cl01(t,9,9.5); ref.material.opacity = cl01(t,10.2,10.7);
+      setStat(t < 2 ? 'Sold on eBay' : t < 7.6 ? 'It kept crashing' : t < 10.2 ? 'It came down to the motherboard' : 'Refunded. The closest I got to giving up.');
+    }});
+}
+
+// 25, 50, 80: one block for every PC
+{ const g = holo(), W0 = 10, sz = .042, gap = .006, cols = [0x19e6c0, 0x39b8ff, 0xffb057];
+  const blocks = []; for(let i=0;i<80;i++){ const c = i%W0, r = Math.floor(i/W0); blocks.push(mesh(new THREE.BoxGeometry(sz,sz,sz), emis(cols[i < 25 ? 0 : i < 50 ? 1 : 2], .55), [(c-(W0-1)/2)*(sz+gap), .03+sz/2+r*(sz+gap), 0], g, false)); }
+  const rowY = n => .03 + Math.ceil(n/W0)*(sz+gap);
+  const marks = [[25,'25: the goal','#7fe0d0'],[50,"50: it's real",'#7fd4ff'],[80,'80 and counting','#ffb057']].map(m=> ({n:m[0], l:label(m[1], g, [.5, rowY(m[0]), 0], .42, m[2])}));
+  const count = t => t < .5 ? 0 : t < 3 ? (t-.5)/2.5*25 : t < 4.5 ? 25 : t < 6.5 ? 25 + (t-4.5)/2*25 : t < 8 ? 50 : t < 10 ? 50 + (t-8)/2*30 : 80;
+  defDemo('milestones', mkView(new V3(PAD.x,.3,PAD.z), PADOFF), g, { tick(t){
+    const n = Math.floor(count(t));
+    blocks.forEach((b,i)=>{ b.visible = i < n; });
+    marks.forEach(m=> m.l.material.opacity = n >= m.n ? 1 : 0);
+    setStat('PCs built: ' + n);
+  }});
+}
+
+// the drone: takes off from the closet, does a lap of the room, lands again
+let droneAuto = false;
+{ const lab = drone.children.find(o=> o.isSprite && o.renderOrder === 6);
+  const path = new THREE.CatmullRomCurve3([DRONE_HOME.clone(), new V3(-.1,1.45,1.05), new V3(-1.15,1.6,.3), new V3(-1.15,1.7,-1.9), new V3(.2,1.75,-2.15), new V3(1.05,1.6,-1.2), new V3(1.0,1.5,.2), new V3(.5,1.4,1.2), DRONE_HOME.clone()]);
+  const tmp = new V3();
+  defDemo('dronefly', mkView(HOME.tgt, [(HOME.pos.x-HOME.tgt.x)*.62, (HOME.pos.y-HOME.tgt.y)*.7, (HOME.pos.z-HOME.tgt.z)*.62], true), null, {
+    start(){ droneAuto = true; if(lab) lab.visible = false; }, stop(){ droneAuto = false; drone.position.copy(DRONE_HOME); drone.rotation.set(0,2.2,0); if(lab) lab.visible = true; },
+    tick(t){ const u = smo(cl01(t, 1.2, 9.6)); path.getPointAt(u, drone.position); path.getTangentAt(Math.min(.999, u), tmp);
+      if(u > 0 && u < 1){ drone.rotation.set(-.12, Math.atan2(-tmp.x, -tmp.z), Math.sin(t*1.3)*.15); }
+      droneProps.forEach((p,i)=>{ p.rotation.y = t*40*(i%2 ? 1 : -1); });
+      setStat(t < 1.2 ? 'The newest thing in the room' : u < 1 ? 'A lap of the room' : 'Back in the closet'); }});
+}
+
+// what's next: pull all the way back and take one slow turn around the whole room
+defDemo('outro', mkView(HOME.tgt, [(HOME.pos.x-HOME.tgt.x)*1.12, (HOME.pos.y-HOME.tgt.y)*1.18, (HOME.pos.z-HOME.tgt.z)*1.12], true), null, { start(){ this.n = 0; },
+  tick(t){ yawGoal = Math.min(t*.4, Math.PI*2); const n = Math.floor(t/3.2); if(n !== this.n && n < 5){ this.n = n; cycleLeds(); }
+    setStat(t < 8 ? 'Everything here, in the order it showed up' : 'After this, click anything to look closer'); }, stop(){ yawGoal = 0; } });
+
 
 /* ---------- render loop ---------- */
 const white = new THREE.Color(0xffffff), sph = new THREE.Spherical(), off = new V3(), proj = new V3(), clockT = new THREE.Clock();
@@ -2262,7 +2480,7 @@ function frame(){
   screenLight.intensity = .8 + Math.sin(time*2.1)*.04;
   neonMat.color.setRGB(.37+Math.sin(time*1.7)*.02, .9, 1);
 
-  tickJobs(dt, time); tickRoomba(dt); tickDemo(dt); tickShow(dt, time);
+  tickJobs(dt, time); tickRoomba(dt); tickDemo(dt); tickShow(dt, time); tickEras(dt);
   m1Body.opacity += ((jobs[3].on ? .2 : 1) - m1Body.opacity)*s; m1Body.depthWrite = m1Body.opacity > .95; m1Win.opacity += ((jobs[3].on ? .12 : .75) - m1Win.opacity)*s;
   renderer.render(scene, camera);
 
@@ -2279,7 +2497,7 @@ requestAnimationFrame(()=>{
   document.body.classList.add('ready');
   window.dispatchEvent(new Event('room:ready'));
 });
-window.__room = {fpv, flyable, lightShow, scene, camera, renderer, go, startRoomba, startPrint, jobs, yaw:v=>{ yawGoal = v; }, ff:s=>{ for(let i=0;i<s*30;i++){ tickJobs(1/30, i/30); tickRoomba(1/30); tickDemo(1/30); } }};
+window.__room = {fpv, flyable, lightShow, scene, camera, renderer, go, startRoomba, startPrint, jobs, yaw:v=>{ yawGoal = v; }, ff:s=>{ for(let i=0;i<s*30;i++){ tickJobs(1/30, i/30); tickRoomba(1/30); tickDemo(1/30); tickEras(1/30); } }};
 </script>
 </body>
 </html>
