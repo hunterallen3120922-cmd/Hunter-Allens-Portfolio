@@ -463,6 +463,38 @@ body.has-demo #minimap,body.has-panel #minimap{opacity:0}
   .gt-head,.gt-row{font-size:.64rem;padding:0 8px}
 }
 @media (prefers-reduced-motion:reduce){ #pc{transition:none} .gt-row,.shop-part.no{animation:none} }
+
+/* FPV drone view */
+#fpv{position:fixed;inset:0;z-index:5;pointer-events:none;opacity:0;transition:opacity .6s;font-family:var(--font-mono);color:#f4f1e8}
+#fpv.on{opacity:1}
+.fpv-frame{position:absolute;inset:0;background:radial-gradient(120% 100% at 50% 50%, transparent 58%, rgba(0,0,0,.5) 100%)}
+.fpv-frame i{position:absolute;width:26px;height:26px;border:2px solid rgba(244,241,232,.55)}
+.fpv-frame i:nth-child(1){left:18px;top:calc(env(safe-area-inset-top, 0px) + 18px);border-right:0;border-bottom:0}
+.fpv-frame i:nth-child(2){right:18px;top:calc(env(safe-area-inset-top, 0px) + 18px);border-left:0;border-bottom:0}
+.fpv-frame i:nth-child(3){left:18px;bottom:calc(env(safe-area-inset-bottom, 0px) + 18px);border-right:0;border-top:0}
+.fpv-frame i:nth-child(4){right:18px;bottom:calc(env(safe-area-inset-bottom, 0px) + 18px);border-left:0;border-top:0}
+.fpv-frame b{position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;background:linear-gradient(rgba(244,241,232,.6),rgba(244,241,232,.6)) 50% 50%/100% 1px no-repeat, linear-gradient(rgba(244,241,232,.6),rgba(244,241,232,.6)) 50% 50%/1px 100% no-repeat}
+.fpv-top{position:absolute;left:54px;top:calc(env(safe-area-inset-top, 0px) + 22px);display:flex;gap:12px;align-items:center}
+.fpv-tape{background:#0d0e11;padding:4px 9px 3px;border-radius:2px;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-1deg);box-shadow:0 2px 0 rgba(0,0,0,.5)}
+.fpv-rec{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#ff6b5e;display:flex;align-items:center;gap:6px}
+.fpv-rec::before{content:"";width:8px;height:8px;border-radius:50%;background:#ff3b30;animation:rec 1.4s steps(2) infinite}
+@keyframes rec{50%{opacity:.15}}
+.fpv-osd{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom, 0px) + 56px);transform:translateX(-50%);display:flex;gap:18px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#7dffc3;text-shadow:0 0 6px rgba(125,255,195,.35), 0 1px 2px #000;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fpv-keys{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom, 0px) + 22px);transform:translateX(-50%);margin:0;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,241,232,.6);text-shadow:0 1px 2px #000;white-space:nowrap}
+#fpvLand{position:absolute;right:54px;top:calc(env(safe-area-inset-top, 0px) + 20px);pointer-events:auto;background:var(--lamp);color:#20140a;padding:7px 13px 6px;border-radius:2px;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 2px 0 rgba(0,0,0,.5)}
+#fpv:not(.on) #fpvLand,#fpv:not(.on) .stick{pointer-events:none}
+.stick{position:absolute;bottom:calc(env(safe-area-inset-bottom, 0px) + 54px);width:112px;height:112px;border-radius:50%;border:2px solid rgba(244,241,232,.4);background:rgba(13,14,17,.35);pointer-events:auto;touch-action:none;display:none;place-items:center}
+.stick i{width:44px;height:44px;border-radius:50%;background:rgba(244,241,232,.75);box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.stick small{position:absolute;top:100%;margin-top:6px;font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,232,.65);white-space:nowrap}
+#stickL{left:26px}#stickR{right:26px}
+body.has-fpv #scene{cursor:crosshair}
+@media (pointer:coarse), (max-width:720px){
+  .stick{display:grid}
+  .fpv-keys{display:none}
+  .fpv-osd{bottom:calc(env(safe-area-inset-bottom, 0px) + 20px);gap:10px;font-size:.6rem}
+  .fpv-top{left:44px}#fpvLand{right:44px}
+}
+@media (prefers-reduced-motion:reduce){ .fpv-rec::before{animation:none} }
 </style>
 </head>
 <body>
@@ -490,7 +522,7 @@ body.has-demo #minimap,body.has-panel #minimap{opacity:0}
     <li><button type="button" data-open="experiments" aria-pressed="false">Ideas</button></li>
     <li><button type="button" data-open="contact" aria-pressed="false">Contact</button></li>
   </ul>
-  <p class="hint">drag to spin. click a label. the printers, the roomba and the LED strip all do something. the chair is free.</p>
+  <p class="hint">drag to spin. click a label. the printers, the roomba and the LED strip all do something. the chair is free. so is the drone in the closet.</p>
 </nav>
 
 <aside id="panel" role="dialog" aria-labelledby="panelTitle" hidden>
@@ -909,6 +941,64 @@ body.has-demo #minimap,body.has-panel #minimap{opacity:0}
       return clear;
     }}
   };
+})();
+</script>
+
+<div id="fpv" hidden>
+  <div class="fpv-frame" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
+  <div class="fpv-top"><span class="fpv-tape">fpv / closet drone</span><span class="fpv-rec">rec</span></div>
+  <div class="fpv-osd" aria-hidden="true"><span id="fpvAlt">alt 0.0 m</span><span id="fpvSpd">spd 0.0 m/s</span></div>
+  <p class="fpv-keys" id="fpvKeys">W S fly / A D slide / arrows turn / space up / shift down / drag to look</p>
+  <div class="stick" id="stickL" aria-hidden="true"><i></i><small>turn / height</small></div>
+  <div class="stick" id="stickR" aria-hidden="true"><i></i><small>fly</small></div>
+  <button type="button" id="fpvLand">land</button>
+</div>
+<script>
+/* ---------- FPV drone controls and on-screen display ---------- */
+(function(){
+  const $ = id => document.getElementById(id), hud = $('fpv');
+  const In = window.__fpvIn = {f:0, s:0, y:0, u:0}, keys = {}, st = {L:[0,0], R:[0,0]};
+  let on = false, showT = 0;
+  const K = {KeyW:1, KeyS:1, KeyA:1, KeyD:1, KeyQ:1, KeyE:1, KeyR:1, KeyF:1, ArrowUp:1, ArrowDown:1, ArrowLeft:1, ArrowRight:1, Space:1, ShiftLeft:1, ShiftRight:1};
+  function mix(){
+    const k = c => keys[c] ? 1 : 0, cl = v => Math.max(-1, Math.min(1, v));
+    In.f = cl(k('KeyW') + k('ArrowUp') - k('KeyS') - k('ArrowDown') - st.R[1]);
+    In.s = cl(k('KeyD') - k('KeyA') + st.R[0]);
+    In.y = cl(k('ArrowRight') + k('KeyE') - k('ArrowLeft') - k('KeyQ') + st.L[0]);
+    In.u = cl(k('Space') + k('KeyR') - k('ShiftLeft') - k('ShiftRight') - k('KeyF') - st.L[1]);
+  }
+  function enter(){
+    if(on || document.body.classList.contains('has-demo')) return;
+    on = true; if(window.RoomUI.current) window.RoomUI.close();
+    for(const c in keys) keys[c] = false; st.L = [0,0]; st.R = [0,0]; mix();
+    document.body.classList.add('has-demo','has-fpv'); hud.hidden = false;
+    window.dispatchEvent(new CustomEvent('room:fpv',{detail:true}));
+    showT = setTimeout(()=> hud.classList.add('on'), 900);
+  }
+  function land(){
+    if(!on) return; on = false; clearTimeout(showT);
+    hud.classList.remove('on'); document.body.classList.remove('has-demo','has-fpv');
+    setTimeout(()=>{ if(!on) hud.hidden = true; }, 500);
+    for(const c in keys) keys[c] = false; st.L = [0,0]; st.R = [0,0]; mix();
+    window.dispatchEvent(new CustomEvent('room:fpv',{detail:false}));
+  }
+  window.RoomFPV = enter;
+  $('fpvLand').addEventListener('click', land);
+  window.addEventListener('keydown', e=>{ if(!on) return; if(e.key === 'Escape'){ land(); return; } if(K[e.code]){ keys[e.code] = true; mix(); e.preventDefault(); } });
+  window.addEventListener('keyup', e=>{ if(K[e.code]){ keys[e.code] = false; mix(); } });
+  window.addEventListener('blur', ()=>{ for(const c in keys) keys[c] = false; mix(); });
+  ['L','R'].forEach(side=>{
+    const el = $('stick' + side), knob = el.querySelector('i'); let id = null;
+    const set = e=>{ const r = el.getBoundingClientRect(), m = r.width/2; let x = (e.clientX-r.left-m)/m, y = (e.clientY-r.top-m)/m; const d = Math.hypot(x,y); if(d > 1){ x /= d; y /= d; }
+      st[side] = [x,y]; knob.style.transform = 'translate(' + (x*m*.6).toFixed(1) + 'px,' + (y*m*.6).toFixed(1) + 'px)'; mix(); };
+    const end = ()=>{ id = null; st[side] = [0,0]; knob.style.transform = ''; mix(); };
+    el.addEventListener('pointerdown', e=>{ id = e.pointerId; el.setPointerCapture(id); set(e); e.preventDefault(); });
+    el.addEventListener('pointermove', e=>{ if(e.pointerId === id) set(e); });
+    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+  });
+  let lastOsd = 0;
+  window.__fpvOsd = (alt, spd, live)=>{ const now = performance.now(); if(now-lastOsd < 120) return; lastOsd = now;
+    $('fpvAlt').textContent = 'alt ' + alt.toFixed(1) + ' m'; $('fpvSpd').textContent = live ? 'spd ' + spd.toFixed(1) + ' m/s' : 'arming'; };
 })();
 </script>
 
@@ -1566,7 +1656,8 @@ let shiftX = 0, shiftY = 0, yaw = 0, pitch = 0, yawGoal = 0, pitchGoal = 0, parX
 const isNarrow = ()=> W <= 720;
 let demoView = null;
 let sitOn = false;
-function panelInset(){ if(!focusId || sitOn) return [0,0]; if(demoView) return isNarrow() ? [0, H*.17] : [0, H*.09]; return isNarrow() ? [0, H*.62] : [Math.min(440, W-32) + 16, 0]; }
+const fpv = {on:false, t:0, pos:new V3(), vel:new V3(), yaw:0, look:0, roll:0, tilt:0, p0:new V3(), q0:new THREE.Quaternion(), fov0:32};
+function panelInset(){ if(!focusId || sitOn || fpv.on) return [0,0]; if(demoView) return isNarrow() ? [0, H*.17] : [0, H*.09]; return isNarrow() ? [0, H*.62] : [Math.min(440, W-32) + 16, 0]; }
 function goal(id){
   const v = demoView || (id ? HOT[id] : HOME), a = W/H, dir = v.pos.clone().sub(v.tgt);
   let k;
@@ -1611,8 +1702,10 @@ function hit(ev){
 }
 canvas.addEventListener('pointerdown', e=>{ down = {x:e.clientX, y:e.clientY}; moved = 0; canvas.setPointerCapture(e.pointerId); });
 canvas.addEventListener('pointermove', e=>{
+  if(fpv.on && !down) return;
   if(down){
     const dx = e.clientX-down.x, dy = e.clientY-down.y; moved += Math.abs(dx)+Math.abs(dy); down.x = e.clientX; down.y = e.clientY;
+    if(fpv.on){ fpv.yaw -= dx*.0045; fpv.look = THREE.MathUtils.clamp(fpv.look - dy*.0035, -1.1, 1.1); return; }
     if(moved > 6){ canvas.classList.add('is-dragging'); yawGoal = focusId ? THREE.MathUtils.clamp(yawGoal - dx*.0045, -.25, .25) : yawGoal - dx*.006;
       pitchGoal = THREE.MathUtils.clamp(pitchGoal + dy*.003, -.14, .22); }
   } else if(e.pointerType === 'mouse'){
@@ -1624,10 +1717,12 @@ canvas.addEventListener('pointermove', e=>{
 });
 function up(e){
   canvas.classList.remove('is-dragging');
+  if(fpv.on){ down = null; return; }
   if(down && moved <= 6){
     const id = hit(e);
     if(id === '@led') lightShow();
     else if(id === '@sit'){ if(!demoView) window.RoomSit(); }
+    else if(id === '@fpv'){ if(!demoView) window.RoomFPV(); }
     else if(id === '@roomba') startRoomba();
     else if(id && id.startsWith('@print:')) startPrint(jobs[+id.slice(7)]);
     else if(id) window.RoomUI.open(id);
@@ -2069,6 +2164,80 @@ jobs.forEach(j=>{ j.host.userData.showGlow = glow(0xffffff, .5, [0,.2,0], j.host
 // Roomba: a corner map draws the path live
 trailC.id = 'minimap'; trailC.setAttribute('aria-hidden','true'); document.body.appendChild(trailC);
 
+/* ---------- FPV drone: hovers in the closet, click it to fly the room ---------- */
+const drone = hot(new THREE.Group(), '@fpv'); scene.add(drone);
+const DRONE_HOME = new V3(.34, 1.3, 1.74), droneProps = [];
+const ceil = mesh(new THREE.ShapeGeometry(floorShape), std({color:0xcfdcdc, roughness:.95, side:THREE.DoubleSide}), [0,RH,0], scene, false); ceil.rotation.x = -Math.PI/2; ceil.visible = false;
+{ const carbon = std({color:0x15161a, roughness:.45, metalness:.3}), dm = std({color:0x2a2c33, roughness:.4, metalness:.6});
+  box(.09,.028,.15, carbon, [0,0,0], drone); box(.07,.03,.08, std({color:0xff7a1a, roughness:.5}), [0,.03,.01], drone);
+  [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(a=>{
+    const arm = box(.2,.012,.022, carbon, [a[0]*.075,0,a[1]*.075], drone); arm.rotation.y = -a[0]*a[1]*Math.PI/4;
+    cyl(.02,.02,.03, dm, [a[0]*.14,.018,a[1]*.14], drone, 12);
+    const pr = mesh(new THREE.CylinderGeometry(.075,.075,.003,20), new THREE.MeshBasicMaterial({color:0x7fe0d0, transparent:true, opacity:.28, depthWrite:false}), [a[0]*.14,.038,a[1]*.14], drone, false); droneProps.push(pr); });
+  const lens = cyl(.016,.016,.03, M.black, [0,.02,-.085], drone, 12); lens.rotation.x = Math.PI/2;
+  mesh(new THREE.SphereGeometry(.012,10,8), basic(0x7fe0d0), [0,.02,-.102], drone, false);
+  cyl(.003,.003,.09, M.black, [.02,.07,.06], drone, 5); box(.03,.01,.006, basic(0xff3b30), [0,.0,.078], drone, false);
+  glow(0x7fe0d0, .5, [0,.02,0], drone, .3);
+  label('fly me', drone, [0,.15,0], .26);
+  drone.position.copy(DRONE_HOME); drone.rotation.y = 2.2; drone.scale.setScalar(1.7);
+}
+const ROOM = [V.A,V.B,V.C,V.D,V.E,V.F];
+function flyable(x, z){
+  let inside = false;
+  for(let i=0, j=ROOM.length-1; i<ROOM.length; j=i++){
+    const a = ROOM[i], b = ROOM[j];
+    if((a[1] > z) !== (b[1] > z) && x < (b[0]-a[0])*(z-a[1])/(b[1]-a[1]) + a[0]) inside = !inside;
+    const dx = b[0]-a[0], dz = b[1]-a[1], t = Math.max(0, Math.min(1, ((x-a[0])*dx + (z-a[1])*dz)/(dx*dx+dz*dz)));
+    if(Math.hypot(x-a[0]-dx*t, z-a[1]-dz*t) < .17) return false;
+  }
+  return inside;
+}
+const FPV_START = {pos:new V3(-.15,1.3,1.42), yaw:.885};
+const fq = new THREE.Quaternion(), fe = new THREE.Euler(0,0,0,'YXZ'), fv = new V3();
+function fpvEnter(){
+  if(fpv.on) return;
+  fpv.on = true; fpv.t = 0; focusId = '@fpv'; drone.visible = false; ceil.visible = true;
+  fpv.pos.copy(FPV_START.pos); fpv.vel.set(0,0,0); fpv.yaw = FPV_START.yaw; fpv.look = -.08; fpv.roll = 0; fpv.tilt = 0;
+  fpv.p0.copy(camera.position); fpv.q0.copy(camera.quaternion); fpv.fov0 = camera.fov;
+}
+function fpvExit(){
+  if(!fpv.on) return;
+  fpv.on = false; drone.visible = true; ceil.visible = false; focusId = null;
+  resize(); camera.getWorldDirection(fv); cur.pos.copy(camera.position); cur.tgt.copy(camera.position).addScaledVector(fv, 1.5); cam.pos.copy(cur.pos); cam.tgt.copy(cur.tgt);
+  yaw = yawGoal = 0; pitch = pitchGoal = 0; go(null, 1.9);
+}
+window.addEventListener('room:fpv', e=> e.detail ? fpvEnter() : fpvExit());
+function tickFpv(dt){
+  const I = window.__fpvIn || {f:0,s:0,y:0,u:0};
+  fpv.t += dt; const k = Math.min(1, fpv.t/1.5), e = k*k*(3-2*k);
+  if(k >= 1){
+    fpv.yaw -= I.y*1.9*dt;
+    const sy = Math.sin(fpv.yaw), cy = Math.cos(fpv.yaw), f = 1 - Math.exp(-dt*3.2);
+    const tx = (-sy*I.f + cy*I.s)*2.3, tz = (-cy*I.f - sy*I.s)*2.3, ty = I.u*1.5;
+    fpv.vel.x += (tx-fpv.vel.x)*f; fpv.vel.z += (tz-fpv.vel.z)*f; fpv.vel.y += (ty-fpv.vel.y)*f;
+    const nx = fpv.pos.x + fpv.vel.x*dt, nz = fpv.pos.z + fpv.vel.z*dt;
+    if(flyable(nx, nz)){ fpv.pos.x = nx; fpv.pos.z = nz; }
+    else if(flyable(nx, fpv.pos.z)){ fpv.pos.x = nx; fpv.vel.z *= -.25; }
+    else if(flyable(fpv.pos.x, nz)){ fpv.pos.z = nz; fpv.vel.x *= -.25; }
+    else { fpv.vel.x *= -.25; fpv.vel.z *= -.25; }
+    fpv.pos.y = THREE.MathUtils.clamp(fpv.pos.y + fpv.vel.y*dt, .14, RH-.14);
+    const g = 1 - Math.exp(-dt*6); fpv.roll += ((-I.s*.2 + I.y*.16) - fpv.roll)*g; fpv.tilt += ((-I.f*.07) - fpv.tilt)*g;
+  }
+  fe.set(fpv.look + fpv.tilt, fpv.yaw, fpv.roll); fq.setFromEuler(fe);
+  const bob = k >= 1 ? Math.sin(fpv.t*2.3)*.006 : 0;
+  camera.position.lerpVectors(fpv.p0, fpv.pos, e); camera.position.y += bob;
+  camera.quaternion.slerpQuaternions(fpv.q0, fq, e);
+  const fov = fpv.fov0 + (84 - fpv.fov0)*e; if(Math.abs(camera.fov - fov) > .01){ camera.fov = fov; camera.updateProjectionMatrix(); }
+  camera.clearViewOffset();
+  for(const W of walls) W.w.visible = (camera.position.x-W.mid.x)*W.n.x + (camera.position.z-W.mid.z)*W.n.z > .05;
+  if(window.__fpvOsd) window.__fpvOsd(fpv.pos.y, Math.hypot(fpv.vel.x, fpv.vel.y, fpv.vel.z), k >= 1);
+}
+function tickDrone(time){
+  if(!drone.visible) return;
+  drone.position.y = DRONE_HOME.y + Math.sin(time*1.7)*.025; drone.rotation.z = Math.sin(time*1.1)*.04; drone.rotation.x = Math.cos(time*.9)*.03;
+  droneProps.forEach((p,i)=>{ p.rotation.y = time*40*(i%2 ? 1 : -1); });
+}
+
 /* ---------- render loop ---------- */
 const white = new THREE.Color(0xffffff), sph = new THREE.Spherical(), off = new V3(), proj = new V3(), clockT = new THREE.Clock();
 const ease = t => t<.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
@@ -2086,6 +2255,7 @@ function frame(){
   for(const W of walls) W.w.visible = (camera.position.x-W.mid.x)*W.n.x + (camera.position.z-W.mid.z)*W.n.z > .05;
   const ins = panelInset(), restX = (!focusId && !isNarrow()) ? -W*.06 : 0, restY = (!focusId && !isNarrow()) ? -H*.03 : 0; shiftX += ((ins[0]/2 || restX) - shiftX)*s; shiftY += ((ins[1]/2 || restY) - shiftY)*s;
   if(Math.abs(shiftX) > .5 || Math.abs(shiftY) > .5) camera.setViewOffset(W,H,shiftX,shiftY,W,H); else camera.clearViewOffset();
+  if(fpv.on) tickFpv(dt); tickDrone(time);
 
   ledCol.lerp(ledGoal, s*.8); ledMat.color.copy(ledCol);
   ledSprites.forEach(sp=> sp.material.color.copy(ledCol)); ledLights.forEach(l=> l.color.copy(ledCol).lerp(white, .2)); bounce.color.copy(ledCol).lerp(white, .68);
@@ -2109,7 +2279,7 @@ requestAnimationFrame(()=>{
   document.body.classList.add('ready');
   window.dispatchEvent(new Event('room:ready'));
 });
-window.__room = {lightShow, scene, camera, renderer, go, startRoomba, startPrint, jobs, yaw:v=>{ yawGoal = v; }, ff:s=>{ for(let i=0;i<s*30;i++){ tickJobs(1/30, i/30); tickRoomba(1/30); tickDemo(1/30); } }};
+window.__room = {fpv, flyable, lightShow, scene, camera, renderer, go, startRoomba, startPrint, jobs, yaw:v=>{ yawGoal = v; }, ff:s=>{ for(let i=0;i<s*30;i++){ tickJobs(1/30, i/30); tickRoomba(1/30); tickDemo(1/30); } }};
 </script>
 </body>
 </html>
